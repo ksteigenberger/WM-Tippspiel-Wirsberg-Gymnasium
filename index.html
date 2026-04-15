@@ -2,33 +2,32 @@
 <html lang="de">
 <head>
   <meta charset="UTF-8">
-  <title>Tippspiel-Demo2</title>
+  <title>Tippspiel</title>
 </head>
 <body>
-  <h1>Tippspiel-Demo2</h1>
 
-  <label>Name:</label>
-  <input type="text" id="name"><br><br>
+  <h1>Tippspiel</h1>
 
-  <label>Team A:</label>
-  <input type="text" id="teamA" value="Deutschland"><br><br>
+  <h2>Eingabe</h2> <!-- in diesem Bereich arbeitet nur Gruppe1 -->
+  <div id="eingabe"></div>
 
-  <label>Team B:</label>
-  <input type="text" id="teamB" value="Brasilien"><br><br>
 
-  <label>Tore Team A:</label>
-  <input type="number" id="toreA"><br><br>
 
-  <label>Tore Team B:</label>
-  <input type="number" id="toreB"><br><br>
-
-  <button onclick="speichern()">Tipp speichern</button>
-  <button onclick="laden()">Tipps laden</button>
-
-  <h2>Gespeicherte Tipps</h2>
+  <h2>Ausgabe</h2> <!--in diesem Bereich arbeitet nur Gruppe3 --> 
   <div id="ausgabe"></div>
+  
 
+ 
+
+ <!--Logik und DB-Verbindung mit JavaScript -->
   <script type="module">
+
+    //Logik mit JavaScript --> beide Gruppen müssen hier arbeiten
+    //siehe betreffender Bereich!!
+    
+     //---------------------------------------------------------------------
+    //Supabase Verbindung (nicht ändern!!)
+    //----------------------------------------------------------------------
     import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
     const supabaseUrl = "https://kmhwwdsuzphkpfupkynf.supabase.co";
@@ -36,65 +35,27 @@
 
     const supabase = createClient(supabaseUrl, supabaseKey);
 
-    async function speichern() {
-      const name = document.getElementById("name").value;
-      const teamA = document.getElementById("teamA").value;
-      const teamB = document.getElementById("teamB").value;
-      const toreA = Number(document.getElementById("toreA").value);
-      const toreB = Number(document.getElementById("toreB").value);
+    //----------------------------------------------------------------------
+    //Gruppe1: Eingabe
+    //----------------------------------------------------------------------
 
-      const { error } = await supabase
-        .from("tipps")
-        .insert([
-          {
-            name: name,
-            team_a: teamA,
-            team_B: teamB,
-            tore_a: toreA,
-            tore_b: toreB
-          }
-        ]);
 
-      if (error) {
-        document.getElementById("ausgabe").innerHTML =
-          "Fehler beim Speichern: " + error.message;
-        return;
-      }
 
-      document.getElementById("ausgabe").innerHTML = "Tipp gespeichert!";
-      await laden();
-    }
 
-    async function laden() {
-      const { data, error } = await supabase
-        .from("tipps")
-        .select("*")
-        .order("id", { ascending: true });
 
-      if (error) {
-        document.getElementById("ausgabe").innerHTML =
-          "Fehler beim Laden: " + error.message;
-        return;
-      }
 
-      let text = "";
+    //---------------------------------------------------------------------
+    //Gruppe3: Ausgabe
+    //---------------------------------------------------------------------
 
-      for (let i = 0; i < data.length; i++) {
-        let tipp = data[i];
-        text +=
-          tipp.name + ": " +
-          tipp.team_a + " " + tipp.tore_a +
-          " : " + tipp.tore_b + " " + tipp.team_B +
-          "<br>";
-      }
+   
+   
+      
 
-      document.getElementById("ausgabe").innerHTML = text;
-    }
 
-    window.speichern = speichern;
-    window.laden = laden;
 
-    laden();
+   
+
   </script>
 </body>
 </html>
