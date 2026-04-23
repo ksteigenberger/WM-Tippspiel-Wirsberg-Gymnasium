@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <title>Supabase Login Demo</title>
+</head>
+<body>
+  <h2>Login</h2>
+
+  <input id="email" type="email" placeholder="Email" />
+  <br /><br />
+  <input id="password" type="password" placeholder="Password" />
+  <br /><br />
+
+  <button onclick="login()">Login</button>
+  <button onclick="signup()">Sign Up</button>
+  <button onclick="logout()">Logout</button>
+
+  <p id="status"></p>
+
+  <!-- Supabase CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+  <script>
+    const supabaseUrl = "https://kmhwwdsuzphkpfupkynf.supabase.co";
+    const supabaseKey = "sb_publishable_7ih4VSPUkXVfHkBa7lrDCA_mO_d0pW1";
+
+    const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
+
+    async function signup() {
+      const email = document.getElementById("email").value;
+      const password = document.getElementById("password").value;
+
+      const { error } = await supabase.auth.signUp({ email, password });
+
+      document.getElementById("status").innerText =
+        error ? error.message : "Signup erfolgreich!";
+    }
+
+    async function login() {
+      const email = document.getElementById("email").value;
+      const password = document.getElementById("password").value;
+
+      const { error } = await supabase.auth.signInWithPassword({
+        email,
+        password
+      });
+
+      document.getElementById("status").innerText =
+        error ? error.message : "Login erfolgreich!";
+    }
+
+    async function logout() {
+      await supabase.auth.signOut();
+      document.getElementById("status").innerText = "Ausgeloggt";
+    }
+
+    // Auth-State beobachten
+    supabase.auth.onAuthStateChange((event, session) => {
+      console.log("Auth Event:", event);
+      if (session) {
+        document.getElementById("status").innerText =
+          "Eingeloggt als: " + session.user.email;
+      }
+    });
+  </script>
+</body>
+</html>
