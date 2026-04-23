@@ -18,14 +18,13 @@
 
   <p id="status"></p>
 
-  <!-- Supabase CDN -->
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
   <script>
+    import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+
     const supabaseUrl = "https://kmhwwdsuzphkpfupkynf.supabase.co";
     const supabaseKey = "sb_publishable_7ih4VSPUkXVfHkBa7lrDCA_mO_d0pW1";
 
-    const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
+    const supabase = createClient(supabaseUrl, supabaseKey);
 
     async function signup() {
       const email = document.getElementById("email").value;
