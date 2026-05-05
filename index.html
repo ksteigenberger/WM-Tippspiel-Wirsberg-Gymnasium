@@ -11,15 +11,32 @@
   <h2>Eingabe</h2> <!-- in diesem Bereich arbeitet nur Gruppe1 -->
   <div id="eingabe"></div>
 
-<label>Name:</label>
-  <input type="text" id="name"><br><br>
-  
-  <p>Achtelfinale:</p>
-
 
   <h2>Anzeige</h2> <!--in diesem Bereich arbeitet nur Gruppe3 --> 
-  <div id="anzeige"></div>
-  
+  <div id="anzeige">
+     <label for ="spiel_ID">Spiel-ID: </label> 
+   <input id="spiel_ID"></input> <!-- hier wird die Spiel-ID eingegeben -->
+   <button id="buttonSpielAnz">Zeige an</button> <!-- mit diesem Button wird das Spiel angezeigt -->
+
+   <!--Ausgabe für Fehleranzeige:-->
+  <p id="ausgabe"></p>
+
+  </div>
+   <div id="anzeige"></div>
+  <p id="spielAnzeige" hidden> <!-- dieser Bereich ist vorerst versteckt -->
+
+         <span id="spielDaten"></span><br> <!-- hier werden die Spielinformationen angezeigt -->
+         Tippabgabe:
+
+         <label id="team_a" for="tore_a" ></label>
+         <input type="number" id="tore_b"> : <!-- hier wird die Anzahl der Tore des ersten Teams eingegeben --> 
+         
+         <input type="number" id="tore_b">
+         <label id="team_b" for="tore_a" ></label> <!-- hier wird die Anzahl der Tore des zweiten Teams eingegeben -->
+         
+   </p>
+ 
+ <p id=" "ausgabe"></p> <!-- hier werden Fehlermeldungen angezeigt -->
 
  
 
@@ -43,6 +60,49 @@
     //Gruppe1: Eingabe
     //----------------------------------------------------------------------
 
+  async function spielLaden(spielID)
+      {
+           //Diese Funktion erhält im fehlerfreien Fall die Tabelle spiele der Datenbank als Array (mit den Zeilen als Objekten)
+          const { data: spiele, error: errorSpiele } = await supabase.from("spiele").select("*").order("id", { ascending: true } );
+           
+          //falls dabei ein Fehler auftritt speichert errorSpiele nicht null, sondern einige Infos zB eine Fehlermeldung, die dann im Absatz mit id "ausgabe"
+          //auf der Website angezeigt wird: 
+           if(errorSpiele)
+           {
+             document.getElementById("ausgabe").innerText=error.message;
+             return;
+          }
+
+          //die folgende Zeile wird nur im fehlerfreien Fall erreicht und sorgt dafür, dass die Konsole das Array ausdruckt, dass 
+          //wir von supabase erhalten haben --> betrachte es in der Konsole! --> Rechtsklick auf die Website --> "Untersuchen" --> oben im Reiter das Konsolenzeichen auswählen
+         console.log( "spielLaden läuft2");
+         console.log(spiele);
+       
+        let text = "";
+        text = text + spiele[spielID].Spiel + ": " + spiele[spielID].team_a + " : " + spiele[spielID].team_b + " - " + spiele[spielID].tore_team_a + " : " + spiele[spielID].tore_team_b + " um " + spiele[spielID].Startzeit + "Uhr";
+        document.getElementById("spielDaten").innerText = text;
+       //team a und team b werden in der Anzeige mit den entsprechenden Namen aus der Datenbank gefüllt und angezeigt
+       
+      }
+
+      document.getElementById("buttonSpielAnz").addEventListener("click", function() { //bei click auf den Button wird die Funktion spielLaden mit der eingegebenen Spiel-ID aufgerufen
+        const sID = document.getElementById("spiel_ID").value;
+        if(sID >= 0 && sID <= 16 && sID!= "") //überprüft ob die eingegebene Spiel-ID gültig ist
+        {
+          //wenn die Spiel-ID gültig ist, wird der Bereich mit id "spielAnzeige" sichtbar gemacht und die Funktion spielLaden mit der eingegebenen Spiel-ID aufgerufen
+          document.getElementById("spielAnzeige").hidden = false;
+           spielLaden(sID);
+          
+        }
+        else{{
+          //wenn die Spiel-ID ungültig ist, wird der Bereich mit id "spielAnzeige" versteckt und eine Fehlermeldung im Absatz mit id "ausgabe" angezeigt
+          document.getElementById("spielAnzeige").hidden = true;
+          document.getElementById("ausgabe").innerText = "Bitte eine gültige Spiel-ID eingeben (0-16)!";
+        }}
+      });
+     
+
+     spielLaden(0); //aufruf der Funktion spielLaden mit der Spiel-ID 0, damit das eine Variable weitergegeben wird und so die funktion gestartet werden kann
 
 
 
