@@ -11,6 +11,25 @@
   <h2>Eingabe</h2> <!-- in diesem Bereich arbeitet nur Gruppe1 -->
   <div id="eingabe"></div>
 
+   <label>Name:</label>
+<input type="text" id="name" placeholder="Dein Name">
+<br>
+<label>Spiel auswählen:</label>
+<select id="spiel_select" >
+    <option value="">-- Bitte wählen --</option>
+</select>
+
+<br><br>
+
+&nbsp;&nbsp;&nbsp;Anstoß: <span id="spiel_datum">--.--.</span> | <span id="spiel_zeit">--:--</span> Uhr <br>
+<span id="team_a" style="font-weight:bold;">Team A</span> 
+<input type="number" id="tore_a" min="0" step="1" oninput="this.value = this.value.replace(/[^0-9]/g, '');" style="width:40px;" placeholder="0"> : 
+<input type="number" id="tore_b" min="0" step="1" oninput="this.value = this.value.replace(/[^0-9]/g, '');" style="width:40px;" placeholder="0"> 
+<span id="team_b" style="font-weight:bold;">Team B</span> <br></br>
+<button id = "tippSpeichern">Tipp speichern</button>
+
+
+
 
   <h2>Anzeige</h2> <!--in diesem Bereich arbeitet nur Gruppe3 --> 
   <div id="anzeige">
@@ -69,10 +88,7 @@
             return;
         }
 
-        if (!id) {
-            alert("Bitte zuerst eine Spiel-ID eingeben!");
-            return;
-        }
+       
 
         // 2. Aus der Tabelle "spiele" das Spiel mit dieser ID laden
         const { data: spiel, error } = await supabase
