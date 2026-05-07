@@ -1,65 +1,233 @@
 <!DOCTYPE html>
-<html lang="de">
+
+<html>
 <head>
-  <meta charset="UTF-8">
-  <title>Tippspiel</title>
+
+    <title> Test</title>
+
 </head>
+
 <body>
 
-  <h1>Tippspiel</h1>
+<h1>Tippspiel</h1><br>
+<!--Anzeige fuer das Spielergebnis ueber der Tabelle-->
+<div id="spielErgebnis"></div>
+<!--Tabelle mit den einzelnen Tipps für ein bestimmtes Spiel-->
+<table border ="1">
+   <thead>
+      <tr>
+         <th>Benutzer</th>
+         <th id="getipptA">Tore getippt </th>
+         <th id="getipptB">Tore getippt </th>
+         <th>Punkte</th>
+      </tr>
+   </thead>
+   <tbody id="tabelle1"></tbody>
+</table>
+<!--Button um tabelleLaden() aufzurufen-->
+<button id="ButtonTabelle">Tabelle anzeigen</button>
+<!--Button um laden() aufzurufen-->
+<button id ="Button1">Alle Tipps</button> <br>
 
-  <h2>Eingabe</h2> <!-- in diesem Bereich arbeitet nur Gruppe1 -->
-  <div id="eingabe"></div>
 
-<label>Name:</label>
-  <input type="text" id="name"><br><br>
-  
-  <p>Achtelfinale:</p>
+<p id="ausgabe"></p>
 
 
-  <h2>Anzeige</h2> <!--in diesem Bereich arbeitet nur Gruppe3 --> 
-  <div id="anzeige"></div>
-  
+<script type="module">
 
- 
+//--------------------------------------------------------------------------------------
+//Verbindung zur Datenbank:
+import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+console.log("Skript gestartet");
+const supabaseUrl="https://kmhwwdsuzphkpfupkynf.supabase.co";
+const supabaseKey ="sb_publishable_7ih4VSPUkXVfHkBa7lrDCA_mO_d0pW1";
+const supabase = createClient(supabaseUrl, supabaseKey);
+//--------------------------------------------------------------------------------------
 
- <!--Logik und DB-Verbindung mit JavaScript -->
-  <script type="module">
+//Alle Tipps eines bestimmten Spieles werden gedruckt
+async function laden(spielId)
 
-    //Logik mit JavaScript --> beide Gruppen müssen hier arbeiten
-    //siehe betreffender Bereich!!
+{ 
+  //Daten aus Supabase rausziehen
+     const { data: tipps,error: errortipps } = await supabase.from("tipps").select("*");
+     const { data: spiele,error:  errorspiele} = await supabase.from("spiele").select("*").order("id", {ascending: true});
+     if(errortipps)
+     {
+        document.getElementById("ausgabe").innerText=errortipps.message;
+        return;
+     }
+     if(errorspiele)
+     {
+        document.getElementById("ausgabe").innerText=errorspiele.message;
+        return;
+     }
+     //Konsole gibt tipps und spiele aus, um auf einen fehler zu pruefen
+     console.log(tipps);
+     console.log(spiele);
+     let text ="Beim Spiel " + spiele[spielId].team_a + " gegen " + spiele[spielId].team_b + " gab es folgende Tipps: \n";
+     //Alle Tipps werden in die Ausgabe geschrieben
+     for(let i = 0; i < tipps.length;i++)
+     {
+      if(tipps[i].spiel_ID == spielId)
+        text = text + "Der Spieler " + tipps[i].username + " hat folgendes getippt: " + spiele[spielId].team_a + " " + tipps [i].tore_team_a + ":" + tipps[i].tore_team_b + " "+ spiele[spielId].team_b + "\n";
+     }
+
+     document.getElementById("ausgabe").innerText=text;
+
+
+}
+// Algorithmus zum Berechnen der Punkte
+    let played_games_quantity = 1;
+
+    let points_for_l1_prediction = 4;
+    let points_for_l2_prediction = 3;
+    let points_for_l3_prediction = 2;
+    let points_for_draw_prediction = 2;
+
+
+
+
+
+      //  for schleife, wenn es fuer alle berechnen werden muss
+      // aber ich wuerde lieber separat zwischen speichern
+
+    let player_quantity = 5;
+    let matrix_points = Array.from({length: player_quantity}, () => Array(17));
     
-     //---------------------------------------------------------------------
-    //Supabase Verbindung (nicht ändern!!)
-    //----------------------------------------------------------------------
-    import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
-
-    const supabaseUrl = "https://kmhwwdsuzphkpfupkynf.supabase.co";
-    const supabaseKey = "sb_publishable_7ih4VSPUkXVfHkBa7lrDCA_mO_d0pW1";
-
-    const supabase = createClient(supabaseUrl, supabaseKey);
-
-    //----------------------------------------------------------------------
-    //Gruppe1: Eingabe
-    //----------------------------------------------------------------------
 
 
+    let arr_result_goals_A = new Array(16);
+    let arr_result_goals_B = new Array(16);
+    let matrix_predict_goals_A = Array.from({length: player_quantity}, () => Array(16));
+    let matrix_predict_goals_B = Array.from({length: player_quantity}, () => Array(16));
+    // ab hier muss die 4 Arrays deklariert werden
 
 
+function points_calculation_for_playerID(j)
+  {
 
+  
 
-    //---------------------------------------------------------------------
-    //Gruppe3: Anzeige
-    //---------------------------------------------------------------------
+    for (let i=0; i < played_games_quantity; i++)
+    {
+      if (matrix_predict_goals_A[j][i] == null || matrix_predict_goals_B[j][i] == null)
+      {
+        let temp1 = arr_result_goals_A[i] - arr_result_goals_B[i];
+        let temp2 = matrix_predict_goals_A[j][i] - matrix_predict_goals_B[j][i];
 
-   
-   
+          if ( temp1 == temp2 && matrix_predict_goals_A[j][i] == arr_result_goals_A[j][i])
+          {
+            matrix_points[j][i] = points_for_l1_prediction;
+          }
+          else
+          {
+            if ( temp1 == temp2 && temp1 != 0)
+            {
+            matrix_points[j][i] = points_for_l2_prediction;
+            }
+            else
+            {
+                if ( temp1 == temp2 && temp1 == 0)
+                {
+                  matrix_points[j][i] = points_for_draw_prediction;
+                }
+              else
+              {
+                if ( Math.sign(temp1) == Math.sign(temp2) )
+                {
+                  matrix_points[j][i] = points_for_l3_prediction;
+                }
+                else
+                {
+                  matrix_points[j][i] = 0;
+                }
+              }
+            }
       
+          }
+      }
+    }
 
 
 
-   
+  }
+ 
+  // Calculation of Points for a specific player and specific match
+    
 
-  </script>
+
+  function calculate_sum()
+  {
+    for (let j = 0; j < player_quantity; j++)
+    {
+      matrix_points[j][16] = 0;
+      for (let i=0; i < played_games_quantity; i++)
+      {
+        matrix_points[j][16] += matrix_points[j][i];
+      }
+    }  
+  }
+
+
+  function merge_sorting_by_characteristic(j)
+  {
+
+    let matrix_sorted_order = Array.from({length: player_quantity}, () => Array(2));
+    for(let i = 0; i < player_quantity; i++)
+    {
+      matrix_sorted_order[i][0] = i;
+      matrix_sorted_order[i][1] = matrix_points[i][j];
+    } 
+    matrix_sorted_order.sort((a, b) => a[1] - b[1]);
+
+  }
+
+
+async function tabelleLaden(spielId)
+
+{ 
+
+     const { data: tipps, error: errortipps } = await supabase.from("tipps").select("*");
+     const { data: spiele, error: errorspiele} = await supabase.from("spiele").select("*").order("id", {ascending: true});
+     if(errortipps)
+     {
+        document.getElementById("ausgabe").innerText=errortipps.message;
+        return;
+     }
+     if(errorspiele)
+     {
+        document.getElementById("ausgabe").innerText=errorspiele.message;
+        return;
+     }
+     //Ueberschrift der Spalten mit Teamnamen 
+     document.getElementById("getipptA").innerText="Tore getippt " + spiele[spielId].team_a;
+     document.getElementById("getipptB").innerText="Tore getippt " + spiele[spielId].team_b;
+     //Spielergebnis wird ueber der Tabelle angezeigt
+     document.getElementById("spielErgebnis").innerText=spiele[spielId].Spiel +" Endergebnis: " + spiele[spielId].team_a + " " + spiele[spielId].tore_team_a + ":" + spiele[spielId].tore_team_b + " " +spiele[spielId].team_b;
+     const tabelle = document.getElementById("tabelle1");
+     //Einzelne tipps von dem Spiel mit spielId werden als neue Zeile in die Tabelle eingetragen
+     for(let i=0; i<tipps.length;i++)
+     {
+      if(tipps[i].spiel_ID == spielId)
+      {
+         tabelle.innerHTML += `
+            <tr>
+               <td>${tipps[i].username}</td>
+               <td>${tipps[i].tore_team_a}</td>
+               <td>${tipps[i].tore_team_b}</td>
+               <td>${matrix_points[i][spielId]}</td>
+            </tr> `
+         ;
+      }
+     }
+
+}
+//Buttons fuehren die Funktionen aus und werden disabled
+document.getElementById("ButtonTabelle").addEventListener("click", function() { this.disabled = true;
+tabelleLaden(0);});
+document.getElementById("Button1").addEventListener("click", function() { this.disabled = true;
+laden(0);});
+
+</script>
 </body>
-</html>
+</html> 
