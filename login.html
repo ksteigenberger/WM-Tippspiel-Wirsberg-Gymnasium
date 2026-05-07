@@ -12,9 +12,9 @@
   <input id="password" type="password" placeholder="Password" />
   <br /><br />
 
-  <button onclick="login()">Login</button>
-  <button onclick="signup()">Sign Up</button>
-  <button onclick="logout()">Logout</button>
+  <button id="login">Login</button>
+  <button id="signup">Sign Up</button>
+  <button id="logout">Logout</button>
 
   <p id="status"></p>
 
@@ -26,7 +26,13 @@
 
     const supabase = createClient(supabaseUrl, supabaseKey);
 
-    window.signup = async function() {
+    // redirect if already logged in
+    const { data: { session } } = await supabase.auth.getSession();
+    if (session) {
+      window.location.href = "input.html";
+    }
+
+    async function signup() {
       const email = document.getElementById("email").value;
       const password = document.getElementById("password").value;
 
@@ -36,7 +42,7 @@
         error ? error.message : "Signup erfolgreich!";
     }
 
-    window.login = async function() {
+    async function login() {
       const email = document.getElementById("email").value;
       const password = document.getElementById("password").value;
 
@@ -45,23 +51,22 @@
         password
       });
 
-      document.getElementById("status").innerText =
-        error ? error.message : "Login erfolgreich!";
+      if (error) {
+        document.getElementById("status").innerText = error.message;
+      } else {
+        window.location.href = "input.html"; // ✅ redirect
+      }
     }
 
-    window.logout = async function() {
+    async function logout() {
       await supabase.auth.signOut();
       document.getElementById("status").innerText = "Ausgeloggt";
     }
 
-    // Auth-State beobachten
-    supabase.auth.onAuthStateChange((event, session) => {
-      console.log("Auth Event:", event);
-      if (session) {
-        document.getElementById("status").innerText =
-          "Eingeloggt als: " + session.user.email;
-      }
-    });
+    document.getElementById("signup").addEventListener("click", signup);
+    document.getElementById("login").addEventListener("click", login);
+    document.getElementById("logout").addEventListener("click", logout);
+
   </script>
 </body>
 </html>
