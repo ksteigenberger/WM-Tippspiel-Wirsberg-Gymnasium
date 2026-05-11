@@ -76,112 +76,59 @@ async function laden(spielId)
 
 
 }
-// Algorithmus zum Berechnen der Punkte
-    let played_games_quantity = 1;
 
-    let points_for_l1_prediction = 4;
-    let points_for_l2_prediction = 3;
-    let points_for_l3_prediction = 2;
-    let points_for_draw_prediction = 2;
+  let points_for_l1_prediction = 4;
+  let points_for_l2_prediction = 3;
+  let points_for_l3_prediction = 2;
+  let points_for_draw_prediction = 2;
 
-
-
-
-
-      //  for schleife, wenn es fuer alle berechnen werden muss
-      // aber ich wuerde lieber separat zwischen speichern
-
-    let player_quantity = 5;
-    let matrix_points = Array.from({length: player_quantity}, () => Array(17));
-    
-
-
-    let arr_result_goals_A = new Array(16);
-    let arr_result_goals_B = new Array(16);
-    let matrix_predict_goals_A = Array.from({length: player_quantity}, () => Array(16));
-    let matrix_predict_goals_B = Array.from({length: player_quantity}, () => Array(16));
-    // ab hier muss die 4 Arrays deklariert werden
-
-
-function points_calculation_for_playerID(j)
-  {
-
+async function punkteBerechnen(spielID, tippA, tippB)
+{
   
-
-    for (let i=0; i < played_games_quantity; i++)
-    {
-      if (matrix_predict_goals_A[j][i] == null || matrix_predict_goals_B[j][i] == null)
-      {
-        let temp1 = arr_result_goals_A[i] - arr_result_goals_B[i];
-        let temp2 = matrix_predict_goals_A[j][i] - matrix_predict_goals_B[j][i];
-
-          if ( temp1 == temp2 && matrix_predict_goals_A[j][i] == arr_result_goals_A[j][i])
+  const { data: spiele, error:  errorspiele} = await supabase.from("spiele").select("*").order("id", {ascending: true});
+  
+     
+ if(errorspiele)
+     {
+       document.getElementById("ausgabe").innerText=errorspiele.message;
+       return;
+     }
+  let temp1 = spiele[spielID].tore_team_a - spiele[spielID].tore_team_b;
+  
+        let temp2 = tippA - tippB;
+        
+          if ( temp1 == temp2 && tippA == spiele[spielID].tore_team_a)
           {
-            matrix_points[j][i] = points_for_l1_prediction;
+            return points_for_l1_prediction;
           }
           else
           {
             if ( temp1 == temp2 && temp1 != 0)
             {
-            matrix_points[j][i] = points_for_l2_prediction;
+              return points_for_l2_prediction;
             }
             else
             {
                 if ( temp1 == temp2 && temp1 == 0)
                 {
-                  matrix_points[j][i] = points_for_draw_prediction;
+                  return points_for_draw_prediction;
                 }
               else
               {
                 if ( Math.sign(temp1) == Math.sign(temp2) )
                 {
-                  matrix_points[j][i] = points_for_l3_prediction;
+                  return points_for_l3_prediction;
                 }
                 else
                 {
-                  matrix_points[j][i] = 0;
+                  return 0;
                 }
               }
             }
       
           }
-      }
-    }
 
-
-
-  }
- 
-  // Calculation of Points for a specific player and specific match
-    
-
-
-  function calculate_sum()
-  {
-    for (let j = 0; j < player_quantity; j++)
-    {
-      matrix_points[j][16] = 0;
-      for (let i=0; i < played_games_quantity; i++)
-      {
-        matrix_points[j][16] += matrix_points[j][i];
-      }
-    }  
-  }
-
-
-  function merge_sorting_by_characteristic(j)
-  {
-
-    let matrix_sorted_order = Array.from({length: player_quantity}, () => Array(2));
-    for(let i = 0; i < player_quantity; i++)
-    {
-      matrix_sorted_order[i][0] = i;
-      matrix_sorted_order[i][1] = matrix_points[i][j];
-    } 
-    matrix_sorted_order.sort((a, b) => a[1] - b[1]);
-
-  }
-
+}
 
 async function tabelleLaden(spielId)
 
@@ -210,12 +157,13 @@ async function tabelleLaden(spielId)
      {
       if(tipps[i].spiel_ID == spielId)
       {
+        const punkte = await punkteBerechnen(spielId, tipps[i].tore_team_a, tipps[i].tore_team_b);
          tabelle.innerHTML += `
             <tr>
                <td>${tipps[i].username}</td>
                <td>${tipps[i].tore_team_a}</td>
                <td>${tipps[i].tore_team_b}</td>
-               <td>${matrix_points[i][spielId]}</td>
+               <td>${punkte}</td>
             </tr> `
          ;
       }
