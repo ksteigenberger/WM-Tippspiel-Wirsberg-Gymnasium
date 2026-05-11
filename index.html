@@ -9,54 +9,45 @@
   <h1>Tippspiel</h1>
 
   <h2>Eingabe</h2> <!-- in diesem Bereich arbeitet nur Gruppe1 -->
-  <div id="eingabe"></div>
+  <div id="eingabe">
 
-   <label>Name:</label>
-<input type="text" id="name" placeholder="Dein Name">
-<br>
-<label>Spiel auswählen:</label>
-<select id="spiel_select" >
-    <option value="">-- Bitte wählen --</option>
-</select>
-
-<br><br>
-
-&nbsp;&nbsp;&nbsp;Anstoß: <span id="spiel_datum">--.--.</span> | <span id="spiel_zeit">--:--</span> Uhr <br>
-<span id="team_a" style="font-weight:bold;">Team A</span> 
-<input type="number" id="tore_a" min="0" step="1" oninput="this.value = this.value.replace(/[^0-9]/g, '');" style="width:40px;" placeholder="0"> : 
-<input type="number" id="tore_b" min="0" step="1" oninput="this.value = this.value.replace(/[^0-9]/g, '');" style="width:40px;" placeholder="0"> 
-<span id="team_b" style="font-weight:bold;">Team B</span> <br></br>
-<button id = "tippSpeichern">Tipp speichern</button>
-
-
-
-
-  <h2>Anzeige</h2> <!--in diesem Bereich arbeitet nur Gruppe3 --> 
-  <div id="anzeige">
-     <label for ="spiel_ID">Spiel-ID: </label> 
+   <label for ="spiel_ID">Spiel-ID: </label> 
    <input id="spiel_ID"></input> <!-- hier wird die Spiel-ID eingegeben -->
    <button id="buttonSpielAnz">Zeige an</button> <!-- mit diesem Button wird das Spiel angezeigt -->
+
+  <!--<label for="spielName">Spiel auswählen: </label>
+  <select id="SpielName"><option value="Spiel" disabled selected>Wähle ein Spiel aus</option></select> -->
+  
+
+
 
    <!--Ausgabe für Fehleranzeige:-->
   <p id="ausgabe"></p>
 
+  
+
   </div>
-   <div id="anzeige"></div>
+
+  <h2>Anzeige</h2> <!--in diesem Bereich arbeitet nur Gruppe3 --> 
+  <div id="anzeige"></div>
   <p id="spielAnzeige" hidden> <!-- dieser Bereich ist vorerst versteckt -->
 
          <span id="spielDaten"></span><br> <!-- hier werden die Spielinformationen angezeigt -->
          Tippabgabe:
 
          <label id="team_a" for="tore_a" ></label>
-         <input type="number" id="tore_b"> : <!-- hier wird die Anzahl der Tore des ersten Teams eingegeben --> 
+         <input type="number" id="tore_a"> : <!-- hier wird die Anzahl der Tore des ersten Teams eingegeben --> 
          
          <input type="number" id="tore_b">
-         <label id="team_b" for="tore_a" ></label> <!-- hier wird die Anzahl der Tore des zweiten Teams eingegeben -->
+         <label id="team_b" for="tore_b" ></label> <!-- hier wird die Anzahl der Tore des zweiten Teams eingegeben -->
+         <label for="name">Name: </label>
+
+         <input type="text" id="name" placeholder="Dein Name"> <!-- hier wird der Name des Tippenden eingegeben -->
+          <button id="speichern">Tipp speichern</button> <!-- mit diesem Button wird
          
    </p>
  
  <p id=" "ausgabe"></p> <!-- hier werden Fehlermeldungen angezeigt -->
-
  
 
  <!--Logik und DB-Verbindung mit JavaScript -->
@@ -79,120 +70,79 @@
     //Gruppe1: Eingabe
     //----------------------------------------------------------------------
 
- async function spielLaden() {
-        // 1. Die ID aus dem Input-Feld holen
-        const id = document.getElementById("spiel_select").value;
+async function spielLaden(spielID)
+      {
+           //Diese Funktion erhält im fehlerfreien Fall die Tabelle spiele der Datenbank als Array (mit den Zeilen als Objekten)
+          const { data: spiele, error: errorSpiele } = await supabase.from("spiele").select("*").order("id", { ascending: true } );
+           
+          //falls dabei ein Fehler auftritt speichert errorSpiele nicht null, sondern einige Infos zB eine Fehlermeldung, die dann im Absatz mit id "ausgabe"
+          //auf der Website angezeigt wird: 
+           if(errorSpiele)
+           {
+             document.getElementById("ausgabe").innerText=errorSpiele.message;
+             return;
+          }
 
-        if (!id) {
-            // Wenn "Bitte wählen" angeklickt wird passiert nöx
-            return;
-        }
-
+          //die folgende Zeile wird nur im fehlerfreien Fall erreicht und sorgt dafür, dass die Konsole das Array ausdruckt, dass 
+          //wir von supabase erhalten haben --> betrachte es in der Konsole! --> Rechtsklick auf die Website --> "Untersuchen" --> oben im Reiter das Konsolenzeichen auswählen
+         console.log( "spielLaden läuft2");
+         console.log(spiele);
        
+        let text = "";
+        text = text + spiele[spielID].Spiel + ": " + spiele[spielID].team_a + " : " + spiele[spielID].team_b + " - " + spiele[spielID].tore_team_a + " : " + spiele[spielID].tore_team_b + " um " + spiele[spielID].Startzeit + "Uhr";
+        document.getElementById("spielDaten").innerText = text;
+       //team a und team b werden in der Anzeige mit den entsprechenden Namen aus der Datenbank gefüllt und angezeigt
+       
+      }
 
-        // 2. Aus der Tabelle "spiele" das Spiel mit dieser ID laden
-        const { data: spiel, error } = await supabase
-            .from("spiele")
-            .select("team_a, team_b, Startzeit")
-            .eq("id", id)
-            .single();
-
-        if (error) {
-            alert("Fehler: Spiel mit ID " + id + " nicht gefunden.");
-            console.error(error);
-            return;
-        }
-
+      document.getElementById("buttonSpielAnz").addEventListener("click", function() { //bei click auf den Button wird die Funktion spielLaden mit der eingegebenen Spiel-ID aufgerufen
         
-        
-        // 3. Teamnamen in HTML-Elemente 
-        document.getElementById("team_a").innerText = spiel.team_a;
-        document.getElementById("team_b").innerText = spiel.team_b;
-
-        
-        if (spiel.Startzeit) {
-
-            const datumObjekt = new Date(spiel.Startzeit);
-
-            const formatiertesDatum = datumObjekt.toLocaleDateString('de-DE', {
-                day: '2-digit',
-                month: '2-digit'
-            });
-
-            
-            const formatierteZeit = datumObjekt.toLocaleTimeString('de-DE', {
-                hour: '2-digit',
-                minute: '2-digit'
-            });
-        document.getElementById("spiel_datum").innerText = formatiertesDatum;
-        document.getElementById("spiel_zeit").innerText = formatierteZeit;
-        } else {
-        document.getElementById("spiel_datum").innerText = "--.--.";
-        document.getElementById("spiel_zeit").innerText = "--:--";
-        }
-        
-    }
-    // Diese Funktion füllt das Dropdown-Menü beim Laden der Seite
-    async function spieleListeLaden() {
-        const { data: spiele, error } = await supabase
-        .from("spiele")
-        .select("id, team_a, team_b")
-        .order("id", { ascending: true });
-
-        if (error) {
-        console.error("Fehler beim Laden der Spieleliste:", error.message);
-        return;
-        }
-
-        const select = document.getElementById("spiel_select");
-
-        spiele.forEach(spiel => {
-        const option = document.createElement("option");
-        option.value = spiel.id; // Die ID wird im Hintergrund gespeichert
-        option.text = `${spiel.team_a} gegen ${spiel.team_b}`; // Das sieht der Nutzer
-        select.appendChild(option);
-        });
-        }
-
-        // ie Funktion muss einmal aufgerufen werden!
-        spieleListeLaden();
-
-        async function speichern() {
-        // 1. Alle Daten aus den Feldern sammeln
-        const name = document.getElementById("name").value;
-        const spielID = document.getElementById("spiel_select").value;
-        const teamA = document.getElementById("team_a").innerText;
-        const teamB = document.getElementById("team_b").innerText;
-        const toreA = Number(document.getElementById("tore_a").value);
-        const toreB = Number(document.getElementById("tore_b").value);
-
-        // 2. Ist alles ausgefüllt?
-        if (!name || !spielID || teamA === "") {
-            alert("Bitte Namen eingeben und Spiel laden!");
-            return;
-        }
+        const sID = document.getElementById("spiel_ID").value;
+        if(sID >= 0 && sID <= 16 && sID!= "") //überprüft ob die eingegebene Spiel-ID gültig ist
+        {
+          //wenn die Spiel-ID gültig ist, wird der Bereich mit id "spielAnzeige" sichtbar gemacht und die Funktion spielLaden mit der eingegebenen Spiel-ID aufgerufen
+          document.getElementById("ausgabe").hidden = true; //Fehlermeldung wird versteckt, falls sie vorher angezeigt wurde
+          document.getElementById("spielAnzeige").hidden = false;
+           spielLaden(sID);
           
-        // 3. In die Tabelle "tipps" einfügen
-        const { error } = await supabase
-            .from("tipps") 
-            .upsert([{
-                username: name,
-                spiel_ID: spielID,
-                tore_team_a: toreA,
-                tore_team_b: toreB
-            }],
-            {onConflict: 'username,spiel_ID'});
-
-        if (error) {
-            alert("Fehler beim Speichern: " + error.message);
-        } else {
-            alert("Tipp für " + teamA + " vs. " + teamB + " wurde gespeichert!");
         }
-    }
+        else{{
+          //wenn die Spiel-ID ungültig ist, wird der Bereich mit id "spielAnzeige" versteckt und eine Fehlermeldung im Absatz mit id "ausgabe" angezeigt
+          document.getElementById("spielAnzeige").hidden = true;
+          document.getElementById("ausgabe").hidden = false;
+          document.getElementById("ausgabe").innerText = "Bitte eine gültige Spiel-ID eingeben (0-16)!";
+        }}
+      });
+     
 
-    // Funktionen global machen, damit die Buttons sie finden
-    document.getElementById("tippSpeichern").addEventListener("click", speichern);
-    document.getElementById("spiel_select").addEventListener("change", spielLaden);
+     spielLaden(0); //aufruf der Funktion spielLaden mit der Spiel-ID 0, damit das eine Variable weitergegeben wird und so die funktion gestartet werden kann
+
+     async function speichern()
+      {
+        const name = document.getElementById("name").value;
+        const spiel_ID = document.getElementById("spiel_ID").value;
+        const tore_a = document.getElementById("tore_a").value;
+        const tore_b = document.getElementById("tore_b").value;
+
+        if(!name || !tore_a || !tore_b)
+        {
+          document.getElementById("ausgabe").innerText = "Bitte alle Felder ausfüllen!";
+          return;
+        }
+        const {  error } = await supabase.from("tipps").upsert([{username: name,  spiel_ID: spiel_ID, tore_team_a: tore_a, tore_team_b: tore_b}],
+        {onconflict: "username, spielID"});
+        if (error)
+        {
+          alert("Fehler beim Speichern: " + error.message);
+        }
+        else{
+          alert("Tipp erfolgreich gespeichert!");
+        }
+
+      }
+    document.getElementById("speichern").addEventListener("click", function() {
+      speichern();
+    });
 
     //---------------------------------------------------------------------
     //Gruppe3: Anzeige
