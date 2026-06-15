@@ -130,7 +130,7 @@ async function spielLaden(spielID)
           return;
         }
         const {  error } = await supabase.from("tipps").upsert([{username: name,  spiel_ID: spiel_ID, tore_team_a: tore_a, tore_team_b: tore_b}],
-        {onconflict: "username, spielID"});
+        {onConflict: "username, spiel_ID"});
         if (error)
         {
           alert("Fehler beim Speichern: " + error.message);
