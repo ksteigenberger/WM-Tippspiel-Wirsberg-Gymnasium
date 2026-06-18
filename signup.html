@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <title>WM-Tippspiel</title>
+</head>
+<body>
+  <h2>Registrieren</h2>
+
+  <input id="email" type="email" placeholder="Email" />
+  <br /><br />
+  <input id="username" type="text" placeholder="Benutzername"/>
+  <br/><br/>
+  <input id="surname" type="text" placeholder="Vorname"/>
+  <br/><br/>
+  <input id="name" type="text" placeholder="Nachname"/>
+  <br/><br/>
+  <input id="password" type="password" placeholder="Password" />
+  <br /><br />
+
+  <button id="signup">Registrieren</button>
+
+  <p id="status"></p>
+
+  <script type="module">
+    import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+
+    const supabaseUrl = "https://kmhwwdsuzphkpfupkynf.supabase.co";
+    const supabaseKey = "sb_publishable_7ih4VSPUkXVfHkBa7lrDCA_mO_d0pW1";
+
+    const supabase = createClient(supabaseUrl, supabaseKey);
+
+    // redirect if already logged in
+    const { data: { session } } = await supabase.auth.getSession();
+    if (session) {
+      window.location.href = "input.html";
+    }
+
+    async function signup() {
+      const email = document.getElementById("email").value;
+      const username = document.getElementById("username").value;
+      const surname = document.getElementById("surname").value;
+      const name = document.getElementById("name").value;
+      const password = document.getElementById("password").value;
+
+      const { error } = await supabase.auth.signUp({ email, password });
+      
+      const { data: { session } } = await supabase.auth.getSession();
+      const user = session.user;
+
+      const { error2 } = await supabase
+        .from("users")
+        .insert([
+          {
+            user_id: user.id,
+            Vorname: surname,
+            name: name,
+            username: username
+          }
+        ]);
+
+      document.getElementById("status").innerText =
+        error || error2 ? error.message + " " + error2.message : "Signup erfolgreich!";
+    }
+
+    document.getElementById("signup").addEventListener("click", signup);
+
+  </script>
+</body>
+</html>

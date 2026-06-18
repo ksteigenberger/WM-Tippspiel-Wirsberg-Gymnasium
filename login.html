@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <title>Supabase Login Demo</title>
+</head>
+<body>
+  <h2>Login</h2>
+
+  <input id="email" type="email" placeholder="Email" />
+  <br /><br />
+  <input id="password" type="password" placeholder="Password" />
+  <br /><br />
+
+  <button id="login">Login</button>
+  <button id="signup">Sign Up</button>
+  <button id="logout">Logout</button>
+
+  <p id="status"></p>
+
+  <script type="module">
+    import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+
+    const supabaseUrl = "https://kmhwwdsuzphkpfupkynf.supabase.co";
+    const supabaseKey = "sb_publishable_7ih4VSPUkXVfHkBa7lrDCA_mO_d0pW1";
+
+    const supabase = createClient(supabaseUrl, supabaseKey);
+
+    // redirect if already logged in
+    const { data: { session } } = await supabase.auth.getSession();
+    if (session) {
+      window.location.href = "input.html";
+    }
+
+    async function signup() {
+      const email = document.getElementById("email").value;
+      const password = document.getElementById("password").value;
+
+      const { error } = await supabase.auth.signUp({ email, password });
+
+      document.getElementById("status").innerText =
+        error ? error.message : "Signup erfolgreich!";
+    }
+
+    async function login() {
+      const email = document.getElementById("email").value;
+      const password = document.getElementById("password").value;
+
+      const { error } = await supabase.auth.signInWithPassword({
+        email,
+        password
+      });
+
+      if (error) {
+        document.getElementById("status").innerText = error.message;
+      } else {
+        window.location.href = "input.html"; // ✅ redirect
+      }
+    }
+
+    async function logout() {
+      await supabase.auth.signOut();
+      document.getElementById("status").innerText = "Ausgeloggt";
+    }
+
+    document.getElementById("signup").addEventListener("click", signup);
+    document.getElementById("login").addEventListener("click", login);
+    document.getElementById("logout").addEventListener("click", logout);
+
+  </script>
+</body>
+</html>
