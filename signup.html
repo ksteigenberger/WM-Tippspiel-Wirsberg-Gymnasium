@@ -44,8 +44,10 @@
       const password = document.getElementById("password").value;
 
       const { error } = await supabase.auth.signUp({ email, password });
-      const user = session.user;
       
+      const { data: { session } } = await supabase.auth.getSession();
+      const user = session.user;
+
       const { error2 } = await supabase
         .from("users")
         .insert([
