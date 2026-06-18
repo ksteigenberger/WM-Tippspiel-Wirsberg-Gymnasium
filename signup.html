@@ -44,10 +44,21 @@
       const password = document.getElementById("password").value;
 
       const { error } = await supabase.auth.signUp({ email, password });
-      //ToDo Daten auf neue Tabelle einfügen
+      const user = session.user;
+      
+      const { error2 } = await supabase
+        .from("users")
+        .insert([
+          {
+            user_id: user.id,
+            Vorname: surname,
+            name: name,
+            username: username
+          }
+        ]);
 
       document.getElementById("status").innerText =
-        error ? error.message : "Signup erfolgreich!";
+        error || error2 ? error.message + " " + error2.message : "Signup erfolgreich!";
     }
 
     document.getElementById("signup").addEventListener("click", signup);
