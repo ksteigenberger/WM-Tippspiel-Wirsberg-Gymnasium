@@ -1,62 +1,165 @@
 <!DOCTYPE html> 
 <html lang="de"> 
 <head> 
-    <meta charset="UTF-8"> 
-    <title>WM 2026 Tippspiel</title> 
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta charset="UTF-8">
+  <title>WiG Tippspiel Demo</title>
+
   <style>
-    body {
-      font-family: Arial, sans-serif;
-      background-color: #f2f2f2;
-      text-align: center;
-      margin: 40px
-      
+  body {
+    
+  padding-top: 220px;
+
+  font-family: Arial, sans-serif;
+  background-image: url("rasen chatgpt.png");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  text-align: center;
+  margin: 40px;
+  position: relative;
+}
+
+    @font-face {
+  font-family: 'MeineSchrift';
+  src: url('GREGH___.ttf');
+}
+
+body {
+  position: relative;
+}
+
+#header {
+  display: flex;
+  flex-direction: row;   /* nebeneinander auch auf Handy */
+  align-items: center;
+  justify-content: center;
+  gap: 15px;
+  margin-top: -200px;
+  text-align: center;
+  flex-wrap: wrap;       /* wichtig, damit es nicht überläuft */
+}
+
+#title {
+  position: relative;
+  top: 0;
+  left: 0;
+  font-size: clamp(40px, 6vw, 120px);
+  color: white;
+}
+
+   #logo {
+  display: inline-block;
+
+  position: relative;
+  left: 20px;   
+  right: 20px;  
+
+  top: 10px;    
+  bottom: 10px; 
+
+  font-size: 90px;
+  font-family: 'MeineSchrift', sans-serif; 
+  
+ 
+
+  color: white;
+  font-weight: bold;
+  letter-spacing: 0px;
+  text-shadow: 3px 3px 8px rgba(0,0,0,0.3);
+}
+
+#logo-container {
+  position: relative; /* wichtig: NICHT mehr absolute */
+  display: inline-block;
+}
+
+
+#ball-wrapper{
+    position:absolute;
+
+    /* Mittelpunkt des roten Punkts */
+    left:64.8%;
+    top:62.1%;
+
+    /* Ball zentrieren */
+    transform:translate(-50%,-50%);
+
+    animation:flug 1.5s ease-out forwards;
+}
+
+#ball {
+  width: 44px;
+  height: 44px;
+  position: relative;
+  z-index: 2;
+  display: inline-block;
+
+  animation:
+    spin 15s linear infinite;
+}
+
+
+#wirsberg-logo{
+    height:150px;
+}
+
+label {
+  font-size: 28px;
+  font-weight: bold;
+  color: white;
+  text-shadow: 2px 2px 6px rgba(0,0,0,0.6);
+}
+
+#team_a, #team_b {
+  font-size: 32px;
+  color: white;
+  text-shadow: 2px 2px 8px rgba(0,0,0,0.7);
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes flug {
+    from {
+        transform:
+            translate(-50%, -50%)
+            translate(800px, 400px);
     }
 
-    #logo {
-      font-size: 90px;
-      color: darkblue;
-      margin-bottom: 30px;
+    to {
+        transform:
+            translate(-50%, -50%)
+            translate(0, 0);
     }
+}
 
-    #ball {
-      display: inline-block;
-      animation: flug 2s ease-out;
-    }
-
-    @keyframes flug {
-      0% {
-        transform: translate(-300px, -200px);
-      }
-
-      100% {
-        transform: translate(0, 0);
-      }
-    }
-
-    .kasten {
-      background-color: white;
-      padding: 20px;
-      border-radius: 15px;
-      width: 300px;
-      margin: auto;
-    }
-
-    button {
-      padding: 10px 20px;
-      border-radius: 5px;
-      border: none;
-      background-color: red;
-      color: white;
-      cursor: pointer;
-    }
-      
+    
   </style>
 </head>
 <body> 
 
-<h1 id="logo">W<span id="ball">⚽</span>G Tippspiel</h1>
 
-  <label>Name:</label>
+  <div id="logo-container">
+  <img id="wirsberg-logo" src="wirsberg logo transparent.png">
+
+  <span id="ball-wrapper">
+      <img id="ball" src="fussball_ohne_schatten.png">
+  </span>
+</div>
+
+<h1 id="title">M-Tippspiel</h1>
+
+
+ 
 <input type="text" id="name" placeholder="Dein Name">
 <br>
 <label>Spiel auswählen:</label><br>
@@ -292,8 +395,10 @@
     document.getElementById("btn_next").addEventListener("click", () => spielWechseln(1));
     //Veraltet: Wenn man den Namen tippt, sucht das System auch direkt nach alten Tipps
     document.getElementById("name").addEventListener("input", spielLaden);
-    </script>
-    
+    </script> 
+
+
+
     <footer>
     <p>
         <a href="datenschutzerklärung.html">Datenschutzerklärung</a> |
