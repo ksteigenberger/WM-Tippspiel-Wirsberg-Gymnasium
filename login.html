@@ -13,8 +13,8 @@
   <br /><br />
 
   <button id="login">Login</button>
-  <button id="signup">Sign Up</button>
-  <button id="logout">Logout</button>
+  <br/><br/>
+  <a href="signup.html">Registrieren</a>
 
   <p id="status"></p>
 
@@ -29,17 +29,7 @@
     // redirect if already logged in
     const { data: { session } } = await supabase.auth.getSession();
     if (session) {
-      window.location.href = "input.html";
-    }
-
-    async function signup() {
-      const email = document.getElementById("email").value;
-      const password = document.getElementById("password").value;
-
-      const { error } = await supabase.auth.signUp({ email, password });
-
-      document.getElementById("status").innerText =
-        error ? error.message : "Signup erfolgreich!";
+      window.location.href = "index.html";
     }
 
     async function login() {
@@ -54,7 +44,7 @@
       if (error) {
         document.getElementById("status").innerText = error.message;
       } else {
-        window.location.href = "input.html"; // ✅ redirect
+        window.location.href = "index.html"; 
       }
     }
 
@@ -63,9 +53,7 @@
       document.getElementById("status").innerText = "Ausgeloggt";
     }
 
-    document.getElementById("signup").addEventListener("click", signup);
     document.getElementById("login").addEventListener("click", login);
-    document.getElementById("logout").addEventListener("click", logout);
 
   </script>
 </body>
