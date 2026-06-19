@@ -45,14 +45,10 @@
 
       const { error } = await supabase.auth.signUp({ email, password });
       
-      const { data: { session } } = await supabase.auth.getSession();
-      const user = session.user;
-
       const { error2 } = await supabase
         .from("users")
         .insert([
           {
-            user_id: user.id,
             Vorname: surname,
             name: name,
             username: username
@@ -60,7 +56,8 @@
         ]);
 
       document.getElementById("status").innerText =
-        error || error2 ? error.message + " " + error2.message : "Signup erfolgreich!";
+        error ? error.message : "Signup erfolgreich!" + 
+        error2 ? error2.message : "";
     }
 
     document.getElementById("signup").addEventListener("click", signup);
