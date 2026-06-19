@@ -12,36 +12,39 @@ body {
 
 /* ===== Logo (optional like your main page) ===== */
 h2 {
-  color: darkblue;
+  color: red;
   margin-bottom: 20px;
 }
 
-/* ===== Card Box (your .kasten style) ===== */
+/* ===== Container ===== */
 .container {
   background-color: white;
   padding: 25px;
   border-radius: 15px;
-  width: 320px;
+  width: 320px;          /* desktop default (smaller form) */
   margin: auto;
   box-shadow: 0 5px 15px rgba(0,0,0,0.1);
 }
 
-/* ===== Inputs ===== */
+/* ===== Inputs (each on its own line) ===== */
 input {
-  width: 90%;
+  display: block;        /* forces each input to new line */
+  width: 100%;
   padding: 10px;
-  margin: 8px 0;
+  margin: 10px 0;
   border-radius: 6px;
   border: 1px solid #ccc;
   outline: none;
+  box-sizing: border-box;
 }
 
 input:focus {
   border-color: darkblue;
 }
 
-/* ===== Buttons (match your red WM style) ===== */
+/* ===== Buttons ===== */
 button {
+  width: 100%;
   padding: 10px 20px;
   border-radius: 5px;
   border: none;
@@ -78,4 +81,15 @@ a:hover {
 /* ===== Remove ugly spacing hacks ===== */
 br {
   display: none;
+}
+
+@media (max-width: 600px) {
+  .container {
+    width: 90%;   /* full width feel on phone */
+    padding: 20px;
+  }
+
+  input {
+    font-size: 16px; /* prevents zoom on iPhone */
+  }
 }
