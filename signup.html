@@ -9,12 +9,6 @@
 
   <input id="email" type="email" placeholder="Email" />
   <br /><br />
-  <input id="username" type="text" placeholder="Benutzername"/>
-  <br/><br/>
-  <input id="surname" type="text" placeholder="Vorname"/>
-  <br/><br/>
-  <input id="name" type="text" placeholder="Nachname"/>
-  <br/><br/>
   <input id="password" type="password" placeholder="Password" />
   <br /><br />
 
@@ -38,26 +32,12 @@
 
     async function signup() {
       const email = document.getElementById("email").value;
-      const username = document.getElementById("username").value;
-      const surname = document.getElementById("surname").value;
-      const name = document.getElementById("name").value;
       const password = document.getElementById("password").value;
 
       const { error } = await supabase.auth.signUp({ email, password });
-      
-      const { error2 } = await supabase
-        .from("users")
-        .insert([
-          {
-            Vorname: surname,
-            name: name,
-            username: username
-          }
-        ]);
 
       document.getElementById("status").innerText =
-        error ? error.message : "Signup erfolgreich!" + 
-        error2 ? error2.message : "";
+        error ? error.message : "Signup erfolgreich! Schauen Sie in ihren E-Mails";
     }
 
     document.getElementById("signup").addEventListener("click", signup);
