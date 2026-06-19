@@ -2,6 +2,7 @@
 <html lang="de">
 <head>
   <meta charset="UTF-8" />
+  <link rel="stylesheet" href="style.css">
   <title>WM-Tippspiel</title>
 </head>
 <body>
@@ -27,7 +28,7 @@
     // redirect if already logged in
     const { data: { session } } = await supabase.auth.getSession();
     if (session) {
-      window.location.href = "input.html";
+      window.location.href = "login.html";
     }
 
     async function signup() {
