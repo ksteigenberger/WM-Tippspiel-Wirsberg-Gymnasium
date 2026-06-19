@@ -59,10 +59,16 @@ e
   <label>Name:</label>
 <input type="text" id="name" placeholder="Dein Name">
 <br>
-<label>Spiel auswählen:</label>
-<select id="spiel_select" >
-    <option value="">-- Bitte wählen --</option>
-</select>
+<label>Spiel auswählen:</label><br>
+<div style="display: flex; justify-content: center; align-items: center; gap: 10px; margin-top: 10px;">
+    <button id="btn_prev" style="padding: 10px 15px;">◀</button>
+    
+    <select id="spiel_select" style="padding: 10px; border-radius: 5px; cursor: pointer;">
+        <option value="">-- Bitte wählen --</option>
+    </select>
+    
+    <button id="btn_next" style="padding: 10px 15px;">▶</button>
+</div>
 
 <br><br>
 
@@ -108,8 +114,17 @@ e
     
     
     async function spielLaden() {
-        // 1. Die ID aus dem Input-Feld holen
         const id = document.getElementById("spiel_select").value;
+        const name = document.getElementById("name").value.trim();
+        //TestNameInternerSpeicher
+        localStorage.setItem("tippspiel_username", name);
+        // 1. Eingabefelder und Platzhalter standardmäßig zurücksetzen
+        document.getElementById("tore_a").value = "";
+        document.getElementById("tore_b").value = "";
+        document.getElementById("tore_a").placeholder = "0";
+        document.getElementById("tore_b").placeholder = "0";
+
+        if (!id) return;
 
         if (!id) {
             // Wenn "Bitte wählen" angeklickt wird passiert nöx
@@ -161,8 +176,23 @@ e
         document.getElementById("spiel_datum").innerText = "--.--.";
         document.getElementById("spiel_zeit").innerText = "--:--";
         }
-        
+        //Neu
+        if (name) {
+            const { data: tipp, error: tippError } = await supabase
+                .from("tipps")
+                .select("tore_team_a, tore_team_b")
+                .eq("username", name)
+                .eq("spiel_ID", id)
+                .maybeSingle(); // Verhindert Absturz, wenn kein Tipp existiert
+
+            if (!tippError && tipp) {
+                // Setzt die Tore als grauen Vorschau-Text
+                document.getElementById("tore_a").placeholder = tipp.tore_team_a;
+                document.getElementById("tore_b").placeholder = tipp.tore_team_b;
+            }
+        }   
     }
+
     // Diese Funktion füllt das Dropdown-Menü beim Laden der Seite
     async function spieleListeLaden() {
         const { data: spiele, error } = await supabase
@@ -218,20 +248,50 @@ e
             alert("Fehler beim Speichern: " + error.message);
         } else {
             alert("Tipp für " + teamA + " vs. " + teamB + " wurde gespeichert!");
+            //Neu
+            document.getElementById("tore_a").placeholder = toreA;
+            document.getElementById("tore_b").placeholder = toreB;
+            document.getElementById("tore_a").value = "";
+            document.getElementById("tore_b").value = "";
         }
     }
 
+    // Navigiert durch das Dropdown-Menü
+    function spielWechseln(richtung) {
+        const select = document.getElementById("spiel_select");
+        const currentIndex = select.selectedIndex;
+        const totalOptions = select.options.length;
+
+        // Wenn noch keine Spiele geladen sind mach nichts
+        if (totalOptions <= 1) return;
+
+        let newIndex = currentIndex + richtung;
+
+        // prüfen: Index 0 ist "Bitte wählen" Spiele fangen bei 1 an
+        if (newIndex < 1) {
+            newIndex = totalOptions - 1; // Springe ans Ende
+        } else if (newIndex >= totalOptions) {
+            newIndex = 1; // Springe an den Anfang (erstes Spiel)
+        }
+
+        // Wähle das neue Spiel im Dropdown aus
+        select.selectedIndex = newIndex;
+
+        // Lade die Daten des neuen Spiels
+        spielLaden();
+      }
+      //InternerSpeicherTest
+      const gespeicherterName = localStorage.getItem("tippspiel_username");
+      if (gespeicherterName) {
+        document.getElementById("name").value = gespeicherterName;
+      }
     // Funktionen global machen, damit die Buttons sie find en
     document.getElementById("tippSpeichern").addEventListener("click", speichern);
     document.getElementById("spiel_select").addEventListener("change", spielLaden);
-
-    //Alte Sachen und so:
-    //<label>SpielID:</label>
-    //<input type="number" id="Spiel_ID" min="0">
-    //<button onclick="spielLaden()">Spiel Laden</button>
-    //-----
-    //Gruppe3: Anzeige
-    //---------------------------------------------------------------------
+    document.getElementById("btn_prev").addEventListener("click", () => spielWechseln(-1));
+    document.getElementById("btn_next").addEventListener("click", () => spielWechseln(1));
+    //Veraltet: Wenn man den Namen tippt, sucht das System auch direkt nach alten Tipps
+    document.getElementById("name").addEventListener("input", spielLaden);
     </script> 
 </body> 
 </html>
