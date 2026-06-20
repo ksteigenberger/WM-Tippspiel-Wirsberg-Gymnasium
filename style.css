@@ -90,11 +90,8 @@ button:hover {
 a {
   margin-top: 15px;
   color: red;
-  text-decoration: none;
-}
-
-a:hover {
   text-decoration: underline;
+  font-size: 30px;
 }
 
 /* ===== Status ===== */
