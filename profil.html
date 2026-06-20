@@ -30,10 +30,29 @@
 
       const supabase = createClient(supabaseUrl, supabaseKey);
 
-      // redirect if already logged in
+      // Session holen, um Daten des Users auslesen zu können. Keine Session->Weiterleitung zum login.html
       const { data: { session } } = await supabase.auth.getSession();
       if (!session) {
         window.location.href = "login.html";
+      }
+
+      async function loadData(){
+        const { data, error } = await supabase
+          .from('users')
+          .select('Vorname, Name, username')
+          .eq('user_ID', user.id)
+          .single();
+        if(!error){
+          
+          document.getElementById("username").value = data.username;
+          document.getElementById("surname").value = data.Vorname;
+          document.getElementById("name").value = data.Name;
+          
+          document.getElementById("username").readonly = true;
+          document.getElementById("surname").readonly = true;
+          document.getElementById("name").readonly = true;
+
+        }
       }
 
       async function signup() {
@@ -52,10 +71,11 @@
           ]);
 
         document.getElementById("status").innerText =
-          error ? error.message : "Signup erfolgreich!";
+          error ? error.message : "Profil erfolgreich geändert!";
       }
 
       document.getElementById("signup").addEventListener("click", signup);
+      loadData();
 
     </script>
   </div>

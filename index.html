@@ -158,8 +158,8 @@ label {
 
 <h1 id="title">M-Tippspiel</h1>
 
-
- 
+<a href="profil.html" style="font-size: 30px;">Profil</a>
+<br/><br/> 
 <input type="text" id="name" placeholder="Dein Name">
 <br>
 <label>Spiel auswählen:</label><br>
@@ -187,9 +187,13 @@ label {
   <h2>Anzeige</h2> <!--in diesem Bereich arbeitet nur Gruppe3 -->
   <div id="anzeige"></div>
 
-
-
-
+    <footer>
+        <p>
+            <a href="datenschutzerklärung.html">Datenschutzerklärung</a> |
+            <a href="impressum.html">Impressum</a>  |
+            <button id="logout">Logout</button>
+        </p>
+    </footer>
  <!--Logik und DB-Verbindung mit JavaScript -->
   <script type="module">
 
@@ -209,6 +213,21 @@ label {
     const supabaseKey = "sb_publishable_7ih4VSPUkXVfHkBa7lrDCA_mO_d0pW1";
 
     const supabase = createClient(supabaseUrl, supabaseKey);
+
+    // Session holen, um Daten des Users auslesen zu können. Keine Session->Weiterleitung zum login.html
+    const { data: { session } } = await supabase.auth.getSession();
+    if (!session) {
+        window.location.href = "login.html";
+    }
+
+    //Logout Funktion
+    async function logout() {
+        await supabase.auth.signOut();
+        document.getElementById("status").innerText = "Ausgeloggt";
+    }
+
+    //Funktion mit Logout-Button verbinden
+    document.getElementById("logout").addEventListener("click", logout); 
 
     //----------------------------------------------------------------------
     //Gruppe1: Eingabe
@@ -396,14 +415,6 @@ label {
     //Veraltet: Wenn man den Namen tippt, sucht das System auch direkt nach alten Tipps
     document.getElementById("name").addEventListener("input", spielLaden);
     </script> 
-
-
-    <footer>
-    <p>
-        <a href="datenschutzerklärung.html">Datenschutzerklärung</a> |
-        <a href="impressum.html">Impressum</a>
-    </p>
-</footer>
-    
+   
 </body> 
 </html>
