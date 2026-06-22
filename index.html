@@ -229,7 +229,6 @@ label {
     //Logout Funktion
     async function logout() {
         await supabase.auth.signOut();
-        document.getElementById("status").innerText = "Ausgeloggt";
         window.location.href = "login.html";
     }
 
