@@ -67,9 +67,7 @@
 
       async function reset(){
         const email = document.getElementById("email").value;
-        const { data, error } = await supabase.auth.resetPasswordForEmail(email, {
-        redirectTo: 'https://wig-wm.de/update-password.html',
-        });
+        const { data, error } = await supabase.auth.resetPasswordForEmail(email, {redirectTo: 'https://wig-wm.de/update-password.html'});
       }
 
       redirect();
