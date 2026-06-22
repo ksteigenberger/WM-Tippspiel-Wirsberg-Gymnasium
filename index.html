@@ -57,7 +57,7 @@ body {
   top: 10px;
   bottom: 10px;
 
-  width: 350px;   /* neue Zeile */
+  width: 510px;   /* neue Zeile */
   height: auto;   /* neue Zeile */
 
   color: white;
@@ -72,15 +72,15 @@ body {
 
 #ball-wrapper{
     position:absolute;
-    left:17.4%;
-    top:61%;
+    left:19.2%;
+    top:66.6%;
     transform:translate(-50%,-50%);
     animation:flug 1.5s ease-out forwards;
 }
 
 #ball {
-  width: 20px;
-  height: 20px;
+  width: 26px;
+  height: 26px;
   position: relative;
   z-index: 2;
   display: inline-block;
@@ -106,7 +106,7 @@ label {
 }
 
 #team_a, #team_b {
-  font-size: 28px;
+  font-size: 20px;
   color: white;
   text-shadow: 2px 2px 8px rgba(0,0,0,0.7);
 }
@@ -142,7 +142,7 @@ h2 {
     from {
         transform:
             translate(-50%, -50%)
-            translate(800px, 400px);
+            translate(430px, 400px);
     }
 
     to {
@@ -169,9 +169,8 @@ h2 {
   
 </div>
 
-      
-<a href="profil.html" style="font-size: 30px;">Profil</a>
-<br/><br/> 
+
+ 
 <input type="text" id="name" placeholder="Dein Name">
 <br>
 <label>Spiel auswählen:</label><br>
@@ -197,7 +196,6 @@ h2 {
 <input type="number" id="tore_b" min="0" step="1" oninput="this.value = this.value.replace(/[^0-9]/g, '');" style="width:40px;" placeholder="0"> 
 <span id="team_b" style="font-weight:bold;">Team B</span> <br></br>
 <button id = "tippSpeichern">Tipp speichern</button>
-
 
 
   <h2>Anzeige</h2> <!--in diesem Bereich arbeitet nur Gruppe3 -->
