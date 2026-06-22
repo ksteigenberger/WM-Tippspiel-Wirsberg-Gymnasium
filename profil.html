@@ -115,7 +115,11 @@
 
     const supabase = createClient(supabaseUrl, supabaseKey);
 
- //ende der Verbindung-------------------------------------------------------------
+    //Session holen, um Daten des Users auslesen zu können. Keine Session->Weiterleitung zum login.html
+    //const { data: { session } } = await supabase.auth.getSession();
+    //if (!session) {
+    //    window.location.href = "login.html";
+    //}
 
    async function loadProfile(username) 
    {
