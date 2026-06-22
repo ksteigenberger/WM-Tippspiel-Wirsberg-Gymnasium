@@ -96,8 +96,8 @@
       <p>
         <a href="index.html">Startseite</a> |
         <a href="datenschutzerklärung.html">Datenschutzerklärung</a>  |
-        <a href="impressum.html">Impressum</a>  
-        <!-- <button id="logout">Logout</button> -->
+        <a href="impressum.html">Impressum</a>    | 
+        <button id="logout">Logout</button> 
       </p>
     </footer>
     
@@ -142,9 +142,17 @@
     //document.getElementById("email").innerText=users[indexUser].email;
     }
 
-// WICHTIG: Funktion starten
-loadProfile("EmelieErdbeer");
-//ende der Funktion----------------------
+    // WICHTIG: Funktion starten
+    loadProfile("EmelieErdbeer");
+
+      //Logout Funktion
+    async function logout() {
+        await supabase.auth.signOut();
+        document.getElementById("status").innerText = "Ausgeloggt";
+    }
+
+    //Funktion mit Logout-Button verbinden
+    document.getElementById("logout").addEventListener("click", logout); 
 
 </script> 
 </body>
