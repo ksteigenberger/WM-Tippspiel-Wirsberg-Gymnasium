@@ -1,14 +1,14 @@
 <!DOCTYPE html> 
 <html lang="de"> 
 <head> 
-      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
       <meta charset="UTF-8">
   <title>WiG Tippspiel Demo</title>
 
   <style>
   body {
     
-  padding-top: 220px;
+  padding-top: 200px;
 
   font-family: Arial, sans-serif;
   background-image: url("rasen chatgpt.png");
@@ -36,7 +36,7 @@ body {
   align-items: center;
   justify-content: center;
   gap: 15px;
-  margin-top: -200px;
+  margin-top: -120px;
   text-align: center;
   flex-wrap: wrap;       /* wichtig, damit es nicht überläuft */
 }
@@ -70,22 +70,17 @@ body {
   text-shadow: 3px 3px 8px rgba(0,0,0,0.3);
 }
 
-#logo-container {
-  position: relative; /* wichtig: NICHT mehr absolute */
-  display: inline-block;
+#logo-container{
+    position:relative;
+    display:inline-block;
 }
 
 
 #ball-wrapper{
     position:absolute;
-
-    /* Mittelpunkt des roten Punkts */
-    left:64.8%;
-    top:62.1%;
-
-    /* Ball zentrieren */
+    left:17.4%;
+    top:61%;
     transform:translate(-50%,-50%);
-
     animation:flug 1.5s ease-out forwards;
 }
 
@@ -105,6 +100,10 @@ body {
     height:150px;
 }
 
+#name {
+    margin-top: 50px;
+}
+
 label {
   font-size: 28px;
   font-weight: bold;
@@ -113,7 +112,7 @@ label {
 }
 
 #team_a, #team_b {
-  font-size: 32px;
+  font-size: 28px;
   color: white;
   text-shadow: 2px 2px 8px rgba(0,0,0,0.7);
 }
@@ -148,16 +147,18 @@ label {
 <body> 
 
 
+ <div id="header">
   <div id="logo-container">
-  <img id="wirsberg-logo" src="wirsberg logo transparent.png">
-
-  <span id="ball-wrapper">
-      <img id="ball" src="fussball_ohne_schatten.png">
-  </span>
+    <img id="logo" src="logo mit titel final.png">
+    <span id="ball-wrapper">
+        <img id="ball" src="fussball_ohne_schatten.png">
+    </span>
 </div>
 
-<h1 id="title">M-Tippspiel</h1>
+  
+</div>
 
+      
 <a href="profil.html" style="font-size: 30px;">Profil</a>
 <br/><br/> 
 <input type="text" id="name" placeholder="Dein Name">
