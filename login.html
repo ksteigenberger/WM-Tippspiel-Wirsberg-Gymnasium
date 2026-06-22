@@ -1,114 +1,11 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
+  <link rel="stylesheet" href="style.css">
   <title>Supabase Login Demo</title>
-
-  <style>
-    body {
-      padding-top: 40px;
-      font-family: Arial, sans-serif;
-      background-image: url("rasen chatgpt.png");
-      background-size: cover;
-      background-position: center;
-      background-repeat: no-repeat;
-      background-attachment: fixed;
-      text-align: center;
-      margin: 0;
-    }
-
-    #header {
-      display: flex;
-      justify-content: center;
-      margin-top: 20px;
-    }
-
-    #logo-container {
-      position: relative;
-      display: inline-block;
-    }
-
-    #logo {
-      width: 510px;
-      height: auto;
-    }
-
-    #ball-wrapper {
-      position: absolute;
-      left: 15.2%;
-      top: 56%;
-      transform: translate(-50%, -50%);
-      animation: flug 1.5s ease-out forwards;
-    }
-
-    #ball {
-      width: 26px;
-      height: 26px;
-      animation: spin 15s linear infinite;
-    }
-
-    #container {
-  width: 350px;
-  margin: 20px auto;
-  padding: 30px;
-
-  background: transparent;
-}
-
-    #container h2,
-    #container p,
-    #container a {
-      color: white;
-    }
-
-    input {
-      width: 90%;
-      padding: 10px;
-      border-radius: 5px;
-      border: none;
-      font-size: 16px;
-    }
-
-    button {
-      padding: 10px 20px;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-      font-size: 16px;
-    }
-
-    @keyframes spin {
-      from { transform: rotate(0deg); }
-      to { transform: rotate(360deg); }
-    }
-
-    @keyframes flug {
-      from {
-        transform:
-          translate(-50%, -50%)
-          translate(430px, 400px);
-      }
-
-      to {
-        transform:
-          translate(-50%, -50%)
-          translate(0, 0);
-      }
-    }
-  </style>
 </head>
-
 <body>
-
-  <div id="header">
-    <div id="logo-container">
-      <img id="logo" src="logo mit titel final.png" alt="WiG Tippspiel">
-
-      <span id="ball-wrapper">
-        <img id="ball" src="fussball_ohne_schatten.png" alt="Ball">
-      </span>
-    </div>
-  </div>
   <div id="container">
     <h2>Login</h2>
 
@@ -120,6 +17,8 @@
     <button id="login">Login</button>
     <br/><br/>
     <a href="signup.html">Registrieren</a>
+    <br/><br/>
+    <button id="pswd-reset">Passwort zurücksetzen</button>
 
     <p id="status"></p>
 
@@ -166,9 +65,17 @@
         }
       }
 
+      async function reset(){
+        const email = document.getElementById("email").value;
+        const { data, error } = await supabase.auth.resetPasswordForEmail(email, {
+        redirectTo: 'https://wig-wm.de/update-password.html',
+        });
+      }
+
       redirect();
 
       document.getElementById("login").addEventListener("click", login);
+      document.getElementById("pswd-reset").addEventListener("click", reset);
 
     </script>
   </div>
