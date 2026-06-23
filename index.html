@@ -3,8 +3,9 @@
 <head> 
     <meta charset="UTF-8"> 
     <title>WM 2026 Tippspiel</title> 
-
- 
+</head>
+ <body>
+     <p> Bitte warten ... </p>
 <script type="module">
 
      //---------------------------------------------------------------------
@@ -17,20 +18,28 @@
 
     const supabase = createClient(supabaseUrl, supabaseKey);
   
-        
- // Session prüfen
-    const{data: { session } } = await supabase.auth.getSession();
-    if(session)
+    async function weiterleiten()
     {
-        //Benutzer bereits angemeldet 
-        windows.location.href ="tippen.html";
+        const { data: { session } } = await supabase.auth.getSession();
     }
-    else
-    {
 
-        //Noch nicht angemeldet
-        window.location.href="login.html";
+   if(!session)
+   {
+       window.location.href ="login.html";
+       return;
+   }
+    const user = session.user;
+    const { count, error } = await supabase.from("users").select("*", { count: "exact", head: true}).eq("user_ID", user.id);
+
+    if(error || count <1)
+    {
+        window.location.href ="profil.html"
+        return;
     }
+    window.location.href ="tippen.html";
+    }
+
+    weiterleiten();
             
 
     </script> 
