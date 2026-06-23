@@ -1,14 +1,14 @@
 <!DOCTYPE html> 
 <html lang="de"> 
 <head> 
-      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
       <meta charset="UTF-8">
   <title>WiG Tippspiel Demo</title>
 
   <style>
   body {
     
-  padding-top: 220px;
+  padding-top: 200px;
 
   font-family: Arial, sans-serif;
   background-image: url("rasen chatgpt.png");
@@ -36,7 +36,7 @@ body {
   align-items: center;
   justify-content: center;
   gap: 15px;
-  margin-top: -200px;
+  margin-top: -120px;
   text-align: center;
   flex-wrap: wrap;       /* wichtig, damit es nicht überläuft */
 }
@@ -49,53 +49,36 @@ body {
   color: white;
 }
 
-   #logo {
+  #logo {
   display: inline-block;
-
   position: relative;
-  left: 20px;   
-  right: 20px;  
+  left: 20px;
+  right: 20px;
+  top: 10px;
+  bottom: 10px;
 
-  top: 10px;    
-  bottom: 10px; 
-
-  font-size: 90px;
-  font-family: 'MeineSchrift', sans-serif; 
-  
- 
   width: 350px;   /* neue Zeile */
   height: auto;   /* neue Zeile */
 
   color: white;
   font-weight: bold;
-  letter-spacing: 0px;
-  text-shadow: 3px 3px 8px rgba(0,0,0,0.3);
 }
 
-#logo-container {
-  position: relative; /* wichtig: NICHT mehr absolute */
-  display: inline-block;
+#logo-container{
+    position:relative;
+    display:inline-block;
 }
 
 
 #ball-wrapper{
     position:absolute;
-
-    /* Mittelpunkt des roten Punkts */
-    left:64.8%;
-    top:62.1%;
-
-    /* Ball zentrieren */
     left:21%;
     top:68.5%;
     transform:translate(-50%,-50%);
-
     animation:flug 1.5s ease-out forwards;
 }
 
 #ball {
-  width: 44px;
-  height: 44px;
   width: 20px;
   height: 20px;
   position: relative;
@@ -111,6 +94,10 @@ body {
     height:150px;
 }
 
+#name {
+    margin-top: 50px;
+}
+
 label {
   font-size: 28px;
   font-weight: bold;
@@ -119,9 +106,26 @@ label {
 }
 
 #team_a, #team_b {
-  font-size: 32px;
+  font-size: 20px;
   color: white;
   text-shadow: 2px 2px 8px rgba(0,0,0,0.7);
+}
+
+#spiel_datum,
+#spiel_zeit {
+  color: white;
+  text-shadow: 2px 2px 6px rgba(0,0,0,0.6);
+}
+
+#spielinfo {
+  color: white;
+  font-size: 20px;
+  text-shadow: 2px 2px 6px rgba(0,0,0,0.6);
+}
+
+h2 {
+  color: white;
+  text-shadow: 2px 2px 6px rgba(0,0,0,0.6);
 }
 
 @keyframes spin {
@@ -138,7 +142,7 @@ label {
     from {
         transform:
             translate(-50%, -50%)
-            translate(800px, 400px);
+            translate(280px, 400px);
     }
 
     to {
@@ -154,18 +158,19 @@ label {
 <body> 
 
 
+ <div id="header">
   <div id="logo-container">
-  <img id="wirsberg-logo" src="wirsberg logo transparent.png">
-
-  <span id="ball-wrapper">
-      <img id="ball" src="fussball_ohne_schatten.png">
-  </span>
+    <img id="logo" src="logo mit titel final.png">
+    <span id="ball-wrapper">
+        <img id="ball" src="fussball_ohne_schatten.png">
+    </span>
 </div>
 
-<h1 id="title">M-Tippspiel</h1>
+  
+</div>
 
-<a href="profil.html" style="font-size: 30px;">Profil</a>
-<br/><br/> 
+
+ 
 <input type="text" id="name" placeholder="Dein Name">
 <br>
 <label>Spiel auswählen:</label><br>
@@ -181,7 +186,11 @@ label {
 
 <br><br>
 
-&nbsp;&nbsp;&nbsp;Anstoß: <span id="spiel_datum">--.--.</span> | <span id="spiel_zeit">--:--</span> Uhr <br>
+&nbsp;&nbsp;&nbsp;<div id="spielinfo">
+  Anstoß: <span id="spiel_datum">--.--.</span> |
+  <span id="spiel_zeit">--:--</span> Uhr
+</div>
+<br>
 <span id="team_a" style="font-weight:bold;">Team A</span> 
 <input type="number" id="tore_a" min="0" step="1" oninput="this.value = this.value.replace(/[^0-9]/g, '');" style="width:40px;" placeholder="0"> : 
 <input type="number" id="tore_b" min="0" step="1" oninput="this.value = this.value.replace(/[^0-9]/g, '');" style="width:40px;" placeholder="0"> 
