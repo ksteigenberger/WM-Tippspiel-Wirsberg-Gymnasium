@@ -8,7 +8,7 @@
      <p> Bitte warten ... </p>
 <script type="module">
 
- 
+ document.body.innerText = "Script startet...";
 
      //---------------------------------------------------------------------
     //Supabase Verbindung (nicht ändern!!)
@@ -34,20 +34,20 @@
         const user = session.user;
         const { count, error } = await supabase.from("users").select("*", { count: "exact", head: true}).eq("user_ID", user.id);
 
-    if(error)
-    {
-        document.body.innerText="Fehler: " + error.message;
-        return;
-    }
+        if(error)
+        {
+            document.body.innerText="Fehler: " + error.message;
+            return;
+        }
 
-    if(count <1)
-    {
-        window.location.href ="profil.html";
-    }
-    else
-    {
-    window.location.href ="tippen.html";
-    }
+        if(count <1)
+        {
+            window.location.href ="profil.html";
+        }
+        else
+        {
+        window.location.href ="tippen.html";
+        }
 }
 
     weiterleiten();
