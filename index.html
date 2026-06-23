@@ -1,36 +1,26 @@
 <!DOCTYPE html>
-
-<html>
+<html lang="en">
 <head>
-
-    <title> Test</title>
-
+    <title>Tabelle</title>
 </head>
-
 <body>
-
-<h1>Tippspiel</h1><br>
-<!--Anzeige fuer das Spielergebnis ueber der Tabelle-->
-<div id="spielErgebnis"></div>
-<!--Tabelle mit den einzelnen Tipps für ein bestimmtes Spiel-->
-<table border ="1">
-   <thead>
-      <tr>
-         <th>Benutzer</th>
-         <th id="getipptA">Tore getippt </th>
-         <th id="getipptB">Tore getippt </th>
-         <th>Punkte</th>
-      </tr>
-   </thead>
-   <tbody id="tabelle1"></tbody>
-</table>
-<!--Button um tabelleLaden() aufzurufen-->
-<button id="ButtonTabelle">Tabelle anzeigen</button>
-<!--Button um laden() aufzurufen-->
-<button id ="Button1">Alle Tipps</button> <br>
-
-
-<p id="ausgabe"></p>
+    <input type="text" id="suche" placeholder="Spieler suchen...">
+    <table border ="1">
+        <thead>
+            <tr>
+                <th>Platz</th>
+                <th>Benutzer</th>
+                <th>Punkte</th>
+                <th>
+                    <button id="zurueck">&larr;</button>
+                    <span id="spielT"></span>
+                    <button id="weiter">&rarr;</button>
+                </th>   
+            </tr>
+        </thead>
+        <tbody id="tabelle1"></tbody>
+    </table>
+</body>
 
 
 <script type="module">
@@ -38,65 +28,62 @@
 //--------------------------------------------------------------------------------------
 //Verbindung zur Datenbank:
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
-console.log("Skript gestartet");
 const supabaseUrl="https://kmhwwdsuzphkpfupkynf.supabase.co";
 const supabaseKey ="sb_publishable_7ih4VSPUkXVfHkBa7lrDCA_mO_d0pW1";
 const supabase = createClient(supabaseUrl, supabaseKey);
-//--------------------------------------------------------------------------------------
 
-//Alle Tipps eines bestimmten Spieles werden gedruckt
-async function laden(spielId)
 
-{ 
-  //Daten aus Supabase rausziehen
-     const { data: tipps,error: errortipps } = await supabase.from("tipps").select("*");
-     const { data: spiele,error:  errorspiele} = await supabase.from("spiele").select("*").order("id", {ascending: true});
-     if(errortipps)
+let points_for_l1_prediction = 4;
+let points_for_l2_prediction = 3;
+let points_for_l3_prediction = 2;
+let points_for_draw_prediction = 2;
+let aktuellesSpiel = 0;
+let rangliste = [];
+let zeileT = [];
+
+const { data: spiele, error:  errorspiele} = await supabase.from("spiele").select("*").order("id", {ascending: true});
+    if(errorspiele)
      {
-        document.getElementById("ausgabe").innerText=errortipps.message;
-        return;
-     }
-     if(errorspiele)
-     {
-        document.getElementById("ausgabe").innerText=errorspiele.message;
-        return;
-     }
-     //Konsole gibt tipps und spiele aus, um auf einen fehler zu pruefen
-     console.log(tipps);
-     console.log(spiele);
-     let text ="Beim Spiel " + spiele[spielId].team_a + " gegen " + spiele[spielId].team_b + " gab es folgende Tipps: \n";
-     //Alle Tipps werden in die Ausgabe geschrieben
-     for(let i = 0; i < tipps.length;i++)
-     {
-      if(tipps[i].spiel_ID == spielId)
-        text = text + "Der Spieler " + tipps[i].username + " hat folgendes getippt: " + spiele[spielId].team_a + " " + tipps [i].tore_team_a + ":" + tipps[i].tore_team_b + " "+ spiele[spielId].team_b + "\n";
+       document.getElementById("ausgabe").innerText=errorspiele.message;
      }
 
-     document.getElementById("ausgabe").innerText=text;
+const { data: users, error: errorusers} = await supabase.from("users").select("*");
+    if(errorusers)
+    {
+        document.getElementById("ausgabe").innerText=errorusers.message;
+    }
 
+
+// Funktion zum sortieren und einfuegen in das Array
+
+async function ranglisteEintragen()
+{
+
+
+    for(let i = 0; i < users.length; i++)
+    {
+        let gesamtPunkte = await gesPunkteBerechnen(users[i].user_ID);
+        rangliste.push({
+            user_ID: users[i].user_ID,
+            punkte: gesamtPunkte
+        });
+
+    }
+    rangliste.sort((a, b) => b.punkte - a.punkte);
+    
 
 }
 
-  let points_for_l1_prediction = 4;
-  let points_for_l2_prediction = 3;
-  let points_for_l3_prediction = 2;
-  let points_for_draw_prediction = 2;
+
 
 async function punkteBerechnen(spielID, tippA, tippB)
 {
-  
-  const { data: spiele, error:  errorspiele} = await supabase.from("spiele").select("*").order("id", {ascending: true});
-  
-     
- if(errorspiele)
-     {
-       document.getElementById("ausgabe").innerText=errorspiele.message;
-       return;
-     }
+
   let temp1 = spiele[spielID].tore_team_a - spiele[spielID].tore_team_b;
-  
+  //arr_result_goals_A[i] - arr_result_goals_B[i];
         let temp2 = tippA - tippB;
-        
+        //matrix_predict_goals_A[j][i] - matrix_predict_goals_B[j][i];
+
           if ( temp1 == temp2 && tippA == spiele[spielID].tore_team_a)
           {
             return points_for_l1_prediction;
@@ -130,52 +117,159 @@ async function punkteBerechnen(spielID, tippA, tippB)
 
 }
 
-async function tabelleLaden(spielId)
-
-{ 
-
-     const { data: tipps, error: errortipps } = await supabase.from("tipps").select("*");
-     const { data: spiele, error: errorspiele} = await supabase.from("spiele").select("*").order("id", {ascending: true});
-     if(errortipps)
-     {
+async function gesPunkteBerechnen(tipper_ID)
+{
+    const { data: tipps, error: errortipps } = await supabase.from("tipps").select("*").eq("tipper_ID", tipper_ID);
+    if(errortipps)
+    {
         document.getElementById("ausgabe").innerText=errortipps.message;
         return;
-     }
-     if(errorspiele)
-     {
+    }
+    let answer = 0;
+    for(let i = 0; i < tipps.length; i++)
+    {
+        answer = answer + await punkteBerechnen(tipps[i].spiel_ID, tipps[i].tore_team_a, tipps[i].tore_team_b)
+    }
+    return answer;
+}
+
+async function nameUserIdGeben(userId)
+{
+    const { data: usersEq, error: errorusers} = await supabase.from("users").select("*").eq("user_ID", userId);
+    if(errorusers)
+    {
+        document.getElementById("ausgabe").innerText=errorusers.message;
+        return;
+    }
+    if(usersEq.length != 0)
+    {
+        return usersEq[0].username;
+    }
+    else
+    {
+        console.log("invalide User_ID");
+        return null;
+    }
+}
+
+// Funktion zum Laden von Platz, Benutzer und Punkte
+
+async function festeSpaltenLaden()
+{
+    let rang = 1;
+    const tabelle = document.getElementById("tabelle1");
+    let pktVorher = -1;
+    tabelle.innerHTML = "";
+    for(let i = 0; i < rangliste.length; i++)
+    {
+        let gesPunkte = rangliste[i].punkte;
+        if(gesPunkte < pktVorher)
+        {
+            rang++;
+        }
+         const row = tabelle.insertRow();
+
+        row.insertCell().innerText = rang;
+        row.insertCell().innerText = await nameUserIdGeben(rangliste[i].user_ID);
+        row.insertCell().innerText = gesPunkte;
+        row.insertCell().innerHTML = ""; // spätere Spalte
+
+        pktVorher = gesPunkte;
+        pktVorher = gesPunkte;
+    }
+    await variableSpalteLaden(aktuellesSpiel);
+}
+
+
+// Funktion zum Laden von der Spalte mit Tipps
+
+async function variableSpalteLaden(spielId)
+{
+    const { data: tipps, error: errortipps } = await supabase.from("tipps").select("*").eq("spiel_ID", spielId);
+    const { data: spiele, error: errorspiele} = await supabase.from("spiele").select("*").order("id", {ascending: true});
+    if(errortipps)
+    {
+        document.getElementById("ausgabe").innerText=errortipps.message;
+        return;
+    }
+    if(errorspiele)
+    {
         document.getElementById("ausgabe").innerText=errorspiele.message;
         return;
-     }
-     //Ueberschrift der Spalten mit Teamnamen 
-     document.getElementById("getipptA").innerText="Tore getippt " + spiele[spielId].team_a;
-     document.getElementById("getipptB").innerText="Tore getippt " + spiele[spielId].team_b;
-     //Spielergebnis wird ueber der Tabelle angezeigt
-     document.getElementById("spielErgebnis").innerText=spiele[spielId].Spiel +" Endergebnis: " + spiele[spielId].team_a + " " + spiele[spielId].tore_team_a + ":" + spiele[spielId].tore_team_b + " " +spiele[spielId].team_b;
-     const tabelle = document.getElementById("tabelle1");
-     //Einzelne tipps von dem Spiel mit spielId werden als neue Zeile in die Tabelle eingetragen
-     for(let i=0; i<tipps.length;i++)
-     {
-      if(tipps[i].spiel_ID == spielId)
-      {
-        const punkte = await punkteBerechnen(spielId, tipps[i].tore_team_a, tipps[i].tore_team_b);
-         tabelle.innerHTML += `
-            <tr>
-               <td>${tipps[i].username}</td>
-               <td>${tipps[i].tore_team_a}</td>
-               <td>${tipps[i].tore_team_b}</td>
-               <td>${punkte}</td>
-            </tr> `
-         ;
-      }
-     }
+    }
+    document.getElementById("spielT").innerText=spiele[spielId].team_a + " - " + spiele[spielId].team_b + "\n" + spiele[spielId].tore_team_a + " : " + spiele[spielId].tore_team_b;
+    const tabelle = document.getElementById("tabelle1");
+    let temp1 = false;
+    for(let i=0; i<rangliste.length;i++)
+    {
+        temp1 = false;
+        for(let j=0; j < tipps.length; j++)
+        {
+            if(rangliste[i].user_ID == tipps[j].tipper_ID && tipps[j].spiel_ID == spielId)
+            {
+                let punkte = await punkteBerechnen(aktuellesSpiel, tipps[j].tore_team_a, tipps[j].tore_team_b);
+                temp1 = true;     
+                tabelle.rows[i].cells[3].innerHTML =
+                    `${tipps[j].tore_team_a} : ${tipps[j].tore_team_b}<sup>${punkte}</sup>`;
+                break;
+            }
+        }
+          
+        if (temp1 == false)
+        {
+           tabelle.rows[i].cells[3].innerHTML =
+            `- : -<sup>0</sup>`;
+        }
 
+    }
 }
-//Buttons fuehren die Funktionen aus und werden disabled
-document.getElementById("ButtonTabelle").addEventListener("click", function() { this.disabled = true;
-tabelleLaden(0);});
-document.getElementById("Button1").addEventListener("click", function() { this.disabled = true;
-laden(0);});
+// Funktion fuer die Pfeile
+async function spielRechts(w)
+{
+    //const tabelle = document.getElementById("tabelle1");
+    //tabelle.innerHTML = "";
+    if(w && aktuellesSpiel != 15)
+    {
+        aktuellesSpiel += 1;
+    }
+    else if(!w && aktuellesSpiel != 0)
+    {
+        aktuellesSpiel -= 1;
+    }
+    else if(w && aktuellesSpiel == 15)
+    {
+        aktuellesSpiel = 0;
+    }
+    else
+    {
+        aktuellesSpiel = 15;
+    }
+    await variableSpalteLaden(aktuellesSpiel);
+}
+await ranglisteEintragen();
+await festeSpaltenLaden();
+//Suchfeld code
+function spielerSuchen() {
+    const suchtext = document.getElementById("suche").value.toLowerCase();
+    const zeilen = document.querySelectorAll("#tabelle1 tr");
+
+    zeilen.forEach(zeile => {
+        const username = zeile.cells[1].textContent.toLowerCase();
+
+        if (username.includes(suchtext)) {
+            zeile.style.display = "";
+        } else {
+            zeile.style.display = "none";
+        }
+    });
+}
+
+document.getElementById("suche").addEventListener("input", spielerSuchen);
+document.getElementById("weiter").addEventListener("click", function() {
+spielRechts(true);});
+document.getElementById("zurueck").addEventListener("click", function() {
+spielRechts(false);});
 
 </script>
 </body>
-</html> 
+</html>
