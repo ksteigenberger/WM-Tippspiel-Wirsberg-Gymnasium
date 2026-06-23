@@ -89,6 +89,16 @@
         <p><strong>Name:</strong> <span id="name"></span></p>
         <p><strong>Benutzername:</strong> <span id="username"></span></p>
         <p><strong>E-Mail:</strong> <span id="email"></span></p>
+        <p><strong>Profilstatus:</strong> <span id="profile_status">Laden...</span></p>
+    </div>
+
+    <div id="profile_completion" style="max-width: 500px; margin: 0 auto 24px; background: #f8fafc; padding: 16px; border-radius: 10px; display: none;">
+        <h2>Profil vervollständigen</h2>
+        <input id="input_vorname" type="text" placeholder="Vorname" style="width:100%; padding:12px; margin-bottom:10px; border-radius:8px; border:1px solid #ccc;" />
+        <input id="input_name" type="text" placeholder="Nachname" style="width:100%; padding:12px; margin-bottom:10px; border-radius:8px; border:1px solid #ccc;" />
+        <input id="input_username" type="text" placeholder="Benutzername" style="width:100%; padding:12px; margin-bottom:10px; border-radius:8px; border:1px solid #ccc;" />
+        <button id="save-profile" style="padding:10px 20px; margin-top:10px;">Profil speichern</button>
+        <p id="status" style="margin-top:12px; color:#b91c1c;"></p>
     </div>
 
     <div id="ausgabe"></div>
@@ -122,42 +132,92 @@
     //    window.location.href = "login.html";
     //}
 
-   async function loadProfile(username) 
-   {
+    async function loadProfile() {
+        const { data: { session }, error: authError } = await supabase.auth.getSession();
 
-    const { data: users,error:  errorusers} = await supabase.from("users").select("*");
-     if(errorusers)
-     {
-        document.getElementById("ausgabe").innerText=errorusers.message;
-        return;
-     }
-
-     let indexUser = -1; 
-
-     for(let i = 0; i < users.length; i++)
-     {
-        if(username == users[i].username)
-        {
-            indexUser = i;
+        if (authError || !session) {
+            window.location.href = "login.html";
+            return;
         }
-     }
 
-    document.getElementById("name").innerText=users[indexUser].Vorname + " " + users[indexUser].Name;
-    document.getElementById("username").innerText=users[indexUser].username;
-    //document.getElementById("email").innerText=users[indexUser].email;
+        const user = session.user;
+        document.getElementById("email").innerText = user.email || "-";
+
+        const { data: profile, error } = await supabase
+            .from("users")
+            .select("username, Vorname, Name")
+            .eq("user_ID", user.id)
+            .maybeSingle();
+
+        if (error) {
+            document.getElementById("ausgabe").innerText = error.message;
+            return;
+        }
+
+        if (!profile) {
+            document.getElementById("profile_status").innerText = "Profil unvollständig";
+            document.getElementById("profile_completion").style.display = "block";
+            document.getElementById("name").innerText = "-";
+            document.getElementById("username").innerText = "-";
+            return;
+        }
+
+        document.getElementById("profile_status").innerText = "Profil vollständig";
+        document.getElementById("name").innerText = `${profile.Vorname || ""} ${profile.Name || ""}`.trim();
+        document.getElementById("username").innerText = profile.username || "-";
+        document.getElementById("input_vorname").value = profile.Vorname || "";
+        document.getElementById("input_name").value = profile.Name || "";
+        document.getElementById("input_username").value = profile.username || "";
+        document.getElementById("profile_completion").style.display = "none";
     }
 
-    // WICHTIG: Funktion starten
-    loadProfile("EmelieErdbeer");
+    async function saveProfile() {
+        const { data: { session }, error: authError } = await supabase.auth.getSession();
+        if (authError || !session) {
+            window.location.href = "login.html";
+            return;
+        }
 
-      //Logout Funktion
+        const user = session.user;
+        const vorname = document.getElementById("input_vorname").value.trim();
+        const name = document.getElementById("input_name").value.trim();
+        const username = document.getElementById("input_username").value.trim();
+        const status = document.getElementById("status");
+
+        status.innerText = "";
+
+        if (!vorname || !name || !username) {
+            status.innerText = "Bitte Vorname, Nachname und Benutzername ausfüllen.";
+            return;
+        }
+
+        const { error } = await supabase.from("users").upsert([
+            {
+                user_ID: user.id,
+                username: username,
+                Vorname: vorname,
+                Name: name
+            }
+        ], { onConflict: "user_ID" });
+
+        if (error) {
+            status.innerText = error.message;
+            return;
+        }
+
+        await loadProfile();
+        status.innerText = "Profil gespeichert.";
+    }
+
     async function logout() {
         await supabase.auth.signOut();
-        document.getElementById("status").innerText = "Ausgeloggt";
+        window.location.href = "login.html";
     }
 
-    //Funktion mit Logout-Button verbinden
-    document.getElementById("logout").addEventListener("click", logout); 
+    document.getElementById("logout").addEventListener("click", logout);
+    document.getElementById("save-profile").addEventListener("click", saveProfile);
+
+    loadProfile();
 
 </script> 
 </body>
