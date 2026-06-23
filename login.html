@@ -137,23 +137,7 @@
 
       const supabase = createClient(supabaseUrl, supabaseKey);
 
-      async function redirect(){
-        // Session abfragen und Userdaten extrahieren
-        const { data: { session } } = await supabase.auth.getSession();
-        if (!session) return;
-        const user = session.user;
-        // Wenn schon eingeloggt -> Überprüfung, ob Profil vervollständigt ist. Ja->Alles.html | Nein->profil.html
-        const { count, error } = await supabase
-          .from('users')
-          .select('*', { count: 'exact', head: true })
-          .eq('user_ID', user.id);
-
-        if (error || count < 1) {
-          window.location.href = "profil.html";
-        } else {
-          window.location.href = "Alles.html";
-        }
-      }
+      
 
       async function login() {
         const email = document.getElementById("email").value;
@@ -169,11 +153,7 @@
           return;
         }
 
-        if (!data?.session) {
-          await new Promise(resolve => setTimeout(resolve, 300));
-        }
-
-        redirect();
+        window.location.href="index.html";
       }
 
       async function reset(){
@@ -181,7 +161,11 @@
         const { data, error } = await supabase.auth.resetPasswordForEmail(email, {redirectTo: 'https://wig-wm.de/update-password.html'});
       }
 
-      redirect();
+      const { data: { session} } = await subabase.auth.getSession();
+      if(session)
+      {
+        window.location.href="index.html";
+      }
 
       document.getElementById("login").addEventListener("click", login);
       document.getElementById("pswd-reset").addEventListener("click", reset);
