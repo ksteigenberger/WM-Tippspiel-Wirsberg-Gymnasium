@@ -137,24 +137,7 @@
 
       const supabase = createClient(supabaseUrl, supabaseKey);
 
-      async function redirect(){
-        // Session abfragen und Userdaten extrahieren
-        const { data: { session } } = await supabase.auth.getSession();
-        const user = session.user;
-        //Wenn schon eingeloggt -> Überprüfung, ob Profil vervollständigt ist Ja->index.html | Nein->profil.html
-        if (session) {
-          const { count, error } = await supabase
-            .from('users')
-            .select('*', { count: 'exact', head: true })
-            .eq('user_ID', user.id);
-
-          if(error || count<1){
-            window.location.href = "profil.html"
-          }else{
-            window.location.href = "index.html";
-          }
-        }
-      }
+     
 
       async function login() {
         const email = document.getElementById("email").value;
