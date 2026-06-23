@@ -260,7 +260,8 @@
         }
 
         document.getElementById("profil").addEventListener("click",function(){
-            window.location.href="profil.html";
+            alert("Profil geklickt");
+            //window.location.href="profil.html";
         });
         document.getElementById("logout").addEventListener("click", async function(){
             await supabase.auth.signOut();
