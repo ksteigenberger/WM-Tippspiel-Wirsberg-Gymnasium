@@ -8,8 +8,7 @@
      <p> Bitte warten ... </p>
 <script type="module">
 
-    console.log("index.html Script startet.");
-    document.body.innerText="Script startet";
+ 
 
      //---------------------------------------------------------------------
     //Supabase Verbindung (nicht ändern!!)
@@ -24,15 +23,16 @@
     async function weiterleiten()
     {
         const { data: { session } } = await supabase.auth.getSession();
-    }
-
-   if(!session)
-   {
-       window.location.href ="login.html";
-       return;
-   }
-    const user = session.user;
-    const { count, error } = await supabase.from("users").select("*", { count: "exact", head: true}).eq("user_ID", user.id);
+        
+    
+       if(!session)
+       {
+           window.location.href ="login.html";
+           return;
+       }
+        
+        const user = session.user;
+        const { count, error } = await supabase.from("users").select("*", { count: "exact", head: true}).eq("user_ID", user.id);
 
     if(error)
     {
@@ -48,6 +48,7 @@
     {
     window.location.href ="tippen.html";
     }
+}
 
     weiterleiten();
             
