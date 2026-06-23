@@ -845,7 +845,7 @@
 
         if (authError || !session) {
             // Nicht eingeloggt -> Weiterleitung zur Loginseite
-            window.location.href = "login.html";
+            window.location.href = "index.html";
             return;
         }
 
