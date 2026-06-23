@@ -31,11 +31,18 @@
     const user = session.user;
     const { count, error } = await supabase.from("users").select("*", { count: "exact", head: true}).eq("user_ID", user.id);
 
-    if(error || count <1)
+    if(error)
     {
-        window.location.href ="profil.html"
+        document.body.innerText="Fehler: " + error.message;
         return;
     }
+
+    if(count <1)
+    {
+        window.location.href ="profil.html";
+    }
+    else
+    {
     window.location.href ="tippen.html";
     }
 
