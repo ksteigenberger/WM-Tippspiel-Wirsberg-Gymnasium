@@ -115,6 +115,118 @@
       margin-left: 2px;
     }
 
+  @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0; }
+    }
 
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    @keyframes flug {
+        from {
+            transform: translate(-50%, -50%) translate(800px, 400px);
+        }
+        to {
+            transform: translate(-50%, -50%) translate(0, 0);
+        }
+    }
+
+
+    button {
+      padding: 10px 20px;
+      border-radius: 5px;
+      border: none;
+      background-color: red;
+      color: white;
+      cursor: pointer;
+    }
+
+    button:disabled {
+      background-color: #ccc;
+      cursor: not-allowed;
+    }
+
+
+    .info-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      background-color: #e6f2ff;
+      color: #0066cc;
+      padding: 4px 8px;
+      border-radius: 12px;
+      font-size: 12px;
+      font-weight: bold;
+      font-family: Arial, sans-serif;
+      cursor: pointer;
+      position: relative;
+    }
+
+    .info-badge::after {
+      content: "Noch zu tippende Spiele";
+      position: absolute;
+      bottom: 140%;
+      right: 0; 
+      background-color: #0066cc;
+      color: white;
+      padding: 6px 10px;
+      border-radius: 5px;
+      font-size: 12px;
+      font-family: Arial, sans-serif;
+      font-weight: normal;
+      white-space: nowrap;
+      visibility: hidden;
+      opacity: 0;
+      transition: opacity 0.2s ease-in-out;
+      pointer-events: none;
+      z-index: 999;
+      box-shadow: 0px 2px 5px rgba(0,0,0,0.2);
+    }
+
+    .info-badge::before {
+      content: "";
+      position: absolute;
+      bottom: 120%;
+      right: 25px; 
+      border-width: 6px;
+      border-style: solid;
+      border-color: #0066cc transparent transparent transparent;
+      visibility: hidden;
+      opacity: 0;
+      transition: opacity 0.2s ease-in-out;
+      pointer-events: none;
+      z-index: 999;
+    }
+
+    .info-badge:hover::after, .info-badge:hover::before,
+    .info-badge.active::after, .info-badge.active::before {
+      visibility: visible;
+      opacity: 1;
+    }
+
+    .info-icon-blue {
+      color: white;
+      background-color: #0066cc;
+      border-radius: 50%;
+      width: 16px;
+      height: 16px;
+      font-size: 11px;
+      line-height: 16px;
+      text-align: center;
+      font-family: "Georgia", serif;
+      font-weight: bold;
+      display: inline-block;
+    }
+  </style>
+</head>      
+
+    <body>
+
+
+        
+    </body>
       
-      
+</html>
