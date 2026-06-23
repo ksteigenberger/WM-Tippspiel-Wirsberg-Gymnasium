@@ -167,19 +167,29 @@
 
         if (error) {
           document.getElementById("status").innerText = error.message;
-        } else {
-          redirect();
+          return;
         }
+       window.location.href ="index.html";
       }
 
       async function reset(){
         const email = document.getElementById("email").value;
-        const { data, error } = await supabase.auth.resetPasswordForEmail(email, {redirectTo: 'https://wig-wm.de/update-password.html'});
+        if(email === "")
+        {
+          document.getElementById("status").innerText = "Bitte E-Mail-Adresse eingeben.";
+          return;
+        }
+        const { error } = await supabase.auth.resetPasswordForEmail(email, {redirectTo: 'https://wig-wm.de/update-password.html'});
+        if(error)
+        {
+          document.getElementById("status").innerText=error.message;
+          return;
+      }
+        document.getElementById("status").innerText = "E-Mail zum Zurücksetzen wurde verschickt.";
       }
 
-      redirect();
-
       document.getElementById("login").addEventListener("click", login);
+
       document.getElementById("pswd-reset").addEventListener("click", reset);
 
     </script>
