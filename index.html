@@ -1,3 +1,4 @@
+
 <!DOCTYPE html> 
 <html lang="de"> 
 <head> 
@@ -27,7 +28,7 @@
         
       if(sessionError)
       {
-        document.body.innerText= "Session-Fehler: "+ session.message;
+        document.body.innerText= "Session-Fehler: "+ sessionError.message;
         return;
       }
        if(!session)
@@ -51,7 +52,7 @@
           return;
         }
         
-        window.location.href ="Alles.html";
+        window.location.href ="Alles2.html";
         
 }
 
