@@ -393,6 +393,31 @@
     const supabaseKey = "sb_publishable_7ih4VSPUkXVfHkBa7lrDCA_mO_d0pW1";
 
     const supabase = createClient(supabaseUrl, supabaseKey);
+
+// Nur wenn wirklich jemand eingeloggt ist, soll getippt werden können. Wenn ja, session.user ist der aktuell eingeloggte User!
+
+    const {data: {session}, error: authError} = await supabase.auth.getSession();
+    if(authError || !session)
+    {
+        window.location.href = "index.html"; //falls nicht eingeloggt --> zurück zur index.html !
+    }
+
+    const eingeloggterUser = session.user;
+
+    //Bedeutung des folgenden Code: Suche in der Tabelle users den Datensatz, dessen user_ID zur aktuellen Supabase-User-ID passt. 
+
+    const { data: aktuellesProfil, error: profilError} = await supabase.from("users").select("user_ID", username").eq("user_ID", eingeloggterUser.id).maybeSingle();
+    if(profilError || !aktuellesProfil)
+    {
+        window.location.href="profil.html";  //wenn kein Profil gefunden wird, dann muss der User erst sein Profil vervollständigen
+    }
+
+    // wenn ein Profil gefunden wird, dann wird der Benutzername automatisch in der Seite eingetragen. 
+    document.getElementById("username_display").innerText = aktuellesProfil.username;
+    document.getElementById("name").value=aktuellesProfil.username;
+
+
+
     let countdownInterval = null;
     let spielLadeId = 0;
 
@@ -840,36 +865,9 @@
     });
 
 
-    async function checkAuthAndInit() {
-        const { data: { session }, error: authError } = await supabase.auth.getSession();
+    
 
-        if (authError || !session) {
-            // Nicht eingeloggt -> Weiterleitung zur Loginseite
-            window.location.href = "index.html";
-            return;
-        }
-
-        const user = session.user;
-
-
-        const { data: userDaten, error: userError } = await supabase
-            .from("users")
-            .select("username")
-            .eq("user_ID", user.id)
-            .maybeSingle();
-
-        if (userError || !userDaten) {
-            alert("Fehler: Profil wurde nicht gefunden!");
-            window.location.href = "login.html";
-            return;
-        }
-
-
-        document.getElementById("username_display").innerText = userDaten.username;
-        document.getElementById("name").value = userDaten.username;
-    }
-
-
+//Gruppe3 -Berechnungsfunktionen : 
 
 let points_for_l1_prediction = 4;
 let points_for_l2_prediction = 3;
@@ -1108,20 +1106,18 @@ spielRechts(true);});
 document.getElementById("zurueck").addEventListener("click", function() {
 spielRechts(false);});
 
-        //test, weil ranglistentabelle nicht geladen wird, chat lösungsvorschlag, idk 
-        checkAuthAndInit();
+await spieleListeLaden();   
 
-        spieleListeLaden();
+     
     // Funktionen global machen, damit die Buttons sie find en
     document.getElementById("tippSpeichern").addEventListener("click", speichern);
     document.getElementById("spiel_select").addEventListener("change", spielLaden);
     document.getElementById("btn_prev").addEventListener("click", () => spielWechseln(-1));
     document.getElementById("btn_next").addEventListener("click", () => spielWechseln(1));
-    //Veraltet: Wenn man den Namen tippt, sucht das System auch direkt nach alten Tipps
-    document.getElementById("name").addEventListener("input", spielLaden);
+   
     document.getElementById("logout_button").addEventListener("click", async () => {
         await supabase.auth.signOut();
-        window.location.href = "login.html";
+        window.location.href = "index.html";
     });
     </script> 
 </body> 
