@@ -6,22 +6,26 @@
 
   <style>
     body {
-      padding-top: 40px;
-      font-family: Arial, sans-serif;
-      background-image: url("rasen chatgpt.png");
-      background-size: cover;
-      background-position: center;
-      background-repeat: no-repeat;
-      background-attachment: fixed;
-      text-align: center;
-      margin: 0;
-    }
+  font-family: Arial, sans-serif;
+  background-image: url("rasen chatgpt.png");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+
+  margin: 0;
+  min-height: 100vh;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
 
     #header {
-      display: flex;
-      justify-content: center;
-      margin-top: 20px;
-    }
+  display: flex;
+  justify-content: center;
+}
 
     #logo-container {
       position: relative;
@@ -48,10 +52,9 @@
     }
 
     #container {
-  width: 350px;
-  margin: 20px auto;
+  width: 450px;
+  margin-top: 10px;
   padding: 30px;
-
   background: transparent;
 }
 
@@ -62,12 +65,13 @@
     }
 
     input {
-      width: 90%;
-      padding: 10px;
-      border-radius: 5px;
-      border: none;
-      font-size: 16px;
-    }
+  width: 100%;
+  padding: 16px;
+  border-radius: 8px;
+  border: none;
+  font-size: 20px;
+  box-sizing: border-box;
+}
 
     button {
       padding: 10px 20px;
