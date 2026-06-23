@@ -253,21 +253,22 @@
 
     const supabase = createClient(supabaseUrl, supabaseKey);
     const {data: { session} } = await supabase.auth.getSession();
-        if(!session) 
-        { alert("Keine Session");
+       // if(!session) 
+        //{ alert("Keine Session");
             //window.location.href="index.html";
             
-        }
+        // }
+        alert("Script läuft");
 
-        //document.getElementById("profil").addEventListener("click",function(){
-            //alert("Profil geklickt");
+        document.getElementById("profil").addEventListener("click",function(){
+            alert("Profil geklickt");
             //window.location.href="profil.html";
-       // });
-        //document.getElementById("logout").addEventListener("click", function(){
-            // alert("Logout geklickt");
+        });
+        document.getElementById("logout").addEventListener("click", function(){
+            alert("Logout geklickt");
             //await supabase.auth.signOut();
             //window.location.href="index.html";
-        //});
+        });
     
     </script>
     </body>
