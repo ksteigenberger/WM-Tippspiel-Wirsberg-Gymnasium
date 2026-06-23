@@ -34,4 +34,86 @@
     }
 
       
+    #title {
+      position: relative;
+      top: 0;
+      left: 0;
+      font-size: clamp(40px, 6vw, 120px);
+      color: white;
+    }
+
+      /* evlt entsorgen: 
+    #wirsberg-logo {
+      height: 150px;
+    }
+*/
+
+    #logo-container {
+      position: relative;
+      display: inline-block;
+    }
+
+    #logo {
+        display: inline-block;
+        position: relative;
+        left: 20px;   
+        right: 20px;  
+        top: 10px;    
+        bottom: 10px; 
+        font-size: 90px;
+        
+        /*hier ÄNderungen von Steven -- >nochmal abgleichen mit Max Gr.*/
+        font-family: 'MeineSchrift', sans-serif; 
+        color: white;
+        font-weight: bold;
+        letter-spacing: 0px;
+        text-shadow: 3px 3px 8px rgba(0,0,0,0.3);
+    }
+
+    #ball-wrapper {
+      position: absolute;
+      left: 17.4%; /* Max hat hier: 21% */
+      top: 61%; /* Max hat hier: 69,5% */
+      transform: translate(-50%,-50%);
+      animation: flug 1.5s ease-out forwards;
+    }
+
+    #ball {
+      width: 44px;
+      height: 44px;
+      font-size: 38px;
+      line-height: 44px;
+      position: relative;
+      z-index: 2;
+      display: inline-block;
+      animation: spin 15s linear infinite;
+    }
+
+
+    #name {
+      margin-top: 50px;
+    }
+
+    label {
+      font-size: 28px;
+      font-weight: bold;
+      color: white;
+      text-shadow: 2px 2px 6px rgba(0,0,0,0.6);
+    }
+
+    #team_a, #team_b {
+      font-size: 28px;
+      color: white;
+      text-shadow: 2px 2px 8px rgba(0,0,0,0.7);
+    }
+
+    .cursor {
+      animation: blink 0.8s infinite;
+      color: white;
+      font-weight: bold;
+      margin-left: 2px;
+    }
+
+
+      
       
