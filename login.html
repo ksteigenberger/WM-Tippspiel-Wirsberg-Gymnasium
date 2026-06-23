@@ -137,13 +137,29 @@
 
       const supabase = createClient(supabaseUrl, supabaseKey);
 
-     
+      async function redirect(){
+        // Session abfragen und Userdaten extrahieren
+        const { data: { session } } = await supabase.auth.getSession();
+        if (!session) return;
+        const user = session.user;
+        // Wenn schon eingeloggt -> Überprüfung, ob Profil vervollständigt ist. Ja->Alles.html | Nein->profil.html
+        const { count, error } = await supabase
+          .from('users')
+          .select('*', { count: 'exact', head: true })
+          .eq('user_ID', user.id);
+
+        if (error || count < 1) {
+          window.location.href = "profil.html";
+        } else {
+          window.location.href = "Alles.html";
+        }
+      }
 
       async function login() {
         const email = document.getElementById("email").value;
         const password = document.getElementById("password").value;
 
-        const { error } = await supabase.auth.signInWithPassword({
+        const { data, error } = await supabase.auth.signInWithPassword({
           email,
           password
         });
@@ -152,27 +168,22 @@
           document.getElementById("status").innerText = error.message;
           return;
         }
-       window.location.href ="index.html";
+
+        if (!data?.session) {
+          await new Promise(resolve => setTimeout(resolve, 300));
+        }
+
+        redirect();
       }
 
       async function reset(){
         const email = document.getElementById("email").value;
-        if(email === "")
-        {
-          document.getElementById("status").innerText = "Bitte E-Mail-Adresse eingeben.";
-          return;
-        }
-        const { error } = await supabase.auth.resetPasswordForEmail(email, {redirectTo: 'https://wig-wm.de/update-password.html'});
-        if(error)
-        {
-          document.getElementById("status").innerText=error.message;
-          return;
+        const { data, error } = await supabase.auth.resetPasswordForEmail(email, {redirectTo: 'https://wig-wm.de/update-password.html'});
       }
-        document.getElementById("status").innerText = "E-Mail zum Zurücksetzen wurde verschickt.";
-      }
+
+      redirect();
 
       document.getElementById("login").addEventListener("click", login);
-
       document.getElementById("pswd-reset").addEventListener("click", reset);
 
     </script>
