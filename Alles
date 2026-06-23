@@ -1,4 +1,3 @@
-
 <!DOCTYPE html> 
 <html lang="de"> 
 <head> 
@@ -296,6 +295,14 @@
     <span id="begruessung_text"></span><span class="cursor">_</span>
 </div>
 
+<div id="user_info" style="margin-bottom: 15px; color: white; font-size: 18px; display: flex; justify-content: center; align-items: center; gap: 12px; flex-wrap: wrap;">
+    <span>Angemeldet als: <strong><span id="username_display">-</span></strong></span>
+    <a href="profil.html" style="color: #ffffff; text-decoration: underline;">Profil</a>
+    <input type="hidden" id="name">
+    <span id="limit-error" style="display:none; color:#fff; background:#e60000; padding:2px 6px; border-radius:4px;">Max. 10 Zeichen</span>
+    <div id="meldung" style="display:none;"></div>
+</div>
+
 <br>
 <label>Spiel auswählen:</label><br>
 <div style="display: flex; justify-content: center; align-items: center; gap: 10px; margin-top: 10px;">
@@ -341,7 +348,7 @@
 </div>
 
   <h2 style="color: white; text-shadow: 2px 2px 4px rgba(0,0,0,0.6);">Anzeige</h2> 
-  <div id="anzeige"></div>
+  <div id="ausgabe"></div>
 
 
 <input type="text" id="suche" placeholder="Spieler suchen...">
@@ -361,7 +368,11 @@
         <tbody id="tabelle1"></tbody>
     </table>
 
-
+    <footer id="page_footer" style="margin: 30px auto 20px; max-width: 860px; color: white; display: flex; flex-wrap: wrap; justify-content: center; gap: 12px; font-size: 14px;">
+        <a href="datenschutzerklärung.html" style="color: white; text-decoration: underline;">Datenschutzerklärung</a>
+        <a href="impressum.html" style="color: white; text-decoration: underline;">Impressum</a>
+        <button id="logout_button" style="padding: 8px 14px; border: none; border-radius: 6px; background: #e60000; color: white; cursor: pointer;">Logout</button>
+    </footer>
 
  <!--Logik und DB-Verbindung mit JavaScript -->
   <script type="module">
@@ -856,6 +867,7 @@
 
         document.getElementById("username_display").innerText = userDaten.username;
         document.getElementById("name").value = userDaten.username;
+    }
 
 
 
@@ -1100,7 +1112,6 @@ spielRechts(false);});
         checkAuthAndInit();
 
         spieleListeLaden();
-    }
     // Funktionen global machen, damit die Buttons sie find en
     document.getElementById("tippSpeichern").addEventListener("click", speichern);
     document.getElementById("spiel_select").addEventListener("change", spielLaden);
@@ -1108,6 +1119,10 @@ spielRechts(false);});
     document.getElementById("btn_next").addEventListener("click", () => spielWechseln(1));
     //Veraltet: Wenn man den Namen tippt, sucht das System auch direkt nach alten Tipps
     document.getElementById("name").addEventListener("input", spielLaden);
+    document.getElementById("logout_button").addEventListener("click", async () => {
+        await supabase.auth.signOut();
+        window.location.href = "login.html";
+    });
     </script> 
 </body> 
 </html>
