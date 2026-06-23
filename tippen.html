@@ -239,8 +239,19 @@
         <button id = "logout">Logout</button>
         <p id= "status"></p>
         
-    </body>
-    <script> 
+    
+    <script type="module"> 
+
+
+           //---------------------------------------------------------------------
+    //Supabase Verbindung (nicht ändern!!)
+    //----------------------------------------------------------------------
+    import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+
+    const supabaseUrl = "https://kmhwwdsuzphkpfupkynf.supabase.co";
+    const supabaseKey = "sb_publishable_7ih4VSPUkXVfHkBa7lrDCA_mO_d0pW1";
+
+    const supabase = createClient(supabaseUrl, supabaseKey);
     const data: { session} } = await supabase.auth.getSession();
         if(!session) 
         {
@@ -256,5 +267,6 @@
             window.location.href="index.html";});
     
     </script>
+    </body>
       
 </html>
