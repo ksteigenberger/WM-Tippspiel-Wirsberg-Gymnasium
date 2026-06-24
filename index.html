@@ -1,4 +1,3 @@
-
 <!DOCTYPE html> 
 <html lang="de"> 
 <head> 
@@ -40,19 +39,16 @@
         const user = session.user;
         const { count, error } = await supabase.from("users").select("*", { count: "exact", head: true}).eq("user_ID", user.id);
 
-        if(error)
-        {
-            document.body.innerText = "Profil-Fehler: " + error.message;
-            return;
-        }
+        
 
-        if(count <1)
+        if(error || count <1)
         {
             window.location.href ="profil.html";
-          return;
+            return;
         }
         
-        window.location.href ="Alles.html";
+        window.location.href ="Alles2.html";
+        return;
         
 }
 
