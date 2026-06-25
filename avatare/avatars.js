@@ -5,6 +5,9 @@ window.avatarFiles = [
   "ManuelNeuer.png",
   "Mbappe.png",
   "Messi.png",
-  "Ronaldo.png"
+  "Ronaldo.png",
+  "AlexandraPopp.png",
+  "AlexiaPutellas.png",
+  "Marta.png"
 ];
 //Bitte immer wenn neue Avatare hinzugefügt werden, den Dateinamen hier eintragen.
