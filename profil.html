@@ -359,7 +359,7 @@
             return;
         }
 
-        const isComplete = Boolean(profile.username && profile.Vorname && profile.Name); 
+        const isComplete = Boolean(profile.username && profile.Vorname && profile.Name && profile.avatar); 
 
         if (profileStatus) {
             profileStatus.innerText = isComplete ? "Profil vollständig" : "Profil unvollständig";
