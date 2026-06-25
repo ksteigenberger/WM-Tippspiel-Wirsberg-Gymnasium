@@ -51,7 +51,7 @@
         //durch head: true erhält man hier als Antwort keine Datensätze, sondern nur die oben beschriebenen Anzahl 
         //die in count gespeichert wird. 
         const { count, error } = await supabase.from("users").select("*", { count: "exact", head: true}).eq("user_ID", user.id);
-        //damit kann man beantworten, ob überhaupt ein Benutzerprofil existiert (aber nicht ob es vollständig ist!) 
+        //damit kann man beantworten, ob überhaupt ein Benutzerprofil existiert 
 
         
         // Fehler oder existiert überhaupt ein Profil (dann gilt count speichert 0) , dann wird der Nutzer zur Profilseite geschickt; 
