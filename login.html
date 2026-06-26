@@ -153,10 +153,29 @@
           password: password
         });
 
-        if (error) {
-          document.getElementById("status").innerText = error.message;
-          return;
+      if (error) {
+        let msg;
+
+        switch (error.message) {
+          case "Invalid login credentials":
+            msg = "Die E-Mail-Adresse oder das Passwort ist falsch.";
+            break;
+
+          case "Email not confirmed":
+            msg = "Bitte bestätige zuerst deine E-Mail-Adresse.";
+            break;
+
+          case "Too many requests":
+            msg = "Zu viele Anmeldeversuche. Bitte versuche es später erneut.";
+            break;
+
+          default:
+            msg = "Die Anmeldung ist fehlgeschlagen. Bitte versuche es erneut.";
         }
+
+        document.getElementById("status").innerText = msg;
+        return;
+      }
 
         window.location.href="index.html";
       }
