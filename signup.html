@@ -154,7 +154,7 @@
         const { error } = await supabase.auth.signUp({ email, password });
 
         document.getElementById("status").innerText =
-          error ? error.message : "Registrierung erfolgreich! Schauen Sie in ihren E-Mails und ggf im Spam-Ordner nach";
+          error ? error.message : "Registrierung erfolgreich! \n Schauen Sie in ihren E-Mails und ggf im Spam-Ordner nach!";
       }
 
       document.getElementById("signup").addEventListener("click", signup);
