@@ -232,10 +232,137 @@
     /* Style-Bereich von Gruppe 3!!*/
 
 #suche {
-    padding: 8px;
+    display: block;
     width: 260px;
-    margin-bottom: 12px;
-    font-size: 14px;
+    padding: 8px;
+
+    /* linksbündig über der Tabelle */
+    margin-left: 0;
+
+    /* Abstand zur Rangliste */
+    margin-top: 8px;
+    margin-bottom: 6px;
+
+    font-size: 15px;
+    font-weight: bold;
+}
+
+#rangliste_tools{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    overflow: visible;
+
+    position: relative;
+    z-index: 10000;
+
+    width:100%;
+    margin-top:8px;
+    margin-bottom:6px;
+}
+
+#refreshButton{
+    width:260px;
+    padding:8px;
+
+    background:#0066cc;
+    color:white;
+
+    border:none;
+    border-radius:6px;
+
+    cursor:pointer;
+
+    font-size:15px;
+    font-weight:bold;
+
+    transition:0.2s;
+}
+
+#refreshButton:hover{
+    background:#0052a3;
+}
+
+#refreshButton{
+    width:180px;
+    font-size:14px;
+}
+
+.punkte-info-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 38px;
+    height: 38px;
+
+    background-color: #e6f2ff;
+    border-radius: 8px;
+    cursor: pointer;
+    position: relative;
+    flex-shrink: 0;
+}
+
+.punkte-info-badge::after {
+    content: "So ergeben sich die Punkte:\A\ATipp richtig: 4 Punkte\A Differenz richtig: 3 Punkte\A Unentschieden/Sieger richtig: 2 Punkte\A Ansonsten: 0 Punkte";
+
+    white-space: pre-line;
+
+    position: absolute;
+    top: calc(100% + 8px);
+    left: 50%;
+    transform: translateX(-50%);
+
+    width: 260px;
+
+    background: #0066cc;
+    color: white;
+
+    padding: 12px;
+    border-radius: 8px;
+
+    font-size: 13px;
+    font-weight: bold;
+    line-height: 1.5;
+
+    visibility: hidden;
+    opacity: 0;
+
+    transition: opacity .2s;
+
+    pointer-events: none;
+
+    z-index: 9999;
+
+    box-shadow: 0 4px 12px rgba(0,0,0,.25);
+}
+
+.punkte-info-badge::before {
+    content: "";
+
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+
+    border-width: 7px;
+    border-style: solid;
+    border-color: #0066cc transparent transparent transparent;
+
+    visibility: hidden;
+    opacity: 0;
+
+    transition: opacity .2s;
+
+    pointer-events: none;
+}
+
+.punkte-info-badge:hover::after,
+.punkte-info-badge:hover::before,
+.punkte-info-badge.active::after,
+.punkte-info-badge.active::before {
+    visibility: visible;
+    opacity: 1;
 }
 
 #ausgabe {
@@ -246,6 +373,9 @@
 
 .table-shell {
     width: 100%;
+    overflow: visible;
+    background: white;
+    border-radius: 10px 10px 0 0;
 }
 
 /* Beide Tabellen sehen gleich aus */
@@ -257,9 +387,9 @@
 }
 
 /* feste Spaltenbreiten */
-.col-platz  { width: 70px; }
+.col-platz  { width: 90px; }
 .col-user   { width: 220px; }
-.col-punkte { width: 90px; }
+.col-punkte { width: 110px; }
 
 /* obere Tabelle */
 .col-tipp {
@@ -272,22 +402,31 @@
     width: calc(100% - 70px - 220px - 90px - 14px);
 }
 
-th, td {
-    border: 1px solid #ccc;
-    padding: 6px 8px;
+th,
+td {
+    border: 1px solid #cfcfcf;
+    padding: 8px 10px;
     text-align: center;
-    font-size: 14px;
-    height: 38px;
+    font-size: 16pt;
+    font-weight: 700;
+    height: 42px;
     box-sizing: border-box;
+    background: white;
 }
 
 thead th {
-    background: #f4f4f4;
+    background: #ececec;
+    font-size: 16pt;
+    font-weight: 800;
 }
 
 .eigene-zeile {
-    background-color: #fff3cd;
-    font-weight: bold;
+    background-color: #ffe34d !important;
+    font-weight: 900;
+}
+
+.eigene-zeile td {
+    background-color: #ffe34d !important;
 }
 
 #spielT {
@@ -300,12 +439,14 @@ thead th {
 
 /* Scrollbereich */
 .scroll-wrapper {
-    max-height: 380px; /* ca. 10 Zeilen */
+    max-height: 380px;
     overflow-y: auto;
     overflow-x: hidden;
 
-    /* damit der Scrollbalken nicht die Gesamtbreite kaputtmacht */
     scrollbar-gutter: stable;
+
+    background: white;
+    border-radius: 0 0 10px 10px;
 }
 
 /* obere und untere Tabelle optisch direkt verbinden */
@@ -321,6 +462,37 @@ thead th {
     border-top: 1px solid #ccc;
 }
 
+@media (max-width: 768px) {
+
+    th,
+    td {
+        font-size: 13pt;
+        padding: 6px 4px;
+        height: 38px;
+    }
+
+    thead th {
+        font-size: 13pt;
+    }
+
+    #spielT {
+        font-size: 13pt;
+        font-weight: bold;
+    }
+
+    #suche {
+    width: 180px;
+    margin-left: 60px;
+    font-size: 14px;
+}
+
+#rangliste_tools{
+    gap:8px;
+}
+
+
+
+}
 
 
 
@@ -401,11 +573,27 @@ thead th {
   <h2 style="color: white; text-shadow: 2px 2px 4px rgba(0,0,0,0.6);">Anzeige</h2> 
   <div id="anzeige"></div> 
 
- 
+ <!-- Suchfeld, Aktualisier Button und Info Kästchen für Punkte Berechnung -->
 
-<input type="text" id="suche" placeholder="Spieler suchen...">
+<div id="rangliste_tools">
+
+    <input type="text" id="suche" placeholder="Spieler suchen...">
+
+    <div style="display:flex; align-items:center; gap:10px;">
+
+        <div class="punkte-info-badge" id="punkte_info">
+            <span class="info-icon-blue">i</span>
+        </div>
+
+        <button id="refreshButton">
+            ↻ Aktualisieren
+        </button>
+
+    </div>
+
+</div>
+
 <div id="ausgabe"></div>
-
 
     <!-- Fester oberer Bereich -->
 <div class="table-shell">
@@ -1029,7 +1217,6 @@ async function renderNormaleAnsicht() {
         spiele[aktuellesSpiel].team_a + " - " + spiele[aktuellesSpiel].team_b +
         "\n" + "- : -";
     }
-    
 
     const eigenerEintrag = rangliste.find(e => e.user_ID === currentUserId);
     const top5 = rangliste.slice(0, 5);
@@ -1055,6 +1242,26 @@ async function renderNormaleAnsicht() {
     for (const eintrag of rest) {
         await renderZeile(restBody, eintrag, aktuellesSpiel, false);
     }
+}
+
+//Funktion zum Aktualisier Button
+async function ranglisteAktualisieren() {
+
+    document.getElementById("refreshButton").disabled = true;
+    document.getElementById("refreshButton").innerHTML = "⟳ Aktualisiere...";
+
+    await ranglisteEintragen();
+
+    const suchtext = document.getElementById("suche").value.trim();
+
+    if (suchtext === "") {
+        await renderNormaleAnsicht();
+    } else {
+        await spielerSuchen();
+    }
+
+    document.getElementById("refreshButton").innerHTML = "↻ Aktualisieren";
+    document.getElementById("refreshButton").disabled = false;
 }
 
 async function renderZeile(tbody, eintrag, spielId, istEigeneZeile = false) {
@@ -1250,19 +1457,33 @@ async function spielerSuchen() {
     //Event-Listener Gruppe 3
 
 document.getElementById("suche").addEventListener("input", spielerSuchen);
+document.getElementById("refreshButton").addEventListener("click", ranglisteAktualisieren);
 document.getElementById("weiter").addEventListener("click", async function() {
     await spielRechts(true);});
 document.getElementById("zurueck").addEventListener("click", async function() {
     await spielRechts(false);});
+document.getElementById("punkte_info").addEventListener("click", (e) => {
+    e.stopPropagation();
+    e.currentTarget.classList.toggle("active");
+});
     
     //allgemeine Event-Listener 
     //Pop-Up- Fenster, wenn an irgendwo auf die Seite klickt. 
-    window.addEventListener("click", () => {
-        const badge = document.getElementById("info_badge_tips");
-        const err = document.getElementById("limit-error");
-        if (badge) badge.classList.remove("active");
-        if (err) err.classList.remove("active");
-    });
+   window.addEventListener("click", (e) => {
+    const badge = document.getElementById("info_badge_tips");
+    const badge2 = document.getElementById("punkte_info");
+
+    if (badge && !e.target.closest("#info_badge_tips")) {
+        badge.classList.remove("active");
+    }
+
+    if (badge2 && !e.target.closest("#punkte_info")) {
+        badge2.classList.remove("active");
+    }
+
+    const err = document.getElementById("limit-error");
+    if (err) err.classList.remove("active");
+});
 
 
     </script> 
