@@ -169,7 +169,7 @@
         document.getElementById("status").innerText="Bitte E-Mail-Adresse eingeben.";
         return;
       }
-        const { data, error } = await supabase.auth.resetPasswordForEmail(email, {redirectTo: 'https://wig-wm.de/update-password.html'});
+        const { data, error } = await supabase.auth.resetPasswordForEmail(email, {redirectTo: 'https://www.wig-wm.de/update-password.html'});
         if(error)
       {
         document.getElementById("status").innerText=error.message;
