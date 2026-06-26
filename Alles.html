@@ -1018,9 +1018,18 @@ async function renderNormaleAnsicht() {
     restBody.innerHTML = "";
 
     // Spielüberschrift setzen
-    document.getElementById("spielT").innerText =
+    if(spiele[aktuellesSpiel]["Spiel_fertig?"])
+    {
+        document.getElementById("spielT").innerText =
         spiele[aktuellesSpiel].team_a + " - " + spiele[aktuellesSpiel].team_b +
         "\n" + spiele[aktuellesSpiel].tore_team_a + " : " + spiele[aktuellesSpiel].tore_team_b;
+    }else
+    {
+        document.getElementById("spielT").innerText =
+        spiele[aktuellesSpiel].team_a + " - " + spiele[aktuellesSpiel].team_b +
+        "\n" + "- : -";
+    }
+    
 
     const eigenerEintrag = rangliste.find(e => e.user_ID === currentUserId);
     const top5 = rangliste.slice(0, 5);
