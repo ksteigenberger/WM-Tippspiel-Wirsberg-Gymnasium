@@ -118,7 +118,7 @@
 
     <input id="email" type="email" placeholder="Email" />
     <br /><br />
-   <input id="password" type="password" placeholder="eigenes Passwort" />
+   <input id="password" type="password" placeholder="eigenes Passwort festlegen" />
     <br /><br />
 
     <button id="signup">Registrieren</button>
@@ -154,7 +154,7 @@
         const { error } = await supabase.auth.signUp({ email, password });
 
         document.getElementById("status").innerText =
-          error ? error.message : "Registrierung erfolgreich! Schauen Sie in ihren E-Mails und ggf im Spam-Ordner nach";
+          error ? error.message : "Registrierung erfolgreich! \n Schauen Sie in ihren E-Mails und ggf im Spam-Ordner nach!";
       }
 
       document.getElementById("signup").addEventListener("click", signup);
