@@ -8,6 +8,7 @@ window.avatarFiles = [
   "Ronaldo.png",
   "AlexandraPopp.png",
   "AlexiaPutellas.png",
-  "Marta.png"
+  "Marta.png",
+  "Maradona.png"
 ];
 //Bitte immer wenn neue Avatare hinzugefügt werden, den Dateinamen hier eintragen.
