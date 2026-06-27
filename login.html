@@ -114,6 +114,7 @@
     </div>
   </div>
   <div id="container">
+     <a href="signup.html">Neu hier? Dann hier registrieren</a>
     <h2>Login</h2>
 
     <input id="email" type="email" placeholder="Email" />
@@ -122,8 +123,6 @@
     <br /><br />
 
     <button id="login">Login</button>
-    <br/><br/>
-    <a href="signup.html">Registrieren</a>
     <br/><br/>
     <button id="pswd-reset">Passwort zurücksetzen</button>
 
@@ -154,14 +153,38 @@
           password: password
         });
 
-        if (error) {
-          document.getElementById("status").innerText = error.message;
-          return;
+      if (error) {
+        let msg;
+
+        switch (error.message) {
+          case "Invalid login credentials":
+            msg = "Die E-Mail-Adresse oder das Passwort ist falsch.";
+            break;
+
+          case "Email not confirmed":
+            msg = "Bitte bestätige zuerst deine E-Mail-Adresse.";
+            break;
+
+          case "Too many requests":
+            msg = "Zu viele Anmeldeversuche. Bitte versuche es später erneut.";
+            break;
+
+          default:
+            msg = "Die Anmeldung ist fehlgeschlagen. Bitte versuche es erneut.";
         }
+
+        document.getElementById("status").innerText = msg;
+        return;
+      }
 
         window.location.href="index.html";
       }
 
+      function validateEmail(email) {
+        // Regulärer Ausdruck für die grundlegende E-Mail-Syntax
+        const regex = /^\S+@\S+\.\S+$/;
+        return regex.test(email);
+      }
       async function reset(){
         const email = document.getElementById("email").value;
         if(email==="")
@@ -169,7 +192,12 @@
         document.getElementById("status").innerText="Bitte E-Mail-Adresse eingeben.";
         return;
       }
-        const { data, error } = await supabase.auth.resetPasswordForEmail(email, {redirectTo: 'https://wig-wm.de/update-password.html'});
+      if(validateEmail(email))
+      {
+        document.getElementById("status").innerText="Bitte gültige E-Mail-Adresse eingeben.";
+        return;
+      }
+        const { data, error } = await supabase.auth.resetPasswordForEmail(email, {redirectTo: 'https://www.wig-wm.de/update-password.html'});
         if(error)
       {
         document.getElementById("status").innerText=error.message;

@@ -118,7 +118,7 @@
 
     <input id="email" type="email" placeholder="Email" />
     <br /><br />
-    <input id="password" type="password" placeholder="Password" />
+   <input id="password" type="password" placeholder="eigenes Passwort festlegen" />
     <br /><br />
 
     <button id="signup">Registrieren</button>
@@ -143,10 +143,18 @@
         const email = document.getElementById("email").value;
         const password = document.getElementById("password").value;
 
+        const status = document.getElementById("status");
+
+  // Prüfung: Felder leer?
+  if (!email || !password) {
+    status.innerText = "Bitte alle Felder vollständig ausfüllen";
+    return;
+  }
+
         const { error } = await supabase.auth.signUp({ email, password });
 
         document.getElementById("status").innerText =
-          error ? error.message : "Signup erfolgreich! Schauen Sie in ihren E-Mails";
+          error ? error.message : "Registrierung erfolgreich! \n Schauen Sie in ihren E-Mails und ggf im Spam-Ordner nach!";
       }
 
       document.getElementById("signup").addEventListener("click", signup);

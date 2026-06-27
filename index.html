@@ -23,30 +23,45 @@
   
     async function weiterleiten()
     {
+        //ist momentan ein Benutzer eingeloggt? 
         const { data: { session } ,error: sessionError} = await supabase.auth.getSession();
+        //falls Ja --> erhält man session (--> user --> id, email,...)
+
         
+        //Prüfen, ob Fehler aufgetreten ist
       if(sessionError)
       {
         document.body.innerText= "Session-Fehler: "+ sessionError.message;
         return;
       }
-       if(!session)
+
+        //Prüfen, ob jemand eingeloggt ist, falls nicht (also !session, wird sofort zur Login-Seite weitergeleitet)
+        if(!session)
        {
            window.location.href ="login.html";
            return;
        }
-        
+
+
+        //merken des aktuellen Users: 
         const user = session.user;
+
+        //hier wird gezählt wie viele Zeilen es in der User-Tabelle mit der user_ID des eingeloggten Users gibt
+        //falls es einen Datensatz gibt speichert count dann die Zahl 1, falls nicht: 0
+        //durch head: true erhält man hier als Antwort keine Datensätze, sondern nur die oben beschriebenen Anzahl 
+        //die in count gespeichert wird. 
         const { count, error } = await supabase.from("users").select("*", { count: "exact", head: true}).eq("user_ID", user.id);
+        //damit kann man beantworten, ob überhaupt ein Benutzerprofil existiert 
 
         
-
+        // Fehler oder existiert überhaupt ein Profil (dann gilt count speichert 0) , dann wird der Nutzer zur Profilseite geschickt; 
         if(error || count <1)
         {
             window.location.href ="profil.html";
             return;
         }
-        
+
+        //nur wenn alle obigen Prüfungen bestanden wurden, landet der User auf der Tippseite: 
         window.location.href ="Alles.html";
         return;
         
