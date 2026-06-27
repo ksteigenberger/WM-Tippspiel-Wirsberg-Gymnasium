@@ -170,16 +170,18 @@
     .info-badge {
       display: inline-flex;
       align-items: center;
-      gap: 5px;
+      gap: 8px;
       background-color: #e6f2ff;
       color: #0066cc;
-      padding: 4px 8px;
-      border-radius: 12px;
-      font-size: 12px;
+      padding: 8px 14px;
+      border-radius: 20px;
+      font-size: 15px;
       font-weight: bold;
       font-family: Arial, sans-serif;
       cursor: pointer;
       position: relative;
+      border: 1px solid #cce5ff;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
     }
 
     .info-badge::after {
@@ -191,7 +193,7 @@
       color: white;
       padding: 6px 10px;
       border-radius: 5px;
-      font-size: 12px;
+      font-size: 14px;
       font-family: Arial, sans-serif;
       font-weight: normal;
       white-space: nowrap;
@@ -228,16 +230,22 @@
       color: white;
       background-color: #0066cc;
       border-radius: 50%;
-      width: 16px;
-      height: 16px;
-      font-size: 11px;
-      line-height: 16px;
+      width: 22px;
+      height: 22px;
+      font-size: 14px;
+      line-height: 22px;
       text-align: center;
       font-family: "Georgia", serif;
       font-weight: bold;
       display: inline-block;
     }
 
+    .content-wrapper {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 0 15px;   
+    box-sizing: border-box;
+    }  
     /* Style-Bereich von Gruppe 3!!*/
 
 #suche {
@@ -565,7 +573,7 @@ body.fold67-hide-original > *:not(#fold67-wrapper) {
 <br>
 
                                                                                                                                         
-<div id="begruessung_container" style="font-size: 20px; font-weight: bold; color: white; text-shadow: 1px 1px 4px rgba(0,0,0,0.6); margin-bottom: 25px; min-height: 24px;">
+<div id="begruessung_container" style="font-size: 30px; font-weight: bold; color: white; text-shadow: 1px 1px 4px rgba(0,0,0,0.6); margin-bottom: 25px; min-height: 24px;">
     <span id="begruessung_text"></span><span class="cursor">_</span>
 </div>
 
@@ -573,52 +581,66 @@ body.fold67-hide-original > *:not(#fold67-wrapper) {
 
 <input type="hidden" id="name">
 <span id="limit-error" style="display: none;"></span>
+<br>
 
 <label>Spiel auswählen:</label><br>
-<div style="display: flex; justify-content: center; align-items: center; gap: 10px; margin-top: 10px;">
-    <button id="btn_prev" style="padding: 10px 15px;">◀</button>
+<div style="display: flex; justify-content: center; align-items: center; gap: 12px; margin-top: 15px; width: 100%;">
+    <button id="btn_prev" style="padding: 12px 20px; font-size: 16px; border-radius: 8px;">◀</button>
     
-    <select id="spiel_select" style="padding: 10px; border-radius: 5px; cursor: pointer;">
+    <select id="spiel_select" style="padding: 12px 20px; font-size: 16px; border-radius: 8px; cursor: pointer; flex: 1; max-width: 300px; text-align: center; text-align-last: center;">
         <option value="" disabled>-- Bitte wählen --</option>
     </select>
     
-    <button id="btn_next" style="padding: 10px 15px;">▶</button>
+    <button id="btn_next" style="padding: 12px 20px; font-size: 18px; border-radius: 8px;">▶</button>
 </div>
 
 <br><br>
 
 
 
-<div id="tipp_box" style="position: relative; display: inline-block; background-color: white; padding: 25px; border-radius: 15px; box-shadow: 0 4px 12px rgba(0,0,0,0.2); min-width: 340px;">
+<div id="tipp_box" style="position: relative; display: inline-block; background-color: white; padding: 25px; border-radius: 15px; box-shadow: 0 4px 12px rgba(0,0,0,0.2); width: 100%; max-width: 100%; box-sizing: border-box;">
 
-    <div id="overlay" style="display: none; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(255, 255, 255, 0.88); backdrop-filter: blur(3px); z-index: 10; flex-direction: column; justify-content: center; align-items: center; border-radius: 15px;">
-        <div style="font-size: 20px; font-weight: bold; color: #333; text-transform: uppercase; letter-spacing: 1px;">Spiel vorbei</div>
-        <div style="font-size: 13px; color: #666; margin-top: 6px;">Endergebnis</div>
-        <div id="overlay_score" style="font-size: 38px; font-weight: bold; color: #e60000; margin-top: 2px;">0 : 0</div>
+    <div id="overlay" style="display: none; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(5px); z-index: 10; flex-direction: column; justify-content: center; align-items: center; border-radius: 15px;">
+    
+    <div style="font-size: 22px; font-weight: bold; color: #333; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px;">Spiel vorbei</div>
+    
+    <div style="display: flex; justify-content: center; align-items: center; gap: 20px; padding: 10px;">
+        <div id="overlay_team_a" style="font-size: 20px; font-weight: bold; color: #333; min-width: 80px; text-align: right;">Team A</div>
+        <div id="overlay_score" style="font-size: 42px; font-weight: bold; color: #e60000;">0 : 0</div>
+        <div id="overlay_team_b" style="font-size: 20px; font-weight: bold; color: #333; min-width: 80px; text-align: left;">Team B</div>
     </div>
+    
+</div>
 
     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
-        <div style="font-size: 13px; color: #333;">Anstoß: <span id="spiel_datum">--.--.</span> | <span id="spiel_zeit">--:--</span> Uhr</div>
+        <div style="font-size:20px; color: #333;">Anstoß: <span id="spiel_datum">--.--.</span> | <span id="spiel_zeit">--:--</span> Uhr</div>
         <div class="info-badge" id="info_badge_tips" onclick="this.classList.toggle('active'); event.stopPropagation();">
             <span class="info-icon-blue">i</span>
             <span id="offene_tipps_count">--</span>
         </div>
     </div>
 
-    <div id="countdown_box" style="margin: 10px 0 20px 0; font-size: 13px; font-weight: bold; color: #555; background: #f0f0f0; padding: 6px 12px; border-radius: 20px; display: inline-block;">--</div>
+    <div id="countdown_box" style="margin: 20px 0 20px 0; font-size: 18px; font-weight: bold; color: #555; background: #f0f0f0; padding: 6px 12px; border-radius: 20px; display: inline-block;">--</div>
 
     <br>
 
-
-    <div style="font-size: 18px; margin-bottom: 15px; display: flex; justify-content: center; align-items: center; gap: 8px;">
-        <span id="team_a" style="font-weight:bold; color: #333; text-shadow: none;">Team A</span> 
-        <input type="number" id="tore_a" min="0" step="1" oninput="this.value = this.value.replace(/[^0-9]/g, '');" style="width:45px; padding: 5px; text-align: center; font-size: 16px;" placeholder="-"> : 
-        <input type="number" id="tore_b" min="0" step="1" oninput="this.value = this.value.replace(/[^0-9]/g, '');" style="width:45px; padding: 5px; text-align: center; font-size: 16px;" placeholder="-"> 
-        <span id="team_b" style="font-weight:bold; color: #333; text-shadow: none;">Team B</span>
+    <div style="font-size: 24px; margin: 20px 0; display: flex; justify-content: center; align-items: center; gap: 15px; flex-wrap: wrap;">
+        <span id="team_a" style="font-weight:bold; color: #333; text-shadow: none; min-width: 100px; text-align: right;">Team A</span> 
+        
+        <input type="number" id="tore_a" min="0" step="1" oninput="this.value = this.value.replace(/[^0-9]/g, '');" 
+               style="width: 65px; height: 50px; padding: 5px; text-align: center; font-size: 24px; font-weight: bold; border: 2px solid #ccc; border-radius: 8px;" placeholder="-"> 
+        
+        <span style="font-size: 28px; font-weight: bold; color: #333;">:</span> 
+        
+        <input type="number" id="tore_b" min="0" step="1" oninput="this.value = this.value.replace(/[^0-9]/g, '');" 
+               style="width: 65px; height: 50px; padding: 5px; text-align: center; font-size: 24px; font-weight: bold; border: 2px solid #ccc; border-radius: 8px;" placeholder="-"> 
+        
+        <span id="team_b" style="font-weight:bold; color: #333; text-shadow: none; min-width: 100px; text-align: left;">Team B</span>
     </div>
 
-    <button id="tippSpeichern">Tipp speichern</button>
-</div>
+    <button id="tippSpeichern" style="width: 100%; padding: 15px; font-size: 18px; font-weight: bold; border-radius: 8px; background-color: red; color: white; border: none; cursor: pointer;">Tipp speichern</button>
+
+</div></div>
 
 <!-- Anzeige Gruppe 3-->
 
@@ -838,6 +860,8 @@ body.fold67-hide-original > *:not(#fold67-wrapper) {
         const istSpielFertig = spiel["Spiel_fertig?"];
         if (istSpielFertig) {
             document.getElementById("countdown_box").innerText = "Beendet";
+            document.getElementById("overlay_team_a").innerText = spiel.team_a;
+            document.getElementById("overlay_team_b").innerText = spiel.team_b;
             document.getElementById("overlay_score").innerText = `${spiel.tore_team_a} : ${spiel.tore_team_b}`;
             document.getElementById("overlay").style.display = "flex";
             document.getElementById("tippSpeichern").disabled = true;
