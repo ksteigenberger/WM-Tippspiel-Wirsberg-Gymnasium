@@ -249,12 +249,17 @@
       display: inline-block;
     }
 
-    .content-wrapper {
-    max-width: 860px;
-    margin: 0 auto;
-    padding: 0 15px;   
+      //
+.oberer-bereich-wrapper {
+    max-width: 850px;       
+    width: 100%;
+    margin: 0 auto;         
     box-sizing: border-box;
-    }  
+    text-align: center;     
+    } 
+
+
+      
     /* Style-Bereich von Gruppe 3!!*/
 
 #suche {
@@ -582,6 +587,8 @@ body.fold67-hide-original > *:not(#fold67-wrapper) {
 <br>
 
                                                                                                                                         
+
+    <div class="oberer-bereich-wrapper">                                                                                                                                           
 <div id="begruessung_container" style="font-size: 30px; font-weight: bold; color: white; text-shadow: 1px 1px 4px rgba(0,0,0,0.6); margin-bottom: 25px; min-height: 24px;">
     <span id="begruessung_text"></span><span class="cursor">_</span>
 </div>
@@ -633,20 +640,31 @@ body.fold67-hide-original > *:not(#fold67-wrapper) {
 
     <br>
 
-    <div style="font-size: 24px; margin: 20px 0; display: flex; justify-content: center; align-items: center; gap: 15px; flex-wrap: wrap;">
-        <span id="team_a" style="font-weight:bold; color: #333; text-shadow: none; min-width: 100px; text-align: right;">Team A</span> 
-        
+   <!-- <div style="font-size: 24px; margin: 20px 0; display: flex; justify-content: center; align-items: center; gap: 15px; flex-wrap: wrap;"> -->
+       <div style="margin: 20px 0; display: flex; justify-content: center; align-items: flex-start; gap: 15px; flex-wrap: wrap;">
+
+
+div style="display: flex; flex-direction: column; align-items: center; min-width: 100px;">
+        <img id="img_flag_a" src="" alt="" style="width: 45px; height: 30px; object-fit: cover; margin-bottom: 5px; border-radius: 3px; box-shadow: 0 1px 3px rgba(0,0,0,0.3); display: none;">
+        <span id="team_a" style="font-weight:bold; color: #333; text-shadow: none;">Team A</span>
+    </div>
+    
+    <div style="display: flex; align-items: center; gap: 10px; margin-top: 25px;">
         <input type="number" id="tore_a" min="0" step="1" oninput="this.value = this.value.replace(/[^0-9]/g, '');" 
-               style="width: 65px; height: 50px; padding: 5px; text-align: center; font-size: 24px; font-weight: bold; border: 2px solid #ccc; border-radius: 8px;" placeholder="-"> 
+               style="width: 60px; height: 50px; padding: 5px; text-align: center; font-size: 24px; font-weight: bold; border: 2px solid #ccc; border-radius: 8px;" placeholder="-"> 
         
         <span style="font-size: 28px; font-weight: bold; color: #333;">:</span> 
         
         <input type="number" id="tore_b" min="0" step="1" oninput="this.value = this.value.replace(/[^0-9]/g, '');" 
-               style="width: 65px; height: 50px; padding: 5px; text-align: center; font-size: 24px; font-weight: bold; border: 2px solid #ccc; border-radius: 8px;" placeholder="-"> 
-        
-        <span id="team_b" style="font-weight:bold; color: #333; text-shadow: none; min-width: 100px; text-align: left;">Team B</span>
+               style="width: 60px; height: 50px; padding: 5px; text-align: center; font-size: 24px; font-weight: bold; border: 2px solid #ccc; border-radius: 8px;" placeholder="-"> 
     </div>
-
+    
+    <div style="display: flex; flex-direction: column; align-items: center; min-width: 100px;">
+        <img id="img_flag_b" src="" alt="" style="width: 45px; height: 30px; object-fit: cover; margin-bottom: 5px; border-radius: 3px; box-shadow: 0 1px 3px rgba(0,0,0,0.3); display: none;">
+        <span id="team_b" style="font-weight:bold; color: #333; text-shadow: none;">Team B</span>
+    </div>
+</div>    
+    
     <button id="tippSpeichern" style="width: 100%; padding: 15px; font-size: 18px; font-weight: bold; border-radius: 8px; background-color: red; color: white; border: none; cursor: pointer;">Tipp speichern</button>
 
 </div></div>
@@ -823,7 +841,9 @@ body.fold67-hide-original > *:not(#fold67-wrapper) {
 
         document.getElementById("team_a").innerText = spiel.team_a;
         document.getElementById("team_b").innerText = spiel.team_b;
-
+        setzeFlagge(spiel.team_a, "img_flag_a");
+        setzeFlagge(spiel.team_b, "img_flag_b");
+        
         if (spiel.Startzeit) {
             const datumObjekt = new Date(spiel.Startzeit);
             const formatiertesDatum = datumObjekt.toLocaleDateString('de-DE', {
@@ -918,6 +938,35 @@ body.fold67-hide-original > *:not(#fold67-wrapper) {
         offeneTippsBerechnen();
     }
 
+
+  const flaggenMap = {
+    "Deutschland": "de",
+    "Brasilien": "br",
+    "Frankreich": "fr",
+    "Spanien": "es",
+    "Italien": "it",
+    "England": "gb-eng",
+    "Portugal": "pt",
+    "Argentinien": "ar",
+    "AF4_a": "de" //test für AFa_4 = DE Flagge zum anschauen wie es aussieht
+    };
+
+
+  function setzeFlagge(teamName, elementId) {
+    const flagElement = document.getElementById(elementId);
+    const laenderKuerzel = flaggenMap[teamName];
+    
+    if (laenderKuerzel) {
+        flagElement.src = `https://flagcdn.com/w80/${laenderKuerzel}.png`;
+        flagElement.style.display = "block";
+    } else {
+        
+        flagElement.style.display = "none"; 
+        }
+    }      
+
+           
+      
     async function spieleListeLaden() {
         const { data: spiele, error } = await supabase
         .from("spiele")
