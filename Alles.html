@@ -503,6 +503,43 @@ thead th {
 }
 
 
+#fold67-wrapper {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  pointer-events: none;
+}
+
+.fold67-strip {
+  position: absolute;
+  top: 0;
+  height: 100%;
+  overflow: hidden;
+}
+
+.fold67-strip-inner {
+  position: absolute;
+  top: 0;
+  height: 100%;
+}
+
+@keyframes fold67Strip {
+  0%   { transform: translateY(0) skewY(0deg); }
+  20%  { transform: translateY(calc(var(--d) * -160px)) skewY(calc(var(--d) * -3deg)); }
+  40%  { transform: translateY(calc(var(--d) * 80px))  skewY(calc(var(--d) * 1.6deg)); }
+  60%  { transform: translateY(calc(var(--d) * -40px)) skewY(calc(var(--d) * -0.8deg)); }
+  80%  { transform: translateY(calc(var(--d) * 20px))   skewY(calc(var(--d) * 0.4deg)); }
+  100% { transform: translateY(0) skewY(0deg); }
+}
+
+.fold67-strip.active {
+  animation: fold67Strip 1.5s ease-in-out;
+}
+
+body.fold67-hide-original > *:not(#fold67-wrapper) {
+  opacity: 0;
+}
+
 
 
 
@@ -988,7 +1025,14 @@ thead th {
 
             offeneTippsBerechnen();
         }
+
+        if(toreA == 6 && toreB == 7)
+    {
+        trigger67Effekt();
     }
+    }
+
+
 
 
 
@@ -1428,9 +1472,69 @@ async function spielerSuchen() {
     for (const eintrag of treffer) {
         await renderZeile(restBody, eintrag, aktuellesSpiel, false);
     }
+    if(suchtext == "67")
+    {
+        trigger67Effekt();
+    }
 }
 
+async function aktuellesSpiel_Laden() 
+{ 
+    for(let i = 0; i < spiele.length; i++) 
+    { 
+        if(spiele[i]["Spiel_fertig?"]) 
+        { 
+            aktuellesSpiel = i; 
+        } 
+    } 
+}
 
+function trigger67Effekt() {
+  const STRIP_COUNT = 101;
+  const OVERLAP = 4; // px Überlappung zwischen Streifen, verhindert weiße Lücken
+  const wrapper = document.createElement('div');
+  wrapper.id = 'fold67-wrapper';
+
+  const pageWidth = window.innerWidth;
+  const stripWidth = pageWidth / STRIP_COUNT;
+  const strips = [];
+
+  for (let i = 0; i < STRIP_COUNT; i++) {
+    const strip = document.createElement('div');
+    strip.className = 'fold67-strip';
+
+    const left = i * stripWidth - OVERLAP;
+    strip.style.left = left + 'px';
+    strip.style.width = (stripWidth + OVERLAP * 2) + 'px';
+    strip.style.zIndex = i; // sichert konsistente Überdeckungsreihenfolge
+
+    const center = (STRIP_COUNT - 1) / 2;
+    const d = (i - center) / center;
+    strip.style.setProperty('--d', d.toFixed(3));
+
+    const inner = document.createElement('div');
+    inner.className = 'fold67-strip-inner';
+    inner.style.width = pageWidth + 'px';
+    inner.style.left = -left + 'px';
+    inner.innerHTML = document.body.innerHTML;
+
+    strip.appendChild(inner);
+    wrapper.appendChild(strip);
+    strips.push(strip);
+  }
+
+  document.body.appendChild(wrapper);
+  document.body.classList.add('fold67-hide-original');
+
+  requestAnimationFrame(() => {
+    strips.forEach(s => s.classList.add('active'));
+  });
+
+  setTimeout(() => {
+    document.body.classList.remove('fold67-hide-original');
+    wrapper.remove();
+  }, 1550); 
+}
 
 
 //if (eintrag.rang === 1) row.classList.add("platz1");
@@ -1461,7 +1565,7 @@ async function spielerSuchen() {
         //Initialisierung : 
 
        await checkAuthAndInit();
-
+        await aktuellesSpiel_Laden();
         await spieleListeLaden();
         await ranglisteEintragen();
         await renderNormaleAnsicht();
