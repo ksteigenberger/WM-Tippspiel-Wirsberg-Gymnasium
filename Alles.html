@@ -17,7 +17,7 @@
       background-repeat: no-repeat;
       background-attachment: fixed;
       text-align: center;
-      margin: 40px; /*Lennart hat hier 20px*/
+      margin: 40px;
       padding-top: 200px;
       position: relative;
     }
@@ -25,13 +25,13 @@
 
     #header {
       display: flex;
-      flex-direction: row;   /* Nebeneinander auch auf dem Smartphone */
+      flex-direction: row;
       align-items: center;
       justify-content: center;
       gap: 15px;
       margin-top: -120px;
       text-align: center;
-      flex-wrap: wrap;       /* Verhindert Überlaufen auf kleinen Displays */
+      flex-wrap: wrap;
     }
    
     
@@ -81,13 +81,14 @@
         text-shadow: 3px 3px 8px rgba(0,0,0,0.3);
     }
 
+    /* DOC 2: z-index:10 added */
     #ball-wrapper {
       position: absolute;
       left: 17.4%;
       top: 61%;
       transform: translate(-50%,-50%);
       animation: flug 1.5s ease-out forwards;
-    z-index: 10;
+      z-index: 10;
     }
 
     #ball {
@@ -133,21 +134,21 @@
       100% { transform: rotate(360deg); }
     }
 
-   @keyframes flug {
-  from {
-    transform:
-      translate(-50%, -50%)
-      translate(430px, 400px)
-      scale(4);      /* Start: 4-mal so groß */
-  }
-
-  to {
-    transform:
-      translate(-50%, -50%)
-      translate(0, 0)
-      scale(1);      /* Endgröße = aktuelle Größe (26px) */
-  }
-}
+    /* DOC 2: updated flug animation with scale effect */
+    @keyframes flug {
+      from {
+        transform:
+          translate(-50%, -50%)
+          translate(430px, 400px)
+          scale(4);
+      }
+      to {
+        transform:
+          translate(-50%, -50%)
+          translate(0, 0)
+          scale(1);
+      }
+    }
 
 
     button {
@@ -244,10 +245,8 @@
     width: 260px;
     padding: 8px;
 
-    /* linksbündig über der Tabelle */
     margin-left: 0;
 
-    /* Abstand zur Rangliste */
     margin-top: 8px;
     margin-bottom: 6px;
 
@@ -386,7 +385,6 @@
     border-radius: 10px 10px 0px 0px;
 }
 
-/* Beide Tabellen sehen gleich aus */
 .rangliste-table {
     width: 100%;
     border-collapse: collapse;
@@ -394,18 +392,14 @@
     border-spacing: 0;
 }
 
-/* feste Spaltenbreiten */
 .col-platz  { width: 90px; }
 .col-user   { width: 220px; }
 .col-punkte { width: 110px; }
 
-/* obere Tabelle */
 .col-tipp {
     width: auto;
 }
 
-/* untere Tabelle:
-   letzte Spalte etwas schmaler, damit der Scrollbalken dort "verschwindet" */
 .col-tipp-rest {
     width: calc(100% - 70px - 220px - 90px - 14px);
 }
@@ -445,7 +439,6 @@ thead th {
     font-size: 14px;
 }
 
-/* Scrollbereich */
 .scroll-wrapper {
     max-height: 380px;
     overflow-y: auto;
@@ -457,7 +450,6 @@ thead th {
     border-radius: 0 0 10px 10px;
 }
 
-/* obere und untere Tabelle optisch direkt verbinden */
 #fixedTable {
     border-bottom: none;
 }
@@ -498,11 +490,9 @@ thead th {
     gap:8px;
 }
 
-
-
 }
 
-
+/* DOC 2: fold67 easter egg styles */
 #fold67-wrapper {
   position: fixed;
   inset: 0;
@@ -539,8 +529,6 @@ thead th {
 body.fold67-hide-original > *:not(#fold67-wrapper) {
   opacity: 0;
 }
-
-
 
 
   </style>
@@ -681,8 +669,6 @@ body.fold67-hide-original > *:not(#fold67-wrapper) {
     </table>
 </div>
     
-<!--<button id="buttonT">Rangliste laden</button>-->
-
 
 
     <footer id="page_footer" style="margin: 30px auto 20px; max-width: 860px; color: white; display: flex; flex-wrap: wrap; justify-content: center; gap: 12px; font-size: 14px;">
@@ -697,8 +683,6 @@ body.fold67-hide-original > *:not(#fold67-wrapper) {
  <!--Logik und DB-Verbindung mit JavaScript -->
   <script type="module">
 
-    
-
      //---------------------------------------------------------------------
     //Supabase Verbindung (nicht ändern!!)
     //----------------------------------------------------------------------
@@ -709,16 +693,14 @@ body.fold67-hide-original > *:not(#fold67-wrapper) {
 
     const supabase = createClient(supabaseUrl, supabaseKey);
 
-    //hier gleich Logout setzen!
-
     document.getElementById("logout_button").addEventListener("click", async () => {
         await supabase.auth.signOut();
         window.location.href = "index.html";
     });
 
     document.getElementById("profil_button").addEventListener("click", () => {
-    window.location.href = "profil.html";
-});
+        window.location.href = "profil.html";
+    });
 
     
     //----------------------------------------------------------------------
@@ -727,12 +709,8 @@ body.fold67-hide-original > *:not(#fold67-wrapper) {
     let countdownInterval = null;
     let spielLadeId = 0;
 
-   // let typewriterTimeout = null;
-    //let typingAktiv = true;  //hat Steven entfernt
-    //--------------------------
 
-
-   function starteBegruessungAnim() {
+    function starteBegruessungAnim() {
         const name = document.getElementById("name").value.trim() || "Tipper";
         const text = `Hallo ${name}! Bereit zum Tippen?`;
         const element = document.getElementById("begruessung_text");
@@ -750,7 +728,6 @@ body.fold67-hide-original > *:not(#fold67-wrapper) {
     }
 
 
-
     async function spielLaden() {
 
         let meineLadeId = ++spielLadeId;
@@ -758,13 +735,11 @@ body.fold67-hide-original > *:not(#fold67-wrapper) {
         const id = document.getElementById("spiel_select").value;
         const name = document.getElementById("name").value.trim();
 
-       
-        //Alter Timer löschen
         if (countdownInterval) {
             clearInterval(countdownInterval);
             countdownInterval = null;
         }
-        // 1. Eingabefelder und Platzhalter standarmäßig zurücksetzen
+
         document.getElementById("overlay").style.display = "none";
         document.getElementById("tippSpeichern").disabled = false;
         document.getElementById("tore_a").disabled = false;
@@ -774,7 +749,6 @@ body.fold67-hide-original > *:not(#fold67-wrapper) {
         document.getElementById("tore_a").placeholder = "-";
         document.getElementById("tore_b").placeholder = "-";
 
-        // Wenn kein Spiel ausgewählt ist, hier stoppen
         if (!id) {
             document.getElementById("spiel_datum").innerText = "--.--.";
             document.getElementById("spiel_zeit").innerText = "--:--";
@@ -783,7 +757,6 @@ body.fold67-hide-original > *:not(#fold67-wrapper) {
             return;
         }
 
-        // 2. Aus der Tabelle "spiele" das Spiel mit dieser ID laden
         const { data: spiel, error } = await supabase
             .from("spiele")
             .select('team_a, team_b, Startzeit, "Spiel_fertig?", tore_team_a, tore_team_b')
@@ -797,38 +770,27 @@ body.fold67-hide-original > *:not(#fold67-wrapper) {
             return;
         }
 
-
-
-        // 3. Teamnamen in HTML-Elemente 
         document.getElementById("team_a").innerText = spiel.team_a;
         document.getElementById("team_b").innerText = spiel.team_b;
 
-
         if (spiel.Startzeit) {
-
             const datumObjekt = new Date(spiel.Startzeit);
-
             const formatiertesDatum = datumObjekt.toLocaleDateString('de-DE', {
                 day: '2-digit',
                 month: '2-digit'
             });
-
-
             const formatierteZeit = datumObjekt.toLocaleTimeString('de-DE', {
                 hour: '2-digit',
                 minute: '2-digit'
             });
-        document.getElementById("spiel_datum").innerText = formatiertesDatum;
-        document.getElementById("spiel_zeit").innerText = formatierteZeit;
+            document.getElementById("spiel_datum").innerText = formatiertesDatum;
+            document.getElementById("spiel_zeit").innerText = formatierteZeit;
         } else {
-        document.getElementById("spiel_datum").innerText = "--.--.";
-        document.getElementById("spiel_zeit").innerText = "--:--";
+            document.getElementById("spiel_datum").innerText = "--.--.";
+            document.getElementById("spiel_zeit").innerText = "--:--";
         }
 
-        //Neu
-       
-                 
- if (name) {
+        if (name) {
             const { data: userDaten, error: userError } = await supabase
                 .from("users") 
                 .select("*")    
@@ -859,7 +821,6 @@ body.fold67-hide-original > *:not(#fold67-wrapper) {
             document.getElementById("countdown_box").innerText = "Beendet";
             document.getElementById("overlay_score").innerText = `${spiel.tore_team_a} : ${spiel.tore_team_b}`;
             document.getElementById("overlay").style.display = "flex";
-            
             document.getElementById("tippSpeichern").disabled = true;
             document.getElementById("tore_a").disabled = true;
             document.getElementById("tore_b").disabled = true;
@@ -965,7 +926,7 @@ body.fold67-hide-original > *:not(#fold67-wrapper) {
         starteBegruessungAnim();
     }
 
-     async function speichern() {
+    async function speichern() {
         const name = document.getElementById("name").value;
         const spielID = document.getElementById("spiel_select").value;
         const teamA = document.getElementById("team_a").innerText;
@@ -1025,14 +986,11 @@ body.fold67-hide-original > *:not(#fold67-wrapper) {
             offeneTippsBerechnen();
         }
 
-        if(toreA == 6 && toreB == 7)
-    {
-        trigger67Effekt();
+        // DOC 2: trigger easter egg on 6:7 tip
+        if (toreA == 6 && toreB == 7) {
+            trigger67Effekt();
+        }
     }
-    }
-
-
-
 
 
     async function offeneTippsBerechnen() {
@@ -1108,7 +1066,6 @@ body.fold67-hide-original > *:not(#fold67-wrapper) {
     }
 
 
-
     // Authentifizierung
     async function checkAuthAndInit() {
         const { data: { session }, error: authError } = await supabase.auth.getSession();
@@ -1128,221 +1085,182 @@ body.fold67-hide-original > *:not(#fold67-wrapper) {
             .maybeSingle();
 
         if (userError || !userDaten) {
-           
             window.location.href = "profil.html";
             throw new Error("Profil fehlt");
-           
         }
 
-        
         document.getElementById("name").value = userDaten.username;
-        document.getElementById("begruessung_text").innerText="Hallo "+userDaten.username+"! Bereit zum Tippen?";
-
-        
-        
+        document.getElementById("begruessung_text").innerText = "Hallo " + userDaten.username + "! Bereit zum Tippen?";
     }
-      
-    
-    
 
- 
 
-    
-    
+    // Funktionsdefinitionen von Gruppe 3 !!
 
-// Funktionsdefinitionen von Gruppe 3 !!
+    let currentUserId = null;
 
-//aktuelle session speichern
-//const { data: { session } } = await supabase.auth.getSession();
-   // if (!session) {
-   //     window.location.href = "login.html";
-    //}
+    let points_for_l1_prediction = 4;
+    let points_for_l2_prediction = 3;
+    let points_for_l3_prediction = 2;
+    let points_for_draw_prediction = 2;
+    let aktuellesSpiel = 0;
+    let rangliste = [];
+    let zeileT = [];
+    let spiele = [];
+    let users = [];
+    let tipps = [];
 
-//const currentUserId = session.user.id;
-let currentUserId = null;
-
-let points_for_l1_prediction = 4;
-let points_for_l2_prediction = 3;
-let points_for_l3_prediction = 2;
-let points_for_draw_prediction = 2;
-let aktuellesSpiel = 0;
-let rangliste = [];
-let zeileT = [];
-let spiele = [];
-let users = [];
-let tipps = [];
-
-const { data: spiele1, error:  errorspiele} = await supabase.from("spiele").select("*").order("id", {ascending: true});
-    if(errorspiele)
-     {
-       document.getElementById("ausgabe").innerText=errorspiele.message;
-     }
-
-const { data: users1, error: errorusers} = await supabase.from("users").select("*");
-    if(errorusers)
-    {
-        document.getElementById("ausgabe").innerText=errorusers.message;
+    const { data: spiele1, error: errorspiele } = await supabase.from("spiele").select("*").order("id", { ascending: true });
+    if (errorspiele) {
+        document.getElementById("ausgabe").innerText = errorspiele.message;
     }
-const { data: tipps1, error: errortipps } = await supabase.from("tipps").select("*");
-    if (errortipps) 
-    {
+
+    const { data: users1, error: errorusers } = await supabase.from("users").select("*");
+    if (errorusers) {
+        document.getElementById("ausgabe").innerText = errorusers.message;
+    }
+
+    const { data: tipps1, error: errortipps } = await supabase.from("tipps").select("*");
+    if (errortipps) {
         document.getElementById("ausgabe").innerText = errortipps.message;
     }
 
-spiele = spiele1;
-users = users1;
-tipps = tipps1;
+    spiele = spiele1;
+    users = users1;
+    tipps = tipps1;
 
-async function ranglisteEintragen() {
-    rangliste = [];
+    async function ranglisteEintragen() {
+        rangliste = [];
 
-    for (let i = 0; i < users.length; i++) {
-        let gesamtPunkte = await gesPunkteBerechnen(users[i].user_ID);
+        for (let i = 0; i < users.length; i++) {
+            let gesamtPunkte = await gesPunkteBerechnen(users[i].user_ID);
 
-        rangliste.push({
-            user_ID: users[i].user_ID,
-            username: users[i].username,
-            punkte: gesamtPunkte
-        });
-    }
-
-    // Nach Punkten sortieren
-    rangliste.sort((a, b) => b.punkte - a.punkte);
-
-    // Rang vergeben (bei gleichen Punkten gleicher Rang)
-    let rang = 1;
-    let letzterPunktestand = null;
-
-    for (let i = 0; i < rangliste.length; i++) {
-        if (letzterPunktestand !== null && rangliste[i].punkte < letzterPunktestand) {
-            rang = i + 1;
+            rangliste.push({
+                user_ID: users[i].user_ID,
+                username: users[i].username,
+                punkte: gesamtPunkte
+            });
         }
 
-        rangliste[i].rang = rang;
-        letzterPunktestand = rangliste[i].punkte;
-    }
-}
+        rangliste.sort((a, b) => b.punkte - a.punkte);
 
-//Emojis für Platz 1-3
-function formatPlatz(rang) {
-    if (rang === 1) return "🥇 1";
-    if (rang === 2) return "🥈 2";
-    if (rang === 3) return "🥉 3";
-    return `${rang}`;
-}
+        let rang = 1;
+        let letzterPunktestand = null;
 
-
-
-
-async function getTippTextForUser(userId, spielId) {
-    
-    if(spiele[spielId]["Spiel_fertig?"])
-    {
-        const { data: tipps, error } = await supabase
-        .from("tipps")
-        .select("*")
-        .eq("spiel_ID", spielId)
-        .eq("tipper_ID", userId);
-
-        const tippDesUsers = tipps.filter(tipp => tipp.spiel_ID === spielId).filter(tipp => tipp.tipper_ID === userId);
-    if (error) {
-        document.getElementById("ausgabe").innerText = error.message;
-        return "- : -<sup>0</sup>";
+        for (let i = 0; i < rangliste.length; i++) {
+            if (letzterPunktestand !== null && rangliste[i].punkte < letzterPunktestand) {
+                rang = i + 1;
+            }
+            rangliste[i].rang = rang;
+            letzterPunktestand = rangliste[i].punkte;
+        }
     }
 
-    if (!tippDesUsers || tippDesUsers.length === 0) {
-        return "- : -<sup>0</sup>";
+    function formatPlatz(rang) {
+        if (rang === 1) return "🥇 1";
+        if (rang === 2) return "🥈 2";
+        if (rang === 3) return "🥉 3";
+        return `${rang}`;
     }
 
-    const tipp = tippDesUsers[0];
-    const punkte = await punkteBerechnen(spielId, tipp.tore_team_a, tipp.tore_team_b);
 
-    return `${tipp.tore_team_a} : ${tipp.tore_team_b}<sup>${punkte}</sup>`;
-    }
-    else
-    {
-        return "- : -"
-    }
-    
-}
+    // DOC 2: getTippTextForUser fetches fresh from Supabase instead of using cached tipps
+    async function getTippTextForUser(userId, spielId) {
+        if (spiele[spielId]["Spiel_fertig?"]) {
+            const { data: tipps, error } = await supabase
+                .from("tipps")
+                .select("*")
+                .eq("spiel_ID", spielId)
+                .eq("tipper_ID", userId);
 
+            const tippDesUsers = tipps.filter(tipp => tipp.spiel_ID === spielId).filter(tipp => tipp.tipper_ID === userId);
+            if (error) {
+                document.getElementById("ausgabe").innerText = error.message;
+                return "- : -<sup>0</sup>";
+            }
 
+            if (!tippDesUsers || tippDesUsers.length === 0) {
+                return "- : -<sup>0</sup>";
+            }
 
-async function renderNormaleAnsicht() {
-    const top5Body = document.getElementById("top5Body");
-    const ichBody = document.getElementById("ichBody");
-    const restBody = document.getElementById("restBody");
+            const tipp = tippDesUsers[0];
+            const punkte = await punkteBerechnen(spielId, tipp.tore_team_a, tipp.tore_team_b);
 
-    top5Body.innerHTML = "";
-    ichBody.innerHTML = "";
-    restBody.innerHTML = "";
-
-    // Spielüberschrift setzen
-    if(spiele[aktuellesSpiel]["Spiel_fertig?"])
-    {
-        document.getElementById("spielT").innerText =
-        spiele[aktuellesSpiel].team_a + " - " + spiele[aktuellesSpiel].team_b +
-        "\n" + spiele[aktuellesSpiel].tore_team_a + " : " + spiele[aktuellesSpiel].tore_team_b;
-    }else
-    {
-        document.getElementById("spielT").innerText =
-        spiele[aktuellesSpiel].team_a + " - " + spiele[aktuellesSpiel].team_b +
-        "\n" + "- : -";
+            return `${tipp.tore_team_a} : ${tipp.tore_team_b}<sup>${punkte}</sup>`;
+        } else {
+            return "- : -";
+        }
     }
 
-    const eigenerEintrag = rangliste.find(e => e.user_ID === currentUserId);
-    const top5 = rangliste.slice(0, 5);
 
-    // Top 5 rendern
-    for (const eintrag of top5) {
-        const istIch = eintrag.user_ID === currentUserId;
-        await renderZeile(top5Body, eintrag, aktuellesSpiel, istIch);
+    async function renderNormaleAnsicht() {
+        const top5Body = document.getElementById("top5Body");
+        const ichBody = document.getElementById("ichBody");
+        const restBody = document.getElementById("restBody");
+
+        top5Body.innerHTML = "";
+        ichBody.innerHTML = "";
+        restBody.innerHTML = "";
+
+        if (spiele[aktuellesSpiel]["Spiel_fertig?"]) {
+            document.getElementById("spielT").innerText =
+                spiele[aktuellesSpiel].team_a + " - " + spiele[aktuellesSpiel].team_b +
+                "\n" + spiele[aktuellesSpiel].tore_team_a + " : " + spiele[aktuellesSpiel].tore_team_b;
+        } else {
+            document.getElementById("spielT").innerText =
+                spiele[aktuellesSpiel].team_a + " - " + spiele[aktuellesSpiel].team_b +
+                "\n" + "- : -";
+        }
+
+        const eigenerEintrag = rangliste.find(e => e.user_ID === currentUserId);
+        const top5 = rangliste.slice(0, 5);
+
+        for (const eintrag of top5) {
+            const istIch = eintrag.user_ID === currentUserId;
+            await renderZeile(top5Body, eintrag, aktuellesSpiel, istIch);
+        }
+
+        if (eigenerEintrag && !top5.some(e => e.user_ID === currentUserId)) {
+            await renderZeile(ichBody, eigenerEintrag, aktuellesSpiel, true);
+        }
+
+        const rest = rangliste.filter(e =>
+            !top5.some(t => t.user_ID === e.user_ID) &&
+            e.user_ID !== currentUserId
+        );
+
+        for (const eintrag of rest) {
+            await renderZeile(restBody, eintrag, aktuellesSpiel, false);
+        }
     }
 
-    // Eigene Zeile rendern, aber nur wenn sie NICHT schon in den Top 5 ist
-    if (eigenerEintrag && !top5.some(e => e.user_ID === currentUserId)) {
-        await renderZeile(ichBody, eigenerEintrag, aktuellesSpiel, true);
-    }
+    async function ranglisteAktualisieren() {
+        document.getElementById("refreshButton").disabled = true;
+        document.getElementById("refreshButton").innerHTML = "⟳ Aktualisiere...";
 
-    // Restliche Spieler:
-    // nicht Top 5 und nicht ich
-    const rest = rangliste.filter(e =>
-        !top5.some(t => t.user_ID === e.user_ID) &&
-        e.user_ID !== currentUserId
-    );
+        document.getElementById("top5Body").innerHTML = "";
+        document.getElementById("ichBody").innerHTML = "";
+        document.getElementById("restBody").innerHTML = "";
 
-    for (const eintrag of rest) {
-        await renderZeile(restBody, eintrag, aktuellesSpiel, false);
-    }
-}
-      
-//Funktion zum Aktualisier Button
-async function ranglisteAktualisieren() {
-    document.getElementById("refreshButton").disabled = true;
-    document.getElementById("refreshButton").innerHTML = "⟳ Aktualisiere...";
+        const { data: neueSpiele } = await supabase.from("spiele").select("*").order("id", { ascending: true });
+        const { data: neueUsers } = await supabase.from("users").select("*");
+        const { data: neueTipps } = await supabase.from("tipps").select("*");
 
-     // Tabelle kurz leeren → visuelles "Neu laden"-Gefühl
-    document.getElementById("top5Body").innerHTML = "";
-    document.getElementById("ichBody").innerHTML = "";
-    document.getElementById("restBody").innerHTML = "";
+        if (neueSpiele) spiele = neueSpiele;
+        if (neueUsers) users = neueUsers;
+        if (neueTipps) tipps = neueTipps;
 
-    // NEU: Daten frisch aus der Datenbank holen
-    const { data: neueSpiele } = await supabase.from("spiele").select("*").order("id", { ascending: true });
-    const { data: neueUsers } = await supabase.from("users").select("*");
-    const { data: neueTipps } = await supabase.from("tipps").select("*");
+        await ranglisteEintragen();
 
-    if (neueSpiele) spiele = neueSpiele;
-    if (neueUsers) users = neueUsers;
-    if (neueTipps) tipps = neueTipps;
+        const suchtext = document.getElementById("suche").value.trim();
 
-    await ranglisteEintragen();
-
-    const suchtext = document.getElementById("suche").value.trim();
-
-    if (suchtext === "") {
-        await renderNormaleAnsicht();
-    } else {
-        await spielerSuchen();
+        if (suchtext === "") {
+            await renderNormaleAnsicht();
+        } else {
+            await spielerSuchen();
+        }
+        await new Promise(resolve => setTimeout(resolve, 1000));
+        document.getElementById("refreshButton").innerHTML = "↻ Aktualisieren";
+        document.getElementById("refreshButton").disabled = false;
     }
     await new Promise(resolve => setTimeout(resolve, 1000));
     document.getElementById("refreshButton").innerHTML = "↻ Aktualisieren";
@@ -1354,26 +1272,21 @@ async function renderZeile(tbody, eintrag, spielId, istEigeneZeile = false) {
 
 
 
-    if (istEigeneZeile) {
-        row.classList.add("eigene-zeile");
+        if (istEigeneZeile) {
+            row.classList.add("eigene-zeile");
+        }
+
+        row.insertCell().innerText = formatPlatz(eintrag.rang);
+        row.insertCell().innerText = istEigeneZeile ? "Ich" : eintrag.username;
+        row.insertCell().innerText = eintrag.punkte;
+
+        const tippCell = row.insertCell();
+        tippCell.innerHTML = await getTippTextForUser(eintrag.user_ID, spielId);
     }
 
-    row.insertCell().innerText = formatPlatz(eintrag.rang);
-    row.insertCell().innerText = istEigeneZeile ? "Ich" : eintrag.username;
-    row.insertCell().innerText = eintrag.punkte;
 
-    const tippCell = row.insertCell();
-    
-        tippCell.innerHTML = await getTippTextForUser(eintrag.user_ID, spielId);
-    
-    
-}
-
-
-
-async function punkteBerechnen(spielID, tippA, tippB) {
-    if(spiele[spielID]["Spiel_fertig?"])
-    {
+    async function punkteBerechnen(spielID, tippA, tippB) {
+        if (spiele[spielID]["Spiel_fertig?"]) {
             const spiel = spiele.find(s => s.id === spielID);
             if (!spiel) return 0;
 
@@ -1391,200 +1304,160 @@ async function punkteBerechnen(spielID, tippA, tippB) {
             } else {
                 return 0;
             }
-
-    }else
-    {
-        return 0;
+        } else {
+            return 0;
+        }
     }
-    
-}
 
-async function gesPunkteBerechnen(tipper_ID) {
-    const tippsDesUsers = tipps.filter(tipp => tipp.tipper_ID === tipper_ID);
+    async function gesPunkteBerechnen(tipper_ID) {
+        const tippsDesUsers = tipps.filter(tipp => tipp.tipper_ID === tipper_ID);
 
-    let answer = 0;
+        let answer = 0;
 
-    for (let i = 0; i < tippsDesUsers.length; i++) {
-        const spiel = spiele.find(s => s.id === tippsDesUsers[i].spiel_ID);
-        if (!spiel) continue;
+        for (let i = 0; i < tippsDesUsers.length; i++) {
+            const spiel = spiele.find(s => s.id === tippsDesUsers[i].spiel_ID);
+            if (!spiel) continue;
 
-        if (spiel.tore_team_a == null || spiel.tore_team_b == null) {
-            continue; // Spiel noch nicht ausgewertet
+            if (spiel.tore_team_a == null || spiel.tore_team_b == null) {
+                continue;
+            }
+
+            answer += await punkteBerechnen(
+                tippsDesUsers[i].spiel_ID,
+                tippsDesUsers[i].tore_team_a,
+                tippsDesUsers[i].tore_team_b
+            );
         }
 
-        answer += await punkteBerechnen(
-            tippsDesUsers[i].spiel_ID,
-            tippsDesUsers[i].tore_team_a,
-            tippsDesUsers[i].tore_team_b
+        return answer;
+    }
+
+
+    async function spielRechts(w) {
+        if (w && aktuellesSpiel != spiele.length - 1) {
+            aktuellesSpiel += 1;
+        } else if (!w && aktuellesSpiel != 0) {
+            aktuellesSpiel -= 1;
+        } else if (w && aktuellesSpiel == spiele.length - 1) {
+            aktuellesSpiel = 0;
+        } else {
+            aktuellesSpiel = spiele.length - 1;
+        }
+
+        const suchtext = document.getElementById("suche").value.trim();
+        if (suchtext === "") {
+            await renderNormaleAnsicht();
+        } else {
+            await spielerSuchen();
+        }
+    }
+
+
+    async function spielerSuchen() {
+        const suchtext = document.getElementById("suche").value.trim().toLowerCase();
+
+        const top5Body = document.getElementById("top5Body");
+        const ichBody = document.getElementById("ichBody");
+        const restBody = document.getElementById("restBody");
+
+        top5Body.innerHTML = "";
+        ichBody.innerHTML = "";
+        restBody.innerHTML = "";
+
+        if (suchtext === "") {
+            await renderNormaleAnsicht();
+            return;
+        }
+
+        document.getElementById("spielT").innerText =
+            spiele[aktuellesSpiel].team_a + " - " + spiele[aktuellesSpiel].team_b +
+            "\n" + spiele[aktuellesSpiel].tore_team_a + " : " + spiele[aktuellesSpiel].tore_team_b;
+
+        const eigenerEintrag = rangliste.find(e => e.user_ID === currentUserId);
+
+        if (eigenerEintrag) {
+            await renderZeile(ichBody, eigenerEintrag, aktuellesSpiel, true);
+        }
+
+        const treffer = rangliste.filter(e =>
+            e.user_ID !== currentUserId &&
+            e.username.toLowerCase().includes(suchtext)
         );
 
+        for (const eintrag of treffer) {
+            await renderZeile(restBody, eintrag, aktuellesSpiel, false);
+        }
+
+        // DOC 2: trigger easter egg when searching "67"
+        if (suchtext == "67") {
+            trigger67Effekt();
+        }
     }
 
-    return answer;
-}
-
-
-
-
-// Funktion fuer die Pfeile
-async function spielRechts(w) {
-    if (w && aktuellesSpiel != spiele.length - 1) {
-        aktuellesSpiel += 1;
-    }
-    else if (!w && aktuellesSpiel != 0) {
-        aktuellesSpiel -= 1;
-    }
-    else if (w && aktuellesSpiel == spiele.length - 1) {
-        aktuellesSpiel = 0;
-    }
-    else {
-        aktuellesSpiel = spiele.length - 1;
+    // DOC 2: auto-set aktuellesSpiel to last finished game on init
+    async function aktuellesSpiel_Laden() {
+        for (let i = 0; i < spiele.length; i++) {
+            if (spiele[i]["Spiel_fertig?"]) {
+                aktuellesSpiel = i;
+            }
+        }
     }
 
-    const suchtext = document.getElementById("suche").value.trim();
-    if (suchtext === "") {
-        await renderNormaleAnsicht();
-    } else {
-        await spielerSuchen();
+    // DOC 2: fold/wave easter egg triggered by 6:7 tip or searching "67"
+    function trigger67Effekt() {
+        const STRIP_COUNT = 101;
+        const OVERLAP = 4;
+        const wrapper = document.createElement('div');
+        wrapper.id = 'fold67-wrapper';
+
+        const pageWidth = window.innerWidth;
+        const stripWidth = pageWidth / STRIP_COUNT;
+        const strips = [];
+
+        for (let i = 0; i < STRIP_COUNT; i++) {
+            const strip = document.createElement('div');
+            strip.className = 'fold67-strip';
+
+            const left = i * stripWidth - OVERLAP;
+            strip.style.left = left + 'px';
+            strip.style.width = (stripWidth + OVERLAP * 2) + 'px';
+            strip.style.zIndex = i;
+
+            const center = (STRIP_COUNT - 1) / 2;
+            const d = (i - center) / center;
+            strip.style.setProperty('--d', d.toFixed(3));
+
+            const inner = document.createElement('div');
+            inner.className = 'fold67-strip-inner';
+            inner.style.width = pageWidth + 'px';
+            inner.style.left = -left + 'px';
+            inner.innerHTML = document.body.innerHTML;
+
+            strip.appendChild(inner);
+            wrapper.appendChild(strip);
+            strips.push(strip);
+        }
+
+        document.body.appendChild(wrapper);
+        document.body.classList.add('fold67-hide-original');
+
+        requestAnimationFrame(() => {
+            strips.forEach(s => s.classList.add('active'));
+        });
+
+        setTimeout(() => {
+            document.body.classList.remove('fold67-hide-original');
+            wrapper.remove();
+        }, 1550);
     }
-}
 
 
-//Suchfeld code
-async function spielerSuchen() {
-    const suchtext = document.getElementById("suche").value.trim().toLowerCase();
-
-    const top5Body = document.getElementById("top5Body");
-    const ichBody = document.getElementById("ichBody");
-    const restBody = document.getElementById("restBody");
-
-    top5Body.innerHTML = "";
-    ichBody.innerHTML = "";
-    restBody.innerHTML = "";
-
-    // Wenn Suchfeld leer: normale Ansicht
-    if (suchtext === "") {
-        await renderNormaleAnsicht();
-        return;
-    }
-
-    document.getElementById("spielT").innerText =
-        spiele[aktuellesSpiel].team_a + " - " + spiele[aktuellesSpiel].team_b +
-        "\n" + spiele[aktuellesSpiel].tore_team_a + " : " + spiele[aktuellesSpiel].tore_team_b;
-
-    const eigenerEintrag = rangliste.find(e => e.user_ID === currentUserId);
-
-    // Eigene Zeile immer oben anzeigen
-    if (eigenerEintrag) {
-        await renderZeile(ichBody, eigenerEintrag, aktuellesSpiel, true);
-    }
-
-    // Alle passenden Spieler außer mir
-    const treffer = rangliste.filter(e =>
-        e.user_ID !== currentUserId &&
-        e.username.toLowerCase().includes(suchtext)
-    );
-
-    for (const eintrag of treffer) {
-        await renderZeile(restBody, eintrag, aktuellesSpiel, false);
-    }
-    if(suchtext == "67")
-    {
-        trigger67Effekt();
-    }
-}
-
-async function aktuellesSpiel_Laden() 
-{ 
-    for(let i = 0; i < spiele.length; i++) 
-    { 
-        if(spiele[i]["Spiel_fertig?"]) 
-        { 
-            aktuellesSpiel = i; 
-        } 
-    } 
-}
-
-function trigger67Effekt() {
-  const STRIP_COUNT = 101;
-  const OVERLAP = 4; // px Überlappung zwischen Streifen, verhindert weiße Lücken
-  const wrapper = document.createElement('div');
-  wrapper.id = 'fold67-wrapper';
-
-  const pageWidth = window.innerWidth;
-  const stripWidth = pageWidth / STRIP_COUNT;
-  const strips = [];
-
-  for (let i = 0; i < STRIP_COUNT; i++) {
-    const strip = document.createElement('div');
-    strip.className = 'fold67-strip';
-
-    const left = i * stripWidth - OVERLAP;
-    strip.style.left = left + 'px';
-    strip.style.width = (stripWidth + OVERLAP * 2) + 'px';
-    strip.style.zIndex = i; // sichert konsistente Überdeckungsreihenfolge
-
-    const center = (STRIP_COUNT - 1) / 2;
-    const d = (i - center) / center;
-    strip.style.setProperty('--d', d.toFixed(3));
-
-    const inner = document.createElement('div');
-    inner.className = 'fold67-strip-inner';
-    inner.style.width = pageWidth + 'px';
-    inner.style.left = -left + 'px';
-    inner.innerHTML = document.body.innerHTML;
-
-    strip.appendChild(inner);
-    wrapper.appendChild(strip);
-    strips.push(strip);
-  }
-
-  document.body.appendChild(wrapper);
-  document.body.classList.add('fold67-hide-original');
-
-  requestAnimationFrame(() => {
-    strips.forEach(s => s.classList.add('active'));
-  });
-
-  setTimeout(() => {
-    document.body.classList.remove('fold67-hide-original');
-    wrapper.remove();
-  }, 1550); 
-}
-
-
-//if (eintrag.rang === 1) row.classList.add("platz1");
-//else if (eintrag.rang === 2) row.classList.add("platz2");
-//else if (eintrag.rang === 3) row.classList.add("platz3");
-
-//if (istEigeneZeile) {
-  //  row.classList.add("eigene-zeile");
-//}
-
-//.platz1 {
-//    background: linear-gradient(90deg, #ffd700, #fff3b0);
-  //  font-weight: bold;
-//}
-
-//.platz2 {
-  //  background: linear-gradient(90deg, #c0c0c0, #eeeeee);
-    //font-weight: bold;
-//}
-
-//.platz3 {
-  //  background: linear-gradient(90deg, #cd7f32, #f3e0c2);
-    //font-weight: bold;
-//}
-
-
-
-        //Initialisierung : 
-
-       await checkAuthAndInit();
-        await aktuellesSpiel_Laden();
-        await spieleListeLaden();
-        await ranglisteEintragen();
-        await renderNormaleAnsicht();
+    // Initialisierung
+    await checkAuthAndInit();
+    await aktuellesSpiel_Laden(); // DOC 2: added before spieleListeLaden
+    await spieleListeLaden();
+    await ranglisteEintragen();
+    await renderNormaleAnsicht();
 
     // Event-Listener Gruppe 1 
     document.getElementById("tippSpeichern").addEventListener("click", speichern);
@@ -1592,37 +1465,36 @@ function trigger67Effekt() {
     document.getElementById("btn_prev").addEventListener("click", () => spielWechseln(-1));
     document.getElementById("btn_next").addEventListener("click", () => spielWechseln(1));
    
-    //Event-Listener Gruppe 3
-
-document.getElementById("suche").addEventListener("input", spielerSuchen);
-document.getElementById("refreshButton").addEventListener("click", ranglisteAktualisieren);
-document.getElementById("weiter").addEventListener("click", async function() {
-    await spielRechts(true);});
-document.getElementById("zurueck").addEventListener("click", async function() {
-    await spielRechts(false);});
-document.getElementById("punkte_info").addEventListener("click", (e) => {
-    e.stopPropagation();
-    e.currentTarget.classList.toggle("active");
-});
+    // Event-Listener Gruppe 3
+    document.getElementById("suche").addEventListener("input", spielerSuchen);
+    document.getElementById("refreshButton").addEventListener("click", ranglisteAktualisieren);
+    document.getElementById("weiter").addEventListener("click", async function() {
+        await spielRechts(true);
+    });
+    document.getElementById("zurueck").addEventListener("click", async function() {
+        await spielRechts(false);
+    });
+    document.getElementById("punkte_info").addEventListener("click", (e) => {
+        e.stopPropagation();
+        e.currentTarget.classList.toggle("active");
+    });
     
-    //allgemeine Event-Listener 
-    //Pop-Up- Fenster, wenn an irgendwo auf die Seite klickt. 
-   window.addEventListener("click", (e) => {
-    const badge = document.getElementById("info_badge_tips");
-    const badge2 = document.getElementById("punkte_info");
+    // Allgemeine Event-Listener
+    window.addEventListener("click", (e) => {
+        const badge = document.getElementById("info_badge_tips");
+        const badge2 = document.getElementById("punkte_info");
 
-    if (badge && !e.target.closest("#info_badge_tips")) {
-        badge.classList.remove("active");
-    }
+        if (badge && !e.target.closest("#info_badge_tips")) {
+            badge.classList.remove("active");
+        }
 
-    if (badge2 && !e.target.closest("#punkte_info")) {
-        badge2.classList.remove("active");
-    }
+        if (badge2 && !e.target.closest("#punkte_info")) {
+            badge2.classList.remove("active");
+        }
 
-    const err = document.getElementById("limit-error");
-    if (err) err.classList.remove("active");
-});
-
+        const err = document.getElementById("limit-error");
+        if (err) err.classList.remove("active");
+    });
 
     </script> 
 </body> 
