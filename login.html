@@ -191,21 +191,18 @@
 
       async function reset(){
         const email = document.getElementById("email").value;
-        if(email==="")
-      {
-        document.getElementById("status").innerText="Bitte E-Mail-Adresse eingeben.";
-        return;
-      }
-      if(validateEmail(email))
-      {
-        document.getElementById("status").innerText="Bitte gültige E-Mail-Adresse eingeben.";
-        return;
-      }
+        if(email===""){
+          document.getElementById("status").innerText="Bitte E-Mail-Adresse eingeben.";
+          return;
+        }
+        if(!validateEmail(email)){
+          document.getElementById("status").innerText="Bitte gültige E-Mail-Adresse eingeben.";
+          return;
+        }
         const { data, error } = await supabase.auth.resetPasswordForEmail(email, {redirectTo: 'https://www.wig-wm.de/update-password.html'});
-        if(error)
-      {
-        document.getElementById("status").innerText=error.message;
-      }
+        if(error){
+          document.getElementById("status").innerText=error.message;
+        }
 
       document.getElementById("status").innerText = "E-Mail zum Zurücksetzen wurde verschickt.";
       }
