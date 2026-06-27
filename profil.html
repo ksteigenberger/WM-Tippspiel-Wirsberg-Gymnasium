@@ -235,7 +235,7 @@ body {
 
 
     .nav-button {
-      background: #ff0000;
+      background: #e0a225;
       color: white;
       border: none;
       border-radius: 8px;
@@ -245,11 +245,11 @@ body {
     }
 
     .nav-button:hover {
-      background: #ff2335;
+      background: #ffe523;
     }
 
     .blue-button {
-      background: #2563eb;
+      background: #000000;
       color: white;
       border: none;
       border-radius: 8px;
@@ -261,6 +261,20 @@ body {
 
     .blue-button:hover {
       background: #1d4ed8;
+    }
+
+    .red-button {
+    background: #eb1e1e;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 12px 22px;
+    font-weight: 600;
+    cursor: pointer;
+    }
+
+    .red-button:hover {
+    background: #b91c1c;
     }
 
     .form-card
@@ -553,6 +567,7 @@ body {
 
     <div id="profile_completion" class="form-card" style="display: none;">
         <h2>Profil vervollständigen</h2>
+               <p class="tipp-hinweis" style="margin-bottom:12px;">Vorname, Name und Benutzername können nach Bestätigung nicht mehr geändert werden!</p>
         <input id="input_vorname" type="text" placeholder="Vorname" />
         <input id="input_name" type="text" placeholder="Nachname" />
         <input id="input_username" type="text" placeholder="Benutzername" />
@@ -574,11 +589,8 @@ body {
   </select>
 
   <label for="input_bester_spieler">Wer wird bester Spieler?</label>
-  <input id="input_bester_spieler" type="text" placeholder="z. B. Mbappé, Messi, Bellingham..." />
+  <input id="input_bester_spieler" type="text" placeholder="z. B. Mbappe, Messi, Bellingham..." />
 
-  <p class="tipp-hinweis">
-    Weltmeister und Vizeweltmeister dürfen nicht gleich sein.
-  </p>
 </div>
 <div class="datenschutz-zustimmung">
   <input id="datenschutz_ok" type="checkbox" />
@@ -611,8 +623,6 @@ body {
         <label for="bearbeiten_bester_spieler">Wer wird bester Spieler?</label>
         <input id="bearbeiten_bester_spieler" type="text" placeholder="z. B. Mbappé, Messi, Bellingham..." />
 
-        <p class="tipp-hinweis" style="margin-bottom:12px;">Weltmeister und Vizeweltmeister dürfen nicht gleich sein.</p>
-
         <button id="save-bearbeiten" class="blue-button" style="margin-top:8px;">Änderungen speichern</button>
         <p id="status_bearbeiten" style="margin-top:12px; color:#b91c1c;"></p>
     </div>
@@ -621,8 +631,10 @@ body {
 
    <!-- ANFANG Navigation unten -->
   <div class="bottom-actions">
-  <a href="index.html" class="blue-button bottom-link">Startseite</a>
+  <a href="index.html" class="blue-button bottom-link">Tippabgabe</a>
+  <a href="spielregeln.html" class="red-button bottom-link">Spielregeln</a>
   <button id="logout" class="nav-button" type="button">Logout</button>
+</div>
     </div>
 
   <footer class="legal-footer">
@@ -853,20 +865,12 @@ async function loadProfile() {
     const profileStatus = document.getElementById("profile_status");
 
     if (!profile) {
-        if (profileStatus) {
-            profileStatus.innerText = "Profil unvollständig";
-        }
-
-        document.getElementById("profile_completion").style.display = "block";
-        document.getElementById("meine_tipps_card").style.display = "none";
-        document.getElementById("name").innerText = "-";
-        document.getElementById("username").innerText = "-";
-        document.getElementById("weltmeister_tipp").innerText = "-";
-        document.getElementById("vizeweltmeister_tipp").innerText = "-";
-        document.getElementById("bester_spieler_tipp").innerText = "-";
-
-        markSelectedAvatar("");
-        return;
+        if (profileStatus) { profileStatus.innerText = "Profil unvollständig"; }
+    document.querySelector(".profil").style.display = "none";
+    document.getElementById("profile_completion").style.display = "block";
+    document.getElementById("meine_tipps_card").style.display = "none";
+    markSelectedAvatar("");
+    return;
     }
 
     const isComplete = Boolean(
@@ -902,6 +906,7 @@ async function loadProfile() {
     document.getElementById("input_bester_spieler").value = tipps?.besterspieler || "";
 
     document.getElementById("profile_completion").style.display = isComplete ? "none" : "block";
+    document.querySelector(".profil").style.display = isComplete ? "block" : "none"; //neu: Profil anzeigen, wenn vollständig
     document.getElementById("meine_tipps_card").style.display = isComplete ? "block" : "none";
     document.getElementById("meine_tipps_card").style.display = isComplete ? "block" : "none";
     // NEU: Bearbeiten-Block anzeigen wenn Profil vollständig und vor Deadline
@@ -998,8 +1003,7 @@ async function saveProfile() {
         return;
     }
 
-    await loadProfile();
-    status.innerText = "Profil und Zusatztipps gespeichert.";
+    window.location.href = "index.html";
 }
 
     // NEU: Zusatztipps bearbeiten
