@@ -137,54 +137,58 @@
       const supabase = createClient(supabaseUrl, supabaseKey);
 
       
+      function validateEmail(email) {
+        // Regulärer Ausdruck für die grundlegende E-Mail-Syntax
+        const regex = /^\S+@\S+\.\S+$/;
+        return regex.test(email);
+      }
 
       async function login() {
         const email = document.getElementById("email").value;
         const password = document.getElementById("password").value;
 
-        if(email===""||password==="")
-      {
-        document.getElementById("status").innerText ="Bitte E-Mail und Passwort eingeben.";
-        return;
-      }
+        if(email===""||password===""){
+          document.getElementById("status").innerText ="Bitte E-Mail und Passwort eingeben.";
+          return;
+        }
+        
+        if(!validateEmail(email)){
+          document.getElementById("status").innerText ="Bitte gültige E-Mail eingeben.";
+          return;
+        }
 
         const { data, error } = await supabase.auth.signInWithPassword({
           email: email,
           password: password
         });
 
-      if (error) {
-        let msg;
+        if (error) {
+          let msg;
+  
+          switch (error.message) {
+            case "Invalid login credentials":
+              msg = "Die E-Mail-Adresse oder das Passwort ist falsch.";
+              break;
+  
+            case "Email not confirmed":
+              msg = "Bitte bestätige zuerst deine E-Mail-Adresse.";
+              break;
+  
+            case "Too many requests":
+              msg = "Zu viele Anmeldeversuche. Bitte versuche es später erneut.";
+              break;
+  
+            default:
+              msg = "Die Anmeldung ist fehlgeschlagen. Bitte versuche es erneut.";
+          }
 
-        switch (error.message) {
-          case "Invalid login credentials":
-            msg = "Die E-Mail-Adresse oder das Passwort ist falsch.";
-            break;
-
-          case "Email not confirmed":
-            msg = "Bitte bestätige zuerst deine E-Mail-Adresse.";
-            break;
-
-          case "Too many requests":
-            msg = "Zu viele Anmeldeversuche. Bitte versuche es später erneut.";
-            break;
-
-          default:
-            msg = "Die Anmeldung ist fehlgeschlagen. Bitte versuche es erneut.";
+          document.getElementById("status").innerText = msg;
+          return;
         }
-
-        document.getElementById("status").innerText = msg;
-        return;
-      }
 
         window.location.href="index.html";
       }
 
-      function validateEmail(email) {
-        // Regulärer Ausdruck für die grundlegende E-Mail-Syntax
-        const regex = /^\S+@\S+\.\S+$/;
-        return regex.test(email);
-      }
       async function reset(){
         const email = document.getElementById("email").value;
         if(email==="")
