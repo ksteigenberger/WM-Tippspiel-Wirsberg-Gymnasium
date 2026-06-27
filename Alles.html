@@ -530,7 +530,26 @@ body.fold67-hide-original > *:not(#fold67-wrapper) {
   opacity: 0;
 }
 
+.flag-emoji {
+  position: fixed;
+  top: -50px;
+  font-size: 2rem;
+  pointer-events: none;
+  z-index: 9999;
+  user-select: none;
+  animation: flag-fall linear forwards;
+}
 
+@keyframes flag-fall {
+  0% {
+    transform: translateY(0) rotate(0deg);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(110vh) rotate(360deg);
+    opacity: 0.8;
+  }
+}
   </style>
 </head>
 <body> 
@@ -990,6 +1009,10 @@ body.fold67-hide-original > *:not(#fold67-wrapper) {
         if (toreA == 6 && toreB == 7) {
             trigger67Effekt();
         }
+        if(toreA == 7 &&toreB == 1 || toreA == 1 && toreB == 7)
+        {
+            flagRain(80);
+        }
     }
 
 
@@ -1446,7 +1469,32 @@ async function renderZeile(tbody, eintrag, spielId, istEigeneZeile = false) {
         }, 1550);
     }
 
+const flags = [
+  'https://flagcdn.com/w80/br.png',
+  'https://flagcdn.com/w80/de.png',
+  'https://flagcdn.com/w80/cw.png'
+];
 
+function flagRain(count = 40) {
+  for (let i = 0; i < count; i++) {
+    const flag = document.createElement('img');
+    flag.src = flags[Math.floor(Math.random() * flags.length)];
+    flag.classList.add('flag-emoji');
+    flag.style.left = Math.random() * 100 + 'vw';
+
+    const duration = 3 + Math.random() * 3;
+    const delay = Math.random() * 2;
+    flag.style.animationDuration = duration + 's';
+    flag.style.animationDelay = delay + 's';
+
+    const size = 30 + Math.random() * 30;
+    flag.style.width = size + 'px';
+
+    document.body.appendChild(flag);
+
+    setTimeout(() => flag.remove(), (duration + delay) * 1000 + 200);
+  }
+}
     // Initialisierung
     await checkAuthAndInit();
     await aktuellesSpiel_Laden(); // DOC 2: added before spieleListeLaden
