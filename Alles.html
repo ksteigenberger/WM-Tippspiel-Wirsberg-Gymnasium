@@ -1173,30 +1173,25 @@ body.fold67-hide-original > *:not(#fold67-wrapper) {
 
     // DOC 2: getTippTextForUser fetches fresh from Supabase instead of using cached tipps
     async function getTippTextForUser(userId, spielId) {
-        if (spiele[spielId]["Spiel_fertig?"]) {
-            const { data: tipps, error } = await supabase
-                .from("tipps")
-                .select("*")
-                .eq("spiel_ID", spielId)
-                .eq("tipper_ID", userId);
-
+        
+        if(spiele[spielId]["Spiel_fertig?"])
+        {
             const tippDesUsers = tipps.filter(tipp => tipp.spiel_ID === spielId).filter(tipp => tipp.tipper_ID === userId);
-            if (error) {
-                document.getElementById("ausgabe").innerText = error.message;
-                return "- : -<sup>0</sup>";
-            }
-
-            if (!tippDesUsers || tippDesUsers.length === 0) {
-                return "- : -<sup>0</sup>";
-            }
-
-            const tipp = tippDesUsers[0];
-            const punkte = await punkteBerechnen(spielId, tipp.tore_team_a, tipp.tore_team_b);
-
-            return `${tipp.tore_team_a} : ${tipp.tore_team_b}<sup>${punkte}</sup>`;
-        } else {
-            return "- : -";
+    
+        if (!tippDesUsers || tippDesUsers.length === 0) {
+            return "- : -<sup>0</sup>";
         }
+    
+        const tipp = tippDesUsers[0];
+        const punkte = await punkteBerechnen(spielId, tipp.tore_team_a, tipp.tore_team_b);
+    
+        return `${tipp.tore_team_a} : ${tipp.tore_team_b}<sup>${punkte}</sup>`;
+        }
+        else
+        {
+            return "- : -"
+        }
+        
     }
 
 
