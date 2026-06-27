@@ -1108,25 +1108,33 @@ body.fold67-hide-original > *:not(#fold67-wrapper) {
     let spiele = [];
     let users = [];
     let tipps = [];
-
-    const { data: spiele1, error: errorspiele } = await supabase.from("spiele").select("*").order("id", { ascending: true });
-    if (errorspiele) {
-        document.getElementById("ausgabe").innerText = errorspiele.message;
+      
+    await informationLaden();
+    
+    async function informationLaden()
+    {
+        const { data: spiele1, error:  errorspiele} = await supabase.from("spiele").select("*").order("id", {ascending: true});
+            if(errorspiele)
+            {
+            document.getElementById("ausgabe").innerText=errorspiele.message;
+            }
+    
+        const { data: users1, error: errorusers} = await supabase.from("users").select("*");
+            if(errorusers)
+            {
+                document.getElementById("ausgabe").innerText=errorusers.message;
+            }
+        const { data: tipps1, error: errortipps } = await supabase.from("tipps").select("*");
+            if (errortipps) 
+            {
+                document.getElementById("ausgabe").innerText = errortipps.message;
+            }
+    
+        spiele = spiele1;
+        users = users1;
+        tipps = tipps1;
     }
 
-    const { data: users1, error: errorusers } = await supabase.from("users").select("*");
-    if (errorusers) {
-        document.getElementById("ausgabe").innerText = errorusers.message;
-    }
-
-    const { data: tipps1, error: errortipps } = await supabase.from("tipps").select("*");
-    if (errortipps) {
-        document.getElementById("ausgabe").innerText = errortipps.message;
-    }
-
-    spiele = spiele1;
-    users = users1;
-    tipps = tipps1;
 
     async function ranglisteEintragen() {
         rangliste = [];
@@ -1241,13 +1249,9 @@ body.fold67-hide-original > *:not(#fold67-wrapper) {
         document.getElementById("ichBody").innerHTML = "";
         document.getElementById("restBody").innerHTML = "";
 
-        const { data: neueSpiele } = await supabase.from("spiele").select("*").order("id", { ascending: true });
-        const { data: neueUsers } = await supabase.from("users").select("*");
-        const { data: neueTipps } = await supabase.from("tipps").select("*");
+        await new Promise(resolve => setTimeout(resolve, 300));
 
-        if (neueSpiele) spiele = neueSpiele;
-        if (neueUsers) users = neueUsers;
-        if (neueTipps) tipps = neueTipps;
+        await informationLaden();
 
         await ranglisteEintragen();
 
@@ -1258,7 +1262,7 @@ body.fold67-hide-original > *:not(#fold67-wrapper) {
         } else {
             await spielerSuchen();
         }
-        await new Promise(resolve => setTimeout(resolve, 1000));
+        
         document.getElementById("refreshButton").innerHTML = "↻ Aktualisieren";
         document.getElementById("refreshButton").disabled = false;
     }
