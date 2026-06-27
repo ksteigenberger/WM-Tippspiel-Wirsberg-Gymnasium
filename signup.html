@@ -141,6 +141,12 @@
         window.location.href = "login.html";
       }
 
+      function validateEmail(email) {
+        // Regulärer Ausdruck für die grundlegende E-Mail-Syntax
+        const regex = /^\S+@\S+\.\S+$/;
+        return regex.test(email);
+      }
+
       async function signup() {
         const email = document.getElementById("email").value;
         const password = document.getElementById("password").value;
