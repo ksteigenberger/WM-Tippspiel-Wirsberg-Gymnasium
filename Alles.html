@@ -17,7 +17,7 @@
       background-repeat: no-repeat;
       background-attachment: fixed;
       text-align: center;
-      margin: 40px; /*Lennart hat hier 20px*/
+      margin: 40px;
       padding-top: 200px;
       position: relative;
     }
@@ -25,30 +25,39 @@
 
     #header {
       display: flex;
-      flex-direction: row;   /* Nebeneinander auch auf dem Smartphone */
+      flex-direction: row;
       align-items: center;
       justify-content: center;
       gap: 15px;
       margin-top: -120px;
       text-align: center;
-      flex-wrap: wrap;       /* Verhindert Überlaufen auf kleinen Displays */
+      flex-wrap: wrap;
     }
-   
-    
+
     #profil_button {
-    padding: 8px 14px;
-    border: none;
-    border-radius: 6px;
-    background-color: #0066cc;
-    color: white;
-    cursor: pointer;
-}
+        position: absolute;
+        top: 16px;
+        left: 16px;
+        z-index: 9999;
+        font-size: 2em;
+        padding: 8px 14px;
+        border: none;
+        border-radius: 6px;
+        background-color: #0066cc;
+        color: white;
+        cursor: pointer;
+    }
 
 #profil_button:hover {
     background-color: #0052a3;
 }
 
 #logout_button {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    z-index: 9999;
+    font-size: 2em;
     padding: 8px 14px;
     border: none;
     border-radius: 6px;
@@ -81,12 +90,14 @@
         text-shadow: 3px 3px 8px rgba(0,0,0,0.3);
     }
 
+    /* DOC 2: z-index:10 added */
     #ball-wrapper {
       position: absolute;
       left: 17.4%;
       top: 61%;
       transform: translate(-50%,-50%);
       animation: flug 1.5s ease-out forwards;
+      z-index: 10;
     }
 
     #ball {
@@ -132,13 +143,20 @@
       100% { transform: rotate(360deg); }
     }
 
+    /* DOC 2: updated flug animation with scale effect */
     @keyframes flug {
-        from {
-            transform: translate(-50%, -50%) translate(800px, 400px);
-        }
-        to {
-            transform: translate(-50%, -50%) translate(0, 0);
-        }
+      from {
+        transform:
+          translate(-50%, -50%)
+          translate(430px, 400px)
+          scale(4);
+      }
+      to {
+        transform:
+          translate(-50%, -50%)
+          translate(0, 0)
+          scale(1);
+      }
     }
 
 
@@ -161,16 +179,18 @@
     .info-badge {
       display: inline-flex;
       align-items: center;
-      gap: 5px;
+      gap: 8px;
       background-color: #e6f2ff;
       color: #0066cc;
-      padding: 4px 8px;
-      border-radius: 12px;
-      font-size: 12px;
+      padding: 8px 14px;
+      border-radius: 20px;
+      font-size: 15px;
       font-weight: bold;
       font-family: Arial, sans-serif;
       cursor: pointer;
       position: relative;
+      border: 1px solid #cce5ff;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
     }
 
     .info-badge::after {
@@ -182,7 +202,7 @@
       color: white;
       padding: 6px 10px;
       border-radius: 5px;
-      font-size: 12px;
+      font-size: 14px;
       font-family: Arial, sans-serif;
       font-weight: normal;
       white-space: nowrap;
@@ -219,16 +239,22 @@
       color: white;
       background-color: #0066cc;
       border-radius: 50%;
-      width: 16px;
-      height: 16px;
-      font-size: 11px;
-      line-height: 16px;
+      width: 22px;
+      height: 22px;
+      font-size: 14px;
+      line-height: 22px;
       text-align: center;
       font-family: "Georgia", serif;
       font-weight: bold;
       display: inline-block;
     }
 
+    .content-wrapper {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 0 15px;   
+    box-sizing: border-box;
+    }  
     /* Style-Bereich von Gruppe 3!!*/
 
 #suche {
@@ -236,14 +262,15 @@
     width: 260px;
     padding: 8px;
 
-    /* linksbündig über der Tabelle */
     margin-left: 0;
 
-    /* Abstand zur Rangliste */
     margin-top: 8px;
     margin-bottom: 6px;
 
-    font-size: 15px;
+    border:none;
+    border-radius:6px;
+
+    font-size: 2em;
     font-weight: bold;
 }
 
@@ -262,7 +289,8 @@
 }
 
 #refreshButton{
-    width:260px;
+    width:10em;
+    font-size:2em;
     padding:8px;
 
     background:#0066cc;
@@ -273,7 +301,7 @@
 
     cursor:pointer;
 
-    font-size:15px;
+    font-size:2em;
     font-weight:bold;
 
     transition:0.2s;
@@ -283,18 +311,14 @@
     background:#0052a3;
 }
 
-#refreshButton{
-    width:180px;
-    font-size:14px;
-}
 
 .punkte-info-badge {
     display: inline-flex;
     align-items: center;
     justify-content: center;
 
-    width: 38px;
-    height: 38px;
+    width: 3.5em;
+    height: 3.5em;
 
     background-color: #e6f2ff;
     border-radius: 8px;
@@ -304,7 +328,7 @@
 }
 
 .punkte-info-badge::after {
-    content: "So ergeben sich die Punkte:\A\ATipp richtig: 4 Punkte\A Differenz richtig: 3 Punkte\A Unentschieden/Sieger richtig: 2 Punkte\A Ansonsten: 0 Punkte";
+    content: "So ergeben sich die Punkte:\A\ATipp richtig: 4 Punkte\A Differenz richtig: 3 Punkte\A Unentschieden/Sieger richtig: 2 Punkte\A Ansonsten: 0 Punkte\A\A Tore ohne Elfmeterschießen";
 
     white-space: pre-line;
 
@@ -373,12 +397,11 @@
 
 .table-shell {
     width: 100%;
-    overflow: visible;
+    overflow: hidden;
     background: white;
-    border-radius: 10px 10px 0 0;
+    border-radius: 10px 10px 0px 0px;
 }
 
-/* Beide Tabellen sehen gleich aus */
 .rangliste-table {
     width: 100%;
     border-collapse: collapse;
@@ -386,18 +409,14 @@
     border-spacing: 0;
 }
 
-/* feste Spaltenbreiten */
 .col-platz  { width: 90px; }
 .col-user   { width: 220px; }
 .col-punkte { width: 110px; }
 
-/* obere Tabelle */
 .col-tipp {
     width: auto;
 }
 
-/* untere Tabelle:
-   letzte Spalte etwas schmaler, damit der Scrollbalken dort "verschwindet" */
 .col-tipp-rest {
     width: calc(100% - 70px - 220px - 90px - 14px);
 }
@@ -437,7 +456,6 @@ thead th {
     font-size: 14px;
 }
 
-/* Scrollbereich */
 .scroll-wrapper {
     max-height: 380px;
     overflow-y: auto;
@@ -449,7 +467,6 @@ thead th {
     border-radius: 0 0 10px 10px;
 }
 
-/* obere und untere Tabelle optisch direkt verbinden */
 #fixedTable {
     border-bottom: none;
 }
@@ -481,23 +498,75 @@ thead th {
     }
 
     #suche {
-    width: 180px;
-    margin-left: 60px;
-    font-size: 14px;
-}
+        width: 180px;
+        margin-left: 60px;
+        font-size: 14px;
+    }
 
-#rangliste_tools{
-    gap:8px;
-}
-
-
+    #rangliste_tools{
+        gap:8px;
+    }
 
 }
 
+/* DOC 2: fold67 easter egg styles */
+#fold67-wrapper {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  pointer-events: none;
+}
 
+.fold67-strip {
+  position: absolute;
+  top: 0;
+  height: 100%;
+  overflow: hidden;
+}
 
+.fold67-strip-inner {
+  position: absolute;
+  top: 0;
+  height: 100%;
+}
 
+@keyframes fold67Strip {
+  0%   { transform: translateY(0) skewY(0deg); }
+  20%  { transform: translateY(calc(var(--d) * -160px)) skewY(calc(var(--d) * -3deg)); }
+  40%  { transform: translateY(calc(var(--d) * 80px))  skewY(calc(var(--d) * 1.6deg)); }
+  60%  { transform: translateY(calc(var(--d) * -40px)) skewY(calc(var(--d) * -0.8deg)); }
+  80%  { transform: translateY(calc(var(--d) * 20px))   skewY(calc(var(--d) * 0.4deg)); }
+  100% { transform: translateY(0) skewY(0deg); }
+}
 
+.fold67-strip.active {
+  animation: fold67Strip 1.5s ease-in-out;
+}
+
+body.fold67-hide-original > *:not(#fold67-wrapper) {
+  opacity: 0;
+}
+
+.flag-emoji {
+  position: fixed;
+  top: -50px;
+  font-size: 2rem;
+  pointer-events: none;
+  z-index: 9999;
+  user-select: none;
+  animation: flag-fall linear forwards;
+}
+
+@keyframes flag-fall {
+  0% {
+    transform: translateY(0) rotate(0deg);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(110vh) rotate(360deg);
+    opacity: 0.8;
+  }
+}
   </style>
 </head>
 <body> 
@@ -513,7 +582,7 @@ thead th {
 <br>
 
                                                                                                                                         
-<div id="begruessung_container" style="font-size: 20px; font-weight: bold; color: white; text-shadow: 1px 1px 4px rgba(0,0,0,0.6); margin-bottom: 25px; min-height: 24px;">
+<div id="begruessung_container" style="font-size: 30px; font-weight: bold; color: white; text-shadow: 1px 1px 4px rgba(0,0,0,0.6); margin-bottom: 25px; min-height: 24px;">
     <span id="begruessung_text"></span><span class="cursor">_</span>
 </div>
 
@@ -521,56 +590,69 @@ thead th {
 
 <input type="hidden" id="name">
 <span id="limit-error" style="display: none;"></span>
+<br>
 
 <label>Spiel auswählen:</label><br>
-<div style="display: flex; justify-content: center; align-items: center; gap: 10px; margin-top: 10px;">
-    <button id="btn_prev" style="padding: 10px 15px;">◀</button>
+<div style="display: flex; justify-content: center; align-items: center; gap: 12px; margin-top: 15px; width: 100%;">
+    <button id="btn_prev" style="padding: 12px 20px; font-size: 16px; border-radius: 8px;">◀</button>
     
-    <select id="spiel_select" style="padding: 10px; border-radius: 5px; cursor: pointer;">
+    <select id="spiel_select" style="padding: 12px 20px; font-size: 16px; border-radius: 8px; cursor: pointer; flex: 1; max-width: 300px; text-align: center; text-align-last: center;">
         <option value="" disabled>-- Bitte wählen --</option>
     </select>
     
-    <button id="btn_next" style="padding: 10px 15px;">▶</button>
+    <button id="btn_next" style="padding: 12px 20px; font-size: 18px; border-radius: 8px;">▶</button>
 </div>
 
 <br><br>
 
 
 
-<div id="tipp_box" style="position: relative; display: inline-block; background-color: white; padding: 25px; border-radius: 15px; box-shadow: 0 4px 12px rgba(0,0,0,0.2); min-width: 340px;">
+<div id="tipp_box" style="position: relative; display: inline-block; background-color: white; padding: 25px; border-radius: 15px; box-shadow: 0 4px 12px rgba(0,0,0,0.2); width: 100%; max-width: 100%; box-sizing: border-box;">
 
-    <div id="overlay" style="display: none; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(255, 255, 255, 0.88); backdrop-filter: blur(3px); z-index: 10; flex-direction: column; justify-content: center; align-items: center; border-radius: 15px;">
-        <div style="font-size: 20px; font-weight: bold; color: #333; text-transform: uppercase; letter-spacing: 1px;">Spiel vorbei</div>
-        <div style="font-size: 13px; color: #666; margin-top: 6px;">Endergebnis</div>
-        <div id="overlay_score" style="font-size: 38px; font-weight: bold; color: #e60000; margin-top: 2px;">0 : 0</div>
+    <div id="overlay" style="display: none; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(5px); z-index: 10; flex-direction: column; justify-content: center; align-items: center; border-radius: 15px;">
+    
+    <div style="font-size: 22px; font-weight: bold; color: #333; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px;">Spiel vorbei</div>
+    
+    <div style="display: flex; justify-content: center; align-items: center; gap: 20px; padding: 10px;">
+        <div id="overlay_team_a" style="font-size: 20px; font-weight: bold; color: #333; min-width: 80px; text-align: right;">Team A</div>
+        <div id="overlay_score" style="font-size: 42px; font-weight: bold; color: #e60000;">0 : 0</div>
+        <div id="overlay_team_b" style="font-size: 20px; font-weight: bold; color: #333; min-width: 80px; text-align: left;">Team B</div>
     </div>
+    
+</div>
 
     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
-        <div style="font-size: 13px; color: #333;">Anstoß: <span id="spiel_datum">--.--.</span> | <span id="spiel_zeit">--:--</span> Uhr</div>
+        <div style="font-size:20px; color: #333;">Anstoß: <span id="spiel_datum">--.--.</span> | <span id="spiel_zeit">--:--</span> Uhr</div>
         <div class="info-badge" id="info_badge_tips" onclick="this.classList.toggle('active'); event.stopPropagation();">
             <span class="info-icon-blue">i</span>
             <span id="offene_tipps_count">--</span>
         </div>
     </div>
 
-    <div id="countdown_box" style="margin: 10px 0 20px 0; font-size: 13px; font-weight: bold; color: #555; background: #f0f0f0; padding: 6px 12px; border-radius: 20px; display: inline-block;">--</div>
+    <div id="countdown_box" style="margin: 20px 0 20px 0; font-size: 22px; font-weight: bold; color: #555; background: #f0f0f0; padding: 6px 12px; border-radius: 20px; display: inline-block;">--</div>
 
     <br>
 
-
-    <div style="font-size: 18px; margin-bottom: 15px; display: flex; justify-content: center; align-items: center; gap: 8px;">
-        <span id="team_a" style="font-weight:bold; color: #333; text-shadow: none;">Team A</span> 
-        <input type="number" id="tore_a" min="0" step="1" oninput="this.value = this.value.replace(/[^0-9]/g, '');" style="width:45px; padding: 5px; text-align: center; font-size: 16px;" placeholder="-"> : 
-        <input type="number" id="tore_b" min="0" step="1" oninput="this.value = this.value.replace(/[^0-9]/g, '');" style="width:45px; padding: 5px; text-align: center; font-size: 16px;" placeholder="-"> 
-        <span id="team_b" style="font-weight:bold; color: #333; text-shadow: none;">Team B</span>
+    <div style="font-size: 24px; margin: 20px 0; display: flex; justify-content: center; align-items: center; gap: 15px; flex-wrap: wrap;">
+        <span id="team_a" style="font-weight:bold; color: #333; text-shadow: none; min-width: 100px; text-align: right;">Team A</span> 
+        
+        <input type="number" id="tore_a" min="0" step="1" oninput="this.value = this.value.replace(/[^0-9]/g, '');" 
+               style="width: 65px; height: 50px; padding: 5px; text-align: center; font-size: 24px; font-weight: bold; border: 2px solid #ccc; border-radius: 8px;" placeholder="-"> 
+        
+        <span style="font-size: 28px; font-weight: bold; color: #333;">:</span> 
+        
+        <input type="number" id="tore_b" min="0" step="1" oninput="this.value = this.value.replace(/[^0-9]/g, '');" 
+               style="width: 65px; height: 50px; padding: 5px; text-align: center; font-size: 24px; font-weight: bold; border: 2px solid #ccc; border-radius: 8px;" placeholder="-"> 
+        
+        <span id="team_b" style="font-weight:bold; color: #333; text-shadow: none; min-width: 100px; text-align: left;">Team B</span>
     </div>
 
-    <button id="tippSpeichern">Tipp speichern</button>
-</div>
+    <button id="tippSpeichern" style="width: 100%; padding: 15px; font-size: 18px; font-weight: bold; border-radius: 8px; background-color: red; color: white; border: none; cursor: pointer;">Tipp speichern</button>
+
+</div></div>
 
 <!-- Anzeige Gruppe 3-->
 
-  <h2 style="color: white; text-shadow: 2px 2px 4px rgba(0,0,0,0.6);">Anzeige</h2> 
   <div id="anzeige"></div> 
 
  <!-- Suchfeld, Aktualisier Button und Info Kästchen für Punkte Berechnung -->
@@ -637,23 +719,20 @@ thead th {
     </table>
 </div>
     
-<!--<button id="buttonT">Rangliste laden</button>-->
 
 
-
-    <footer id="page_footer" style="margin: 30px auto 20px; max-width: 860px; color: white; display: flex; flex-wrap: wrap; justify-content: center; gap: 12px; font-size: 14px;">
+    <footer id="page_footer" style="margin: 30px auto 20px; max-width: 860px; color: white; display: flex; flex-wrap: wrap; justify-content: center; gap: 12px; font-size: 20px;">
         <a href="datenschutzerklaerung.html" style="color: white; text-decoration: underline;">Datenschutzerklärung</a>
+        <a href="spielregeln.html" style="color: white; text-decoration: underline;">Spielregeln</a>
         <a href="impressum.html" style="color: white; text-decoration: underline;">Impressum</a>
 
-        <button id="profil_button">zum Profil</button>
-
-        <button id="logout_button" >Logout</button>
     </footer>
+
+    <button id="profil_button">Profil</button>
+    <button id="logout_button">Logout</button>
 
  <!--Logik und DB-Verbindung mit JavaScript -->
   <script type="module">
-
-    
 
      //---------------------------------------------------------------------
     //Supabase Verbindung (nicht ändern!!)
@@ -665,16 +744,14 @@ thead th {
 
     const supabase = createClient(supabaseUrl, supabaseKey);
 
-    //hier gleich Logout setzen!
-
     document.getElementById("logout_button").addEventListener("click", async () => {
         await supabase.auth.signOut();
         window.location.href = "index.html";
     });
 
     document.getElementById("profil_button").addEventListener("click", () => {
-    window.location.href = "profil.html";
-});
+        window.location.href = "profil.html";
+    });
 
     
     //----------------------------------------------------------------------
@@ -683,12 +760,8 @@ thead th {
     let countdownInterval = null;
     let spielLadeId = 0;
 
-   // let typewriterTimeout = null;
-    //let typingAktiv = true;  //hat Steven entfernt
-    //--------------------------
 
-
-   function starteBegruessungAnim() {
+    function starteBegruessungAnim() {
         const name = document.getElementById("name").value.trim() || "Tipper";
         const text = `Hallo ${name}! Bereit zum Tippen?`;
         const element = document.getElementById("begruessung_text");
@@ -706,7 +779,6 @@ thead th {
     }
 
 
-
     async function spielLaden() {
 
         let meineLadeId = ++spielLadeId;
@@ -714,13 +786,11 @@ thead th {
         const id = document.getElementById("spiel_select").value;
         const name = document.getElementById("name").value.trim();
 
-       
-        //Alter Timer löschen
         if (countdownInterval) {
             clearInterval(countdownInterval);
             countdownInterval = null;
         }
-        // 1. Eingabefelder und Platzhalter standarmäßig zurücksetzen
+
         document.getElementById("overlay").style.display = "none";
         document.getElementById("tippSpeichern").disabled = false;
         document.getElementById("tore_a").disabled = false;
@@ -730,7 +800,6 @@ thead th {
         document.getElementById("tore_a").placeholder = "-";
         document.getElementById("tore_b").placeholder = "-";
 
-        // Wenn kein Spiel ausgewählt ist, hier stoppen
         if (!id) {
             document.getElementById("spiel_datum").innerText = "--.--.";
             document.getElementById("spiel_zeit").innerText = "--:--";
@@ -739,7 +808,6 @@ thead th {
             return;
         }
 
-        // 2. Aus der Tabelle "spiele" das Spiel mit dieser ID laden
         const { data: spiel, error } = await supabase
             .from("spiele")
             .select('team_a, team_b, Startzeit, "Spiel_fertig?", tore_team_a, tore_team_b')
@@ -753,38 +821,27 @@ thead th {
             return;
         }
 
-
-
-        // 3. Teamnamen in HTML-Elemente 
         document.getElementById("team_a").innerText = spiel.team_a;
         document.getElementById("team_b").innerText = spiel.team_b;
 
-
         if (spiel.Startzeit) {
-
             const datumObjekt = new Date(spiel.Startzeit);
-
             const formatiertesDatum = datumObjekt.toLocaleDateString('de-DE', {
                 day: '2-digit',
                 month: '2-digit'
             });
-
-
             const formatierteZeit = datumObjekt.toLocaleTimeString('de-DE', {
                 hour: '2-digit',
                 minute: '2-digit'
             });
-        document.getElementById("spiel_datum").innerText = formatiertesDatum;
-        document.getElementById("spiel_zeit").innerText = formatierteZeit;
+            document.getElementById("spiel_datum").innerText = formatiertesDatum;
+            document.getElementById("spiel_zeit").innerText = formatierteZeit;
         } else {
-        document.getElementById("spiel_datum").innerText = "--.--.";
-        document.getElementById("spiel_zeit").innerText = "--:--";
+            document.getElementById("spiel_datum").innerText = "--.--.";
+            document.getElementById("spiel_zeit").innerText = "--:--";
         }
 
-        //Neu
-       
-                 
- if (name) {
+        if (name) {
             const { data: userDaten, error: userError } = await supabase
                 .from("users") 
                 .select("*")    
@@ -813,9 +870,10 @@ thead th {
         const istSpielFertig = spiel["Spiel_fertig?"];
         if (istSpielFertig) {
             document.getElementById("countdown_box").innerText = "Beendet";
+            document.getElementById("overlay_team_a").innerText = spiel.team_a;
+            document.getElementById("overlay_team_b").innerText = spiel.team_b;
             document.getElementById("overlay_score").innerText = `${spiel.tore_team_a} : ${spiel.tore_team_b}`;
             document.getElementById("overlay").style.display = "flex";
-            
             document.getElementById("tippSpeichern").disabled = true;
             document.getElementById("tore_a").disabled = true;
             document.getElementById("tore_b").disabled = true;
@@ -921,7 +979,7 @@ thead th {
         starteBegruessungAnim();
     }
 
-     async function speichern() {
+    async function speichern() {
         const name = document.getElementById("name").value;
         const spielID = document.getElementById("spiel_select").value;
         const teamA = document.getElementById("team_a").innerText;
@@ -980,8 +1038,16 @@ thead th {
 
             offeneTippsBerechnen();
         }
-    }
 
+        // DOC 2: trigger easter egg on 6:7 tip
+        if (toreA == 6 && toreB == 7) {
+            trigger67Effekt();
+        }
+        if(toreA == 7 &&toreB == 1 || toreA == 1 && toreB == 7)
+        {
+            flagRain(80);
+        }
+    }
 
 
     async function offeneTippsBerechnen() {
@@ -1057,7 +1123,6 @@ thead th {
     }
 
 
-
     // Authentifizierung
     async function checkAuthAndInit() {
         const { data: { session }, error: authError } = await supabase.auth.getSession();
@@ -1077,228 +1142,203 @@ thead th {
             .maybeSingle();
 
         if (userError || !userDaten) {
-           
             window.location.href = "profil.html";
             throw new Error("Profil fehlt");
-           
         }
 
-        
         document.getElementById("name").value = userDaten.username;
-        document.getElementById("begruessung_text").innerText="Hallo "+userDaten.username+"! Bereit zum Tippen?";
-
-        
-        
+        document.getElementById("begruessung_text").innerText = "Hallo " + userDaten.username + "! Bereit zum Tippen?";
     }
+
+
+    // Funktionsdefinitionen von Gruppe 3 !!
+
+    let currentUserId = null;
+
+    let points_for_l1_prediction = 4;
+    let points_for_l2_prediction = 3;
+    let points_for_l3_prediction = 2;
+    let points_for_draw_prediction = 2;
+    let aktuellesSpiel = 0;
+    let rangliste = [];
+    let zeileT = [];
+    let spiele = [];
+    let users = [];
+    let tipps = [];
       
+    await informationLaden();
     
-    
-
- 
-
-    
-    
-
-// Funktionsdefinitionen von Gruppe 3 !!
-
-//aktuelle session speichern
-//const { data: { session } } = await supabase.auth.getSession();
-   // if (!session) {
-   //     window.location.href = "login.html";
-    //}
-
-//const currentUserId = session.user.id;
-let currentUserId = null;
-
-let points_for_l1_prediction = 4;
-let points_for_l2_prediction = 3;
-let points_for_l3_prediction = 2;
-let points_for_draw_prediction = 2;
-let aktuellesSpiel = 0;
-let rangliste = [];
-let zeileT = [];
-
-const { data: spiele, error:  errorspiele} = await supabase.from("spiele").select("*").order("id", {ascending: true});
-    if(errorspiele)
-     {
-       document.getElementById("ausgabe").innerText=errorspiele.message;
-     }
-
-const { data: users, error: errorusers} = await supabase.from("users").select("*");
-    if(errorusers)
+    async function informationLaden()
     {
-        document.getElementById("ausgabe").innerText=errorusers.message;
+        const { data: spiele1, error:  errorspiele} = await supabase.from("spiele").select("*").order("id", {ascending: true});
+            if(errorspiele)
+            {
+            document.getElementById("ausgabe").innerText=errorspiele.message;
+            }
+    
+        const { data: users1, error: errorusers} = await supabase.from("users").select("*");
+            if(errorusers)
+            {
+                document.getElementById("ausgabe").innerText=errorusers.message;
+            }
+        const { data: tipps1, error: errortipps } = await supabase.from("tipps").select("*");
+            if (errortipps) 
+            {
+                document.getElementById("ausgabe").innerText = errortipps.message;
+            }
+    
+        spiele = spiele1;
+        users = users1;
+        tipps = tipps1;
     }
 
-async function ranglisteEintragen() {
-    rangliste = [];
 
-    for (let i = 0; i < users.length; i++) {
-        console.log("schleife läuft für user: ", users[i].user_ID);
+    async function ranglisteEintragen() {
+        rangliste = [];
 
-        let gesamtPunkte = await gesPunkteBerechnen(users[i].user_ID);
+        for (let i = 0; i < users.length; i++) {
+            let gesamtPunkte = await gesPunkteBerechnen(users[i].user_ID);
 
-        rangliste.push({
-            user_ID: users[i].user_ID,
-            username: users[i].username,
-            punkte: gesamtPunkte
-        });
-    }
-
-    // Nach Punkten sortieren
-    rangliste.sort((a, b) => b.punkte - a.punkte);
-
-    // Rang vergeben (bei gleichen Punkten gleicher Rang)
-    let rang = 1;
-    let letzterPunktestand = null;
-
-    for (let i = 0; i < rangliste.length; i++) {
-        if (letzterPunktestand !== null && rangliste[i].punkte < letzterPunktestand) {
-            rang = i + 1;
+            rangliste.push({
+                user_ID: users[i].user_ID,
+                username: users[i].username,
+                punkte: gesamtPunkte
+            });
         }
 
-        rangliste[i].rang = rang;
-        letzterPunktestand = rangliste[i].punkte;
+        rangliste.sort((a, b) => b.punkte - a.punkte);
+
+        let rang = 1;
+        let letzterPunktestand = null;
+
+        for (let i = 0; i < rangliste.length; i++) {
+            if (letzterPunktestand !== null && rangliste[i].punkte < letzterPunktestand) {
+                rang = i + 1;
+            }
+            rangliste[i].rang = rang;
+            letzterPunktestand = rangliste[i].punkte;
+        }
     }
-}
 
-//Emojis für Platz 1-3
-function formatPlatz(rang) {
-    if (rang === 1) return "🥇 1";
-    if (rang === 2) return "🥈 2";
-    if (rang === 3) return "🥉 3";
-    return `${rang}`;
-}
+    function formatPlatz(rang) {
+        if (rang === 1) return "🥇 1";
+        if (rang === 2) return "🥈 2";
+        if (rang === 3) return "🥉 3";
+        return `${rang}`;
+    }
 
 
-
-
-async function getTippTextForUser(userId, spielId) {
+    // DOC 2: getTippTextForUser fetches fresh from Supabase instead of using cached tipps
+    async function getTippTextForUser(userId, spielId) {
+        
+        if(spiele[spielId]["Spiel_fertig?"])
+        {
+            const tippDesUsers = tipps.filter(tipp => tipp.spiel_ID === spielId).filter(tipp => tipp.tipper_ID === userId);
     
-    if(spiele[spielId]["Spiel_fertig?"])
-    {
-        const { data: tipps, error } = await supabase
-        .from("tipps")
-        .select("*")
-        .eq("spiel_ID", spielId)
-        .eq("tipper_ID", userId);
-
-    if (error) {
-        document.getElementById("ausgabe").innerText = error.message;
-        return "- : -<sup>0</sup>";
-    }
-
-    if (!tipps || tipps.length === 0) {
-        return "- : -<sup>0</sup>";
-    }
-
-    const tipp = tipps[0];
-    const punkte = await punkteBerechnen(spielId, tipp.tore_team_a, tipp.tore_team_b);
-
-    return `${tipp.tore_team_a} : ${tipp.tore_team_b}<sup>${punkte}</sup>`;
-    }
-    else
-    {
-        return "- : -"
-    }
+        if (!tippDesUsers || tippDesUsers.length === 0) {
+            return "- : -<sup>0</sup>";
+        }
     
-}
-
-
-
-async function renderNormaleAnsicht() {
-    const top5Body = document.getElementById("top5Body");
-    const ichBody = document.getElementById("ichBody");
-    const restBody = document.getElementById("restBody");
-
-    top5Body.innerHTML = "";
-    ichBody.innerHTML = "";
-    restBody.innerHTML = "";
-
-    // Spielüberschrift setzen
-    if(spiele[aktuellesSpiel]["Spiel_fertig?"])
-    {
-        document.getElementById("spielT").innerText =
-        spiele[aktuellesSpiel].team_a + " - " + spiele[aktuellesSpiel].team_b +
-        "\n" + spiele[aktuellesSpiel].tore_team_a + " : " + spiele[aktuellesSpiel].tore_team_b;
-    }else
-    {
-        document.getElementById("spielT").innerText =
-        spiele[aktuellesSpiel].team_a + " - " + spiele[aktuellesSpiel].team_b +
-        "\n" + "- : -";
+        const tipp = tippDesUsers[0];
+        const punkte = await punkteBerechnen(spielId, tipp.tore_team_a, tipp.tore_team_b);
+    
+        return `${tipp.tore_team_a} : ${tipp.tore_team_b}<sup>${punkte}</sup>`;
+        }
+        else
+        {
+            return "- : -"
+        }
+        
     }
 
-    const eigenerEintrag = rangliste.find(e => e.user_ID === currentUserId);
-    const top5 = rangliste.slice(0, 5);
 
-    // Top 5 rendern
-    for (const eintrag of top5) {
-        const istIch = eintrag.user_ID === currentUserId;
-        await renderZeile(top5Body, eintrag, aktuellesSpiel, istIch);
+    async function renderNormaleAnsicht() {
+        const top5Body = document.getElementById("top5Body");
+        const ichBody = document.getElementById("ichBody");
+        const restBody = document.getElementById("restBody");
+
+        top5Body.innerHTML = "";
+        ichBody.innerHTML = "";
+        restBody.innerHTML = "";
+
+        if (spiele[aktuellesSpiel]["Spiel_fertig?"]) {
+            document.getElementById("spielT").innerText =
+                spiele[aktuellesSpiel].team_a + " - " + spiele[aktuellesSpiel].team_b +
+                "\n" + spiele[aktuellesSpiel].tore_team_a + " : " + spiele[aktuellesSpiel].tore_team_b;
+        } else {
+            document.getElementById("spielT").innerText =
+                spiele[aktuellesSpiel].team_a + " - " + spiele[aktuellesSpiel].team_b +
+                "\n" + "- : -";
+        }
+
+        const eigenerEintrag = rangliste.find(e => e.user_ID === currentUserId);
+        const top5 = rangliste.slice(0, 5);
+
+        for (const eintrag of top5) {
+            const istIch = eintrag.user_ID === currentUserId;
+            await renderZeile(top5Body, eintrag, aktuellesSpiel, istIch);
+        }
+
+        if (eigenerEintrag && !top5.some(e => e.user_ID === currentUserId)) {
+            await renderZeile(ichBody, eigenerEintrag, aktuellesSpiel, true);
+        }
+
+        const rest = rangliste.filter(e =>
+            !top5.some(t => t.user_ID === e.user_ID) &&
+            e.user_ID !== currentUserId
+        );
+
+        for (const eintrag of rest) {
+            await renderZeile(restBody, eintrag, aktuellesSpiel, false);
+        }
     }
 
-    // Eigene Zeile rendern, aber nur wenn sie NICHT schon in den Top 5 ist
-    if (eigenerEintrag && !top5.some(e => e.user_ID === currentUserId)) {
-        await renderZeile(ichBody, eigenerEintrag, aktuellesSpiel, true);
+    async function ranglisteAktualisieren() {
+        document.getElementById("refreshButton").disabled = true;
+        document.getElementById("refreshButton").innerHTML = "⟳ Aktualisiere...";
+
+        document.getElementById("top5Body").innerHTML = "";
+        document.getElementById("ichBody").innerHTML = "";
+        document.getElementById("restBody").innerHTML = "";
+
+        await new Promise(resolve => setTimeout(resolve, 300));
+
+        await informationLaden();
+
+        await ranglisteEintragen();
+
+        const suchtext = document.getElementById("suche").value.trim();
+
+        if (suchtext === "") {
+            await renderNormaleAnsicht();
+        } else {
+            await spielerSuchen();
+        }
+        
+        document.getElementById("refreshButton").innerHTML = "↻ Aktualisieren";
+        document.getElementById("refreshButton").disabled = false;
     }
-
-    // Restliche Spieler:
-    // nicht Top 5 und nicht ich
-    const rest = rangliste.filter(e =>
-        !top5.some(t => t.user_ID === e.user_ID) &&
-        e.user_ID !== currentUserId
-    );
-
-    for (const eintrag of rest) {
-        await renderZeile(restBody, eintrag, aktuellesSpiel, false);
-    }
-}
-
-//Funktion zum Aktualisier Button
-async function ranglisteAktualisieren() {
-
-    document.getElementById("refreshButton").disabled = true;
-    document.getElementById("refreshButton").innerHTML = "⟳ Aktualisiere...";
-
-    await ranglisteEintragen();
-
-    const suchtext = document.getElementById("suche").value.trim();
-
-    if (suchtext === "") {
-        await renderNormaleAnsicht();
-    } else {
-        await spielerSuchen();
-    }
-
-    document.getElementById("refreshButton").innerHTML = "↻ Aktualisieren";
-    document.getElementById("refreshButton").disabled = false;
-}
 
 async function renderZeile(tbody, eintrag, spielId, istEigeneZeile = false) {
     const row = tbody.insertRow();
 
 
 
-    if (istEigeneZeile) {
-        row.classList.add("eigene-zeile");
+        if (istEigeneZeile) {
+            row.classList.add("eigene-zeile");
+        }
+
+        row.insertCell().innerText = formatPlatz(eintrag.rang);
+        row.insertCell().innerText = istEigeneZeile ? "Ich" : eintrag.username;
+        row.insertCell().innerText = eintrag.punkte;
+
+        const tippCell = row.insertCell();
+        tippCell.innerHTML = await getTippTextForUser(eintrag.user_ID, spielId);
     }
 
-    row.insertCell().innerText = formatPlatz(eintrag.rang);
-    row.insertCell().innerText = istEigeneZeile ? "Ich" : eintrag.username;
-    row.insertCell().innerText = eintrag.punkte;
 
-    const tippCell = row.insertCell();
-    
-        tippCell.innerHTML = await getTippTextForUser(eintrag.user_ID, spielId);
-    
-    
-}
-
-
-
-async function punkteBerechnen(spielID, tippA, tippB) {
-    if(spiele[spielID]["Spiel_fertig?"])
-    {
+    async function punkteBerechnen(spielID, tippA, tippB) {
+        if (spiele[spielID]["Spiel_fertig?"]) {
             const spiel = spiele.find(s => s.id === spielID);
             if (!spiel) return 0;
 
@@ -1316,147 +1356,185 @@ async function punkteBerechnen(spielID, tippA, tippB) {
             } else {
                 return 0;
             }
-
-    }else
-    {
-        return 0;
-    }
-    
-}
-
-async function gesPunkteBerechnen(tipper_ID) {
-    const { data: tipps, error: errortipps } = await supabase
-        .from("tipps")
-        .select("*")
-        .eq("tipper_ID", tipper_ID);
-
-    if (errortipps) {
-        document.getElementById("ausgabe").innerText = errortipps.message;
-        return 0;
+        } else {
+            return 0;
+        }
     }
 
-    let answer = 0;
+    async function gesPunkteBerechnen(tipper_ID) {
+        const tippsDesUsers = tipps.filter(tipp => tipp.tipper_ID === tipper_ID);
 
-    for (let i = 0; i < tipps.length; i++) {
-        const spiel = spiele.find(s => s.id === tipps[i].spiel_ID);
-        if (!spiel) continue;
+        let answer = 0;
 
-        if (spiel.tore_team_a == null || spiel.tore_team_b == null) {
-            continue; // Spiel noch nicht ausgewertet
+        for (let i = 0; i < tippsDesUsers.length; i++) {
+            const spiel = spiele.find(s => s.id === tippsDesUsers[i].spiel_ID);
+            if (!spiel) continue;
+
+            if (spiel.tore_team_a == null || spiel.tore_team_b == null) {
+                continue;
+            }
+
+            answer += await punkteBerechnen(
+                tippsDesUsers[i].spiel_ID,
+                tippsDesUsers[i].tore_team_a,
+                tippsDesUsers[i].tore_team_b
+            );
         }
 
-        answer += await punkteBerechnen(
-            tipps[i].spiel_ID,
-            tipps[i].tore_team_a,
-            tipps[i].tore_team_b
+        return answer;
+    }
+
+
+    async function spielRechts(w) {
+        if (w && aktuellesSpiel != spiele.length - 1) {
+            aktuellesSpiel += 1;
+        } else if (!w && aktuellesSpiel != 0) {
+            aktuellesSpiel -= 1;
+        } else if (w && aktuellesSpiel == spiele.length - 1) {
+            aktuellesSpiel = 0;
+        } else {
+            aktuellesSpiel = spiele.length - 1;
+        }
+
+        const suchtext = document.getElementById("suche").value.trim();
+        if (suchtext === "") {
+            await renderNormaleAnsicht();
+        } else {
+            await spielerSuchen();
+        }
+    }
+
+
+    async function spielerSuchen() {
+        const suchtext = document.getElementById("suche").value.trim().toLowerCase();
+
+        const top5Body = document.getElementById("top5Body");
+        const ichBody = document.getElementById("ichBody");
+        const restBody = document.getElementById("restBody");
+
+        top5Body.innerHTML = "";
+        ichBody.innerHTML = "";
+        restBody.innerHTML = "";
+
+        if (suchtext === "") {
+            await renderNormaleAnsicht();
+            return;
+        }
+
+        document.getElementById("spielT").innerText =
+            spiele[aktuellesSpiel].team_a + " - " + spiele[aktuellesSpiel].team_b +
+            "\n" + spiele[aktuellesSpiel].tore_team_a + " : " + spiele[aktuellesSpiel].tore_team_b;
+
+        const eigenerEintrag = rangliste.find(e => e.user_ID === currentUserId);
+
+        if (eigenerEintrag) {
+            await renderZeile(ichBody, eigenerEintrag, aktuellesSpiel, true);
+        }
+
+        const treffer = rangliste.filter(e =>
+            e.user_ID !== currentUserId &&
+            e.username.toLowerCase().includes(suchtext)
         );
+
+        for (const eintrag of treffer) {
+            await renderZeile(restBody, eintrag, aktuellesSpiel, false);
+        }
+
+        // DOC 2: trigger easter egg when searching "67"
+        if (suchtext == "67") {
+            trigger67Effekt();
+        }
     }
 
-    return answer;
+    // DOC 2: auto-set aktuellesSpiel to last finished game on init
+    async function aktuellesSpiel_Laden() {
+        for (let i = 0; i < spiele.length; i++) {
+            if (spiele[i]["Spiel_fertig?"]) {
+                aktuellesSpiel = i;
+            }
+        }
+    }
+
+    // DOC 2: fold/wave easter egg triggered by 6:7 tip or searching "67"
+    function trigger67Effekt() {
+        const STRIP_COUNT = 101;
+        const OVERLAP = 4;
+        const wrapper = document.createElement('div');
+        wrapper.id = 'fold67-wrapper';
+
+        const pageWidth = window.innerWidth;
+        const stripWidth = pageWidth / STRIP_COUNT;
+        const strips = [];
+
+        for (let i = 0; i < STRIP_COUNT; i++) {
+            const strip = document.createElement('div');
+            strip.className = 'fold67-strip';
+
+            const left = i * stripWidth - OVERLAP;
+            strip.style.left = left + 'px';
+            strip.style.width = (stripWidth + OVERLAP * 2) + 'px';
+            strip.style.zIndex = i;
+
+            const center = (STRIP_COUNT - 1) / 2;
+            const d = (i - center) / center;
+            strip.style.setProperty('--d', d.toFixed(3));
+
+            const inner = document.createElement('div');
+            inner.className = 'fold67-strip-inner';
+            inner.style.width = pageWidth + 'px';
+            inner.style.left = -left + 'px';
+            inner.innerHTML = document.body.innerHTML;
+
+            strip.appendChild(inner);
+            wrapper.appendChild(strip);
+            strips.push(strip);
+        }
+
+        document.body.appendChild(wrapper);
+        document.body.classList.add('fold67-hide-original');
+
+        requestAnimationFrame(() => {
+            strips.forEach(s => s.classList.add('active'));
+        });
+
+        setTimeout(() => {
+            document.body.classList.remove('fold67-hide-original');
+            wrapper.remove();
+        }, 1550);
+    }
+
+const flags = [
+  'https://flagcdn.com/w80/br.png',
+  'https://flagcdn.com/w80/de.png',
+  'https://flagcdn.com/w80/cw.png'
+];
+
+function flagRain(count = 40) {
+  for (let i = 0; i < count; i++) {
+    const flag = document.createElement('img');
+    flag.src = flags[Math.floor(Math.random() * flags.length)];
+    flag.classList.add('flag-emoji');
+    flag.style.left = Math.random() * 100 + 'vw';
+
+    const duration = 3 + Math.random() * 3;
+    const delay = Math.random() * 2;
+    flag.style.animationDuration = duration + 's';
+    flag.style.animationDelay = delay + 's';
+
+    const size = 30 + Math.random() * 30;
+    flag.style.width = size + 'px';
+
+    document.body.appendChild(flag);
+
+    setTimeout(() => flag.remove(), (duration + delay) * 1000 + 200);
+  }
 }
-
-
-
-
-// Funktion fuer die Pfeile
-async function spielRechts(w) {
-    if (w && aktuellesSpiel != spiele.length - 1) {
-        aktuellesSpiel += 1;
-    }
-    else if (!w && aktuellesSpiel != 0) {
-        aktuellesSpiel -= 1;
-    }
-    else if (w && aktuellesSpiel == spiele.length - 1) {
-        aktuellesSpiel = 0;
-    }
-    else {
-        aktuellesSpiel = spiele.length - 1;
-    }
-
-    const suchtext = document.getElementById("suche").value.trim();
-    if (suchtext === "") {
-        await renderNormaleAnsicht();
-    } else {
-        await spielerSuchen();
-    }
-}
-
-
-//Suchfeld code
-async function spielerSuchen() {
-    const suchtext = document.getElementById("suche").value.trim().toLowerCase();
-
-    const top5Body = document.getElementById("top5Body");
-    const ichBody = document.getElementById("ichBody");
-    const restBody = document.getElementById("restBody");
-
-    top5Body.innerHTML = "";
-    ichBody.innerHTML = "";
-    restBody.innerHTML = "";
-
-    // Wenn Suchfeld leer: normale Ansicht
-    if (suchtext === "") {
-        await renderNormaleAnsicht();
-        return;
-    }
-
-    document.getElementById("spielT").innerText =
-        spiele[aktuellesSpiel].team_a + " - " + spiele[aktuellesSpiel].team_b +
-        "\n" + spiele[aktuellesSpiel].tore_team_a + " : " + spiele[aktuellesSpiel].tore_team_b;
-
-    const eigenerEintrag = rangliste.find(e => e.user_ID === currentUserId);
-
-    // Eigene Zeile immer oben anzeigen
-    if (eigenerEintrag) {
-        await renderZeile(ichBody, eigenerEintrag, aktuellesSpiel, true);
-    }
-
-    // Alle passenden Spieler außer mir
-    const treffer = rangliste.filter(e =>
-        e.user_ID !== currentUserId &&
-        e.username.toLowerCase().includes(suchtext)
-    );
-
-    for (const eintrag of treffer) {
-        await renderZeile(restBody, eintrag, aktuellesSpiel, false);
-    }
-}
-
-
-
-
-//if (eintrag.rang === 1) row.classList.add("platz1");
-//else if (eintrag.rang === 2) row.classList.add("platz2");
-//else if (eintrag.rang === 3) row.classList.add("platz3");
-
-//if (istEigeneZeile) {
-  //  row.classList.add("eigene-zeile");
-//}
-
-//.platz1 {
-//    background: linear-gradient(90deg, #ffd700, #fff3b0);
-  //  font-weight: bold;
-//}
-
-//.platz2 {
-  //  background: linear-gradient(90deg, #c0c0c0, #eeeeee);
-    //font-weight: bold;
-//}
-
-//.platz3 {
-  //  background: linear-gradient(90deg, #cd7f32, #f3e0c2);
-    //font-weight: bold;
-//}
-
-
-
-        //Initialisierung : 
-
-       await checkAuthAndInit();
-
-        await spieleListeLaden();
-        await ranglisteEintragen();
-        await renderNormaleAnsicht();
+    // Initialisierung
+    await checkAuthAndInit();
+    await aktuellesSpiel_Laden(); // DOC 2: added before spieleListeLaden
+    await spieleListeLaden();
+    await ranglisteEintragen();
+    await renderNormaleAnsicht();
 
     // Event-Listener Gruppe 1 
     document.getElementById("tippSpeichern").addEventListener("click", speichern);
@@ -1464,37 +1542,36 @@ async function spielerSuchen() {
     document.getElementById("btn_prev").addEventListener("click", () => spielWechseln(-1));
     document.getElementById("btn_next").addEventListener("click", () => spielWechseln(1));
    
-    //Event-Listener Gruppe 3
-
-document.getElementById("suche").addEventListener("input", spielerSuchen);
-document.getElementById("refreshButton").addEventListener("click", ranglisteAktualisieren);
-document.getElementById("weiter").addEventListener("click", async function() {
-    await spielRechts(true);});
-document.getElementById("zurueck").addEventListener("click", async function() {
-    await spielRechts(false);});
-document.getElementById("punkte_info").addEventListener("click", (e) => {
-    e.stopPropagation();
-    e.currentTarget.classList.toggle("active");
-});
+    // Event-Listener Gruppe 3
+    document.getElementById("suche").addEventListener("input", spielerSuchen);
+    document.getElementById("refreshButton").addEventListener("click", ranglisteAktualisieren);
+    document.getElementById("weiter").addEventListener("click", async function() {
+        await spielRechts(true);
+    });
+    document.getElementById("zurueck").addEventListener("click", async function() {
+        await spielRechts(false);
+    });
+    document.getElementById("punkte_info").addEventListener("click", (e) => {
+        e.stopPropagation();
+        e.currentTarget.classList.toggle("active");
+    });
     
-    //allgemeine Event-Listener 
-    //Pop-Up- Fenster, wenn an irgendwo auf die Seite klickt. 
-   window.addEventListener("click", (e) => {
-    const badge = document.getElementById("info_badge_tips");
-    const badge2 = document.getElementById("punkte_info");
+    // Allgemeine Event-Listener
+    window.addEventListener("click", (e) => {
+        const badge = document.getElementById("info_badge_tips");
+        const badge2 = document.getElementById("punkte_info");
 
-    if (badge && !e.target.closest("#info_badge_tips")) {
-        badge.classList.remove("active");
-    }
+        if (badge && !e.target.closest("#info_badge_tips")) {
+            badge.classList.remove("active");
+        }
 
-    if (badge2 && !e.target.closest("#punkte_info")) {
-        badge2.classList.remove("active");
-    }
+        if (badge2 && !e.target.closest("#punkte_info")) {
+            badge2.classList.remove("active");
+        }
 
-    const err = document.getElementById("limit-error");
-    if (err) err.classList.remove("active");
-});
-
+        const err = document.getElementById("limit-error");
+        if (err) err.classList.remove("active");
+    });
 
     </script> 
 </body> 

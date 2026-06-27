@@ -86,19 +86,21 @@
       to { transform: rotate(360deg); }
     }
 
-    @keyframes flug {
-      from {
-        transform:
-          translate(-50%, -50%)
-          translate(430px, 400px);
-      }
+     @keyframes flug {
+  from {
+    transform:
+      translate(-50%, -50%)
+      translate(430px, 400px)
+      scale(4);      /* Start: 4-mal so groß */
+  }
 
-      to {
-        transform:
-          translate(-50%, -50%)
-          translate(0, 0);
-      }
-    }
+  to {
+    transform:
+      translate(-50%, -50%)
+      translate(0, 0)
+      scale(1);      /* Endgröße = aktuelle Größe (26px) */
+  }
+}
   </style>
 </head>
 
