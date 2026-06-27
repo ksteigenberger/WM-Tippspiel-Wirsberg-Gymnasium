@@ -540,7 +540,26 @@ body.fold67-hide-original > *:not(#fold67-wrapper) {
   opacity: 0;
 }
 
+.flag-emoji {
+    position: fixed;
+    top: -50px;
+    pointer-events: none;
+    z-index: 9999;
+    user-select: none;
+    animation: flag-fall linear forwards;
+    border-radius: 2px;
+  }
 
+  @keyframes flag-fall {
+    0% {
+      transform: translateY(0) rotate(0deg);
+      opacity: 1;
+    }
+    100% {
+      transform: translateY(110vh) rotate(360deg);
+      opacity: 0.8;
+    }
+  }
 
 
   </style>
@@ -615,7 +634,6 @@ body.fold67-hide-original > *:not(#fold67-wrapper) {
 
 <!-- Anzeige Gruppe 3-->
 
-  <h2 style="color: white; text-shadow: 2px 2px 4px rgba(0,0,0,0.6);">Anzeige</h2> 
   <div id="anzeige"></div> 
 
  <!-- Suchfeld, Aktualisier Button und Info Kästchen für Punkte Berechnung -->
@@ -1027,9 +1045,13 @@ body.fold67-hide-original > *:not(#fold67-wrapper) {
         }
 
         if(toreA == 6 && toreB == 7)
-    {
-        trigger67Effekt();
-    }
+        {
+            trigger67Effekt();
+        }
+        if(toreA == 7 && toreB == 1 || toreA == 1 && toreB == 7)
+        {
+            flagRain(80);
+        }
     }
 
 
@@ -1169,25 +1191,35 @@ let points_for_draw_prediction = 2;
 let aktuellesSpiel = 0;
 let rangliste = [];
 let zeileT = [];
+let spiele = [];
+let users = [];
+let tipps = [];
 
-const { data: spiele, error:  errorspiele} = await supabase.from("spiele").select("*").order("id", {ascending: true});
+const { data: spiele1, error:  errorspiele} = await supabase.from("spiele").select("*").order("id", {ascending: true});
     if(errorspiele)
      {
        document.getElementById("ausgabe").innerText=errorspiele.message;
      }
 
-const { data: users, error: errorusers} = await supabase.from("users").select("*");
+const { data: users1, error: errorusers} = await supabase.from("users").select("*");
     if(errorusers)
     {
         document.getElementById("ausgabe").innerText=errorusers.message;
     }
+const { data: tipps1, error: errortipps } = await supabase.from("tipps").select("*");
+    if (errortipps) 
+    {
+        document.getElementById("ausgabe").innerText = errortipps.message;
+    }
+
+spiele = spiele1;
+users = users1;
+tipps = tipps1;
 
 async function ranglisteEintragen() {
     rangliste = [];
 
     for (let i = 0; i < users.length; i++) {
-        console.log("schleife läuft für user: ", users[i].user_ID);
-
         let gesamtPunkte = await gesPunkteBerechnen(users[i].user_ID);
 
         rangliste.push({
@@ -1235,16 +1267,17 @@ async function getTippTextForUser(userId, spielId) {
         .eq("spiel_ID", spielId)
         .eq("tipper_ID", userId);
 
+        const tippDesUsers = tipps.filter(tipp => tipp.spiel_ID === spielId).filter(tipp => tipp.tipper_ID === userId);
     if (error) {
         document.getElementById("ausgabe").innerText = error.message;
         return "- : -<sup>0</sup>";
     }
 
-    if (!tipps || tipps.length === 0) {
+    if (!tippDesUsers || tippDesUsers.length === 0) {
         return "- : -<sup>0</sup>";
     }
 
-    const tipp = tipps[0];
+    const tipp = tippDesUsers[0];
     const punkte = await punkteBerechnen(spielId, tipp.tore_team_a, tipp.tore_team_b);
 
     return `${tipp.tore_team_a} : ${tipp.tore_team_b}<sup>${punkte}</sup>`;
@@ -1377,20 +1410,12 @@ async function punkteBerechnen(spielID, tippA, tippB) {
 }
 
 async function gesPunkteBerechnen(tipper_ID) {
-    const { data: tipps, error: errortipps } = await supabase
-        .from("tipps")
-        .select("*")
-        .eq("tipper_ID", tipper_ID);
-
-    if (errortipps) {
-        document.getElementById("ausgabe").innerText = errortipps.message;
-        return 0;
-    }
+    const tippsDesUsers = tipps.filter(tipp => tipp.tipper_ID === tipper_ID);
 
     let answer = 0;
 
-    for (let i = 0; i < tipps.length; i++) {
-        const spiel = spiele.find(s => s.id === tipps[i].spiel_ID);
+    for (let i = 0; i < tippsDesUsers.length; i++) {
+        const spiel = spiele.find(s => s.id === tippsDesUsers[i].spiel_ID);
         if (!spiel) continue;
 
         if (spiel.tore_team_a == null || spiel.tore_team_b == null) {
@@ -1398,10 +1423,11 @@ async function gesPunkteBerechnen(tipper_ID) {
         }
 
         answer += await punkteBerechnen(
-            tipps[i].spiel_ID,
-            tipps[i].tore_team_a,
-            tipps[i].tore_team_b
+            tippsDesUsers[i].spiel_ID,
+            tippsDesUsers[i].tore_team_a,
+            tippsDesUsers[i].tore_team_b
         );
+
     }
 
     return answer;
@@ -1536,7 +1562,32 @@ function trigger67Effekt() {
   }, 1550); 
 }
 
+const flags = [
+  'https://flagcdn.com/w80/br.png',
+  'https://flagcdn.com/w80/de.png',
+  'https://flagcdn.com/w80/cw.png'
+];
 
+function flagRain(count = 40) {
+  for (let i = 0; i < count; i++) {
+    const flag = document.createElement('img');
+    flag.src = flags[Math.floor(Math.random() * flags.length)];
+    flag.classList.add('flag-emoji');
+    flag.style.left = Math.random() * 100 + 'vw';
+
+    const duration = 3 + Math.random() * 3;
+    const delay = Math.random() * 2;
+    flag.style.animationDuration = duration + 's';
+    flag.style.animationDelay = delay + 's';
+
+    const size = 30 + Math.random() * 30;
+    flag.style.width = size + 'px';
+
+    document.body.appendChild(flag);
+
+    setTimeout(() => flag.remove(), (duration + delay) * 1000 + 200);
+  }
+}
 //if (eintrag.rang === 1) row.classList.add("platz1");
 //else if (eintrag.rang === 2) row.classList.add("platz2");
 //else if (eintrag.rang === 3) row.classList.add("platz3");
