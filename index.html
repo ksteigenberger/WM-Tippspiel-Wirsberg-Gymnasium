@@ -55,7 +55,7 @@
 
         
         // Fehler oder existiert überhaupt ein Profil (dann gilt count speichert 0) , dann wird der Nutzer zur Profilseite geschickt; 
-        if(error || count <1)
+        if(error || count <1 || !count || count>1)
         {
             window.location.href ="profil.html";
             return;
