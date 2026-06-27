@@ -33,22 +33,31 @@
       text-align: center;
       flex-wrap: wrap;
     }
-   
-    
+
     #profil_button {
-    padding: 8px 14px;
-    border: none;
-    border-radius: 6px;
-    background-color: #0066cc;
-    color: white;
-    cursor: pointer;
-}
+        position: absolute;
+        top: 16px;
+        left: 16px;
+        z-index: 9999;
+        font-size: 2em;
+        padding: 8px 14px;
+        border: none;
+        border-radius: 6px;
+        background-color: #0066cc;
+        color: white;
+        cursor: pointer;
+    }
 
 #profil_button:hover {
     background-color: #0052a3;
 }
 
 #logout_button {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    z-index: 9999;
+    font-size: 2em;
     padding: 8px 14px;
     border: none;
     border-radius: 6px;
@@ -258,7 +267,10 @@
     margin-top: 8px;
     margin-bottom: 6px;
 
-    font-size: 15px;
+    border:none;
+    border-radius:6px;
+
+    font-size: 2em;
     font-weight: bold;
 }
 
@@ -277,7 +289,8 @@
 }
 
 #refreshButton{
-    width:260px;
+    width:10em;
+    font-size:2em;
     padding:8px;
 
     background:#0066cc;
@@ -288,7 +301,7 @@
 
     cursor:pointer;
 
-    font-size:15px;
+    font-size:2em;
     font-weight:bold;
 
     transition:0.2s;
@@ -298,18 +311,14 @@
     background:#0052a3;
 }
 
-#refreshButton{
-    width:180px;
-    font-size:14px;
-}
 
 .punkte-info-badge {
     display: inline-flex;
     align-items: center;
     justify-content: center;
 
-    width: 38px;
-    height: 38px;
+    width: 3.5em;
+    height: 3.5em;
 
     background-color: #e6f2ff;
     border-radius: 8px;
@@ -319,7 +328,7 @@
 }
 
 .punkte-info-badge::after {
-    content: "So ergeben sich die Punkte:\A\ATipp richtig: 4 Punkte\A Differenz richtig: 3 Punkte\A Unentschieden/Sieger richtig: 2 Punkte\A Ansonsten: 0 Punkte";
+    content: "So ergeben sich die Punkte:\A\ATipp richtig: 4 Punkte\A Differenz richtig: 3 Punkte\A Unentschieden/Sieger richtig: 2 Punkte\A Ansonsten: 0 Punkte\A\A Tore ohne Elfmeterschießen";
 
     white-space: pre-line;
 
@@ -489,14 +498,14 @@ thead th {
     }
 
     #suche {
-    width: 180px;
-    margin-left: 60px;
-    font-size: 14px;
-}
+        width: 180px;
+        margin-left: 60px;
+        font-size: 14px;
+    }
 
-#rangliste_tools{
-    gap:8px;
-}
+    #rangliste_tools{
+        gap:8px;
+    }
 
 }
 
@@ -620,7 +629,7 @@ body.fold67-hide-original > *:not(#fold67-wrapper) {
         </div>
     </div>
 
-    <div id="countdown_box" style="margin: 20px 0 20px 0; font-size: 18px; font-weight: bold; color: #555; background: #f0f0f0; padding: 6px 12px; border-radius: 20px; display: inline-block;">--</div>
+    <div id="countdown_box" style="margin: 20px 0 20px 0; font-size: 22px; font-weight: bold; color: #555; background: #f0f0f0; padding: 6px 12px; border-radius: 20px; display: inline-block;">--</div>
 
     <br>
 
@@ -712,14 +721,14 @@ body.fold67-hide-original > *:not(#fold67-wrapper) {
     
 
 
-    <footer id="page_footer" style="margin: 30px auto 20px; max-width: 860px; color: white; display: flex; flex-wrap: wrap; justify-content: center; gap: 12px; font-size: 14px;">
+    <footer id="page_footer" style="margin: 30px auto 20px; max-width: 860px; color: white; display: flex; flex-wrap: wrap; justify-content: center; gap: 12px; font-size: 20px;">
         <a href="datenschutzerklaerung.html" style="color: white; text-decoration: underline;">Datenschutzerklärung</a>
         <a href="impressum.html" style="color: white; text-decoration: underline;">Impressum</a>
 
-        <button id="profil_button">zum Profil</button>
-
-        <button id="logout_button" >Logout</button>
     </footer>
+
+    <button id="profil_button">zum Profil</button>
+    <button id="logout_button">Logout</button>
 
  <!--Logik und DB-Verbindung mit JavaScript -->
   <script type="module">
