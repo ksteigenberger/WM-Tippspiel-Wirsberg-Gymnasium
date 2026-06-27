@@ -1262,9 +1262,15 @@ body.fold67-hide-original > *:not(#fold67-wrapper) {
         document.getElementById("refreshButton").innerHTML = "↻ Aktualisieren";
         document.getElementById("refreshButton").disabled = false;
     }
+    await new Promise(resolve => setTimeout(resolve, 1000));
+    document.getElementById("refreshButton").innerHTML = "↻ Aktualisieren";
+    document.getElementById("refreshButton").disabled = false;
+}
 
-    async function renderZeile(tbody, eintrag, spielId, istEigeneZeile = false) {
-        const row = tbody.insertRow();
+async function renderZeile(tbody, eintrag, spielId, istEigeneZeile = false) {
+    const row = tbody.insertRow();
+
+
 
         if (istEigeneZeile) {
             row.classList.add("eigene-zeile");
