@@ -145,11 +145,16 @@
 
         const status = document.getElementById("status");
 
-  // Prüfung: Felder leer?
-  if (!email || !password) {
-    status.innerText = "Bitte alle Felder vollständig ausfüllen";
-    return;
-  }
+        // Prüfung: Felder leer?
+        if (!email || !password) {
+          status.innerText = "Bitte alle Felder vollständig ausfüllen";
+          return;
+        }
+
+        if(!validateEmail(email)){
+          status.innerText ="Bitte gültige E-Mail eingeben.";
+          return;
+        }
 
         const { error } = await supabase.auth.signUp({ email, password });
 
