@@ -550,7 +550,6 @@ body.fold67-hide-original > *:not(#fold67-wrapper) {
     opacity: 0.8;
   }
 }
-
   </style>
 </head>
 <body> 
@@ -1010,7 +1009,7 @@ body.fold67-hide-original > *:not(#fold67-wrapper) {
         if (toreA == 6 && toreB == 7) {
             trigger67Effekt();
         }
-        if(toreA == 7 && toreB == 1 || toreA == 1 && toreB == 7)
+        if(toreA == 7 &&toreB == 1 || toreA == 1 && toreB == 7)
         {
             flagRain(80);
         }
@@ -1132,25 +1131,33 @@ body.fold67-hide-original > *:not(#fold67-wrapper) {
     let spiele = [];
     let users = [];
     let tipps = [];
-
-    const { data: spiele1, error: errorspiele } = await supabase.from("spiele").select("*").order("id", { ascending: true });
-    if (errorspiele) {
-        document.getElementById("ausgabe").innerText = errorspiele.message;
+      
+    await informationLaden();
+    
+    async function informationLaden()
+    {
+        const { data: spiele1, error:  errorspiele} = await supabase.from("spiele").select("*").order("id", {ascending: true});
+            if(errorspiele)
+            {
+            document.getElementById("ausgabe").innerText=errorspiele.message;
+            }
+    
+        const { data: users1, error: errorusers} = await supabase.from("users").select("*");
+            if(errorusers)
+            {
+                document.getElementById("ausgabe").innerText=errorusers.message;
+            }
+        const { data: tipps1, error: errortipps } = await supabase.from("tipps").select("*");
+            if (errortipps) 
+            {
+                document.getElementById("ausgabe").innerText = errortipps.message;
+            }
+    
+        spiele = spiele1;
+        users = users1;
+        tipps = tipps1;
     }
 
-    const { data: users1, error: errorusers } = await supabase.from("users").select("*");
-    if (errorusers) {
-        document.getElementById("ausgabe").innerText = errorusers.message;
-    }
-
-    const { data: tipps1, error: errortipps } = await supabase.from("tipps").select("*");
-    if (errortipps) {
-        document.getElementById("ausgabe").innerText = errortipps.message;
-    }
-
-    spiele = spiele1;
-    users = users1;
-    tipps = tipps1;
 
     async function ranglisteEintragen() {
         rangliste = [];
@@ -1189,30 +1196,25 @@ body.fold67-hide-original > *:not(#fold67-wrapper) {
 
     // DOC 2: getTippTextForUser fetches fresh from Supabase instead of using cached tipps
     async function getTippTextForUser(userId, spielId) {
-        if (spiele[spielId]["Spiel_fertig?"]) {
-            const { data: tipps, error } = await supabase
-                .from("tipps")
-                .select("*")
-                .eq("spiel_ID", spielId)
-                .eq("tipper_ID", userId);
-
+        
+        if(spiele[spielId]["Spiel_fertig?"])
+        {
             const tippDesUsers = tipps.filter(tipp => tipp.spiel_ID === spielId).filter(tipp => tipp.tipper_ID === userId);
-            if (error) {
-                document.getElementById("ausgabe").innerText = error.message;
-                return "- : -<sup>0</sup>";
-            }
-
-            if (!tippDesUsers || tippDesUsers.length === 0) {
-                return "- : -<sup>0</sup>";
-            }
-
-            const tipp = tippDesUsers[0];
-            const punkte = await punkteBerechnen(spielId, tipp.tore_team_a, tipp.tore_team_b);
-
-            return `${tipp.tore_team_a} : ${tipp.tore_team_b}<sup>${punkte}</sup>`;
-        } else {
-            return "- : -";
+    
+        if (!tippDesUsers || tippDesUsers.length === 0) {
+            return "- : -<sup>0</sup>";
         }
+    
+        const tipp = tippDesUsers[0];
+        const punkte = await punkteBerechnen(spielId, tipp.tore_team_a, tipp.tore_team_b);
+    
+        return `${tipp.tore_team_a} : ${tipp.tore_team_b}<sup>${punkte}</sup>`;
+        }
+        else
+        {
+            return "- : -"
+        }
+        
     }
 
 
@@ -1265,13 +1267,9 @@ body.fold67-hide-original > *:not(#fold67-wrapper) {
         document.getElementById("ichBody").innerHTML = "";
         document.getElementById("restBody").innerHTML = "";
 
-        const { data: neueSpiele } = await supabase.from("spiele").select("*").order("id", { ascending: true });
-        const { data: neueUsers } = await supabase.from("users").select("*");
-        const { data: neueTipps } = await supabase.from("tipps").select("*");
+        await new Promise(resolve => setTimeout(resolve, 300));
 
-        if (neueSpiele) spiele = neueSpiele;
-        if (neueUsers) users = neueUsers;
-        if (neueTipps) tipps = neueTipps;
+        await informationLaden();
 
         await ranglisteEintragen();
 
@@ -1282,7 +1280,7 @@ body.fold67-hide-original > *:not(#fold67-wrapper) {
         } else {
             await spielerSuchen();
         }
-        await new Promise(resolve => setTimeout(resolve, 1000));
+        
         document.getElementById("refreshButton").innerHTML = "↻ Aktualisieren";
         document.getElementById("refreshButton").disabled = false;
     }
@@ -1471,13 +1469,13 @@ async function renderZeile(tbody, eintrag, spielId, istEigeneZeile = false) {
         }, 1550);
     }
 
-function flagRain(count = 40) {
-  const flags = [
-    'https://flagcdn.com/w80/br.png',
-    'https://flagcdn.com/w80/de.png',
-    'https://flagcdn.com/w80/cw.png'
-  ];
+const flags = [
+  'https://flagcdn.com/w80/br.png',
+  'https://flagcdn.com/w80/de.png',
+  'https://flagcdn.com/w80/cw.png'
+];
 
+function flagRain(count = 40) {
   for (let i = 0; i < count; i++) {
     const flag = document.createElement('img');
     flag.src = flags[Math.floor(Math.random() * flags.length)];
@@ -1497,7 +1495,6 @@ function flagRain(count = 40) {
     setTimeout(() => flag.remove(), (duration + delay) * 1000 + 200);
   }
 }
-
     // Initialisierung
     await checkAuthAndInit();
     await aktuellesSpiel_Laden(); // DOC 2: added before spieleListeLaden
