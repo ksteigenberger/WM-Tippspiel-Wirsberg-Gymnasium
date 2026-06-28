@@ -1216,9 +1216,9 @@ body.fold67-hide-original > *:not(#fold67-wrapper) {
     let users = [];
     let tipps = [];
       
-    await informationLaden();
+    await informationLaden(); //diesen Aufruf hier löschen und unten nach dem Aufruf  checkAuth..() einfügen!
     
-    async function informationLaden()
+    async function informationLaden() //hier braucht man async, da auf supabase gewartet werden muss: 
     {
         const { data: spiele1, error:  errorspiele} = await supabase.from("spiele").select("*").order("id", {ascending: true});
             if(errorspiele)
@@ -1243,11 +1243,11 @@ body.fold67-hide-original > *:not(#fold67-wrapper) {
     }
 
 
-    async function ranglisteEintragen() {
+    async function ranglisteEintragen() { //kein async
         rangliste = [];
 
         for (let i = 0; i < users.length; i++) {
-            let gesamtPunkte = await gesPunkteBerechnen(users[i].user_ID);
+            let gesamtPunkte = await gesPunkteBerechnen(users[i].user_ID); //kein await
 
             rangliste.push({
                 user_ID: users[i].user_ID,
@@ -1279,7 +1279,7 @@ body.fold67-hide-original > *:not(#fold67-wrapper) {
 
 
     // DOC 2: getTippTextForUser fetches fresh from Supabase instead of using cached tipps
-    async function getTippTextForUser(userId, spielId) {
+    async function getTippTextForUser(userId, spielId) { //kein async
         
         if(spiele[spielId]["Spiel_fertig?"])
         {
@@ -1290,7 +1290,7 @@ body.fold67-hide-original > *:not(#fold67-wrapper) {
         }
     
         const tipp = tippDesUsers[0];
-        const punkte = await punkteBerechnen(spielId, tipp.tore_team_a, tipp.tore_team_b);
+        const punkte = await punkteBerechnen(spielId, tipp.tore_team_a, tipp.tore_team_b); //kein await
     
         return `${tipp.tore_team_a} : ${tipp.tore_team_b}<sup>${punkte}</sup>`;
         }
@@ -1302,7 +1302,7 @@ body.fold67-hide-original > *:not(#fold67-wrapper) {
     }
 
 
-    async function renderNormaleAnsicht() {
+    async function renderNormaleAnsicht() { //kein async
         const top5Body = document.getElementById("top5Body");
         const ichBody = document.getElementById("ichBody");
         const restBody = document.getElementById("restBody");
@@ -1326,11 +1326,11 @@ body.fold67-hide-original > *:not(#fold67-wrapper) {
 
         for (const eintrag of top5) {
             const istIch = eintrag.user_ID === currentUserId;
-            await renderZeile(top5Body, eintrag, aktuellesSpiel, istIch);
+            await renderZeile(top5Body, eintrag, aktuellesSpiel, istIch);//kein await
         }
 
         if (eigenerEintrag && !top5.some(e => e.user_ID === currentUserId)) {
-            await renderZeile(ichBody, eigenerEintrag, aktuellesSpiel, true);
+            await renderZeile(ichBody, eigenerEintrag, aktuellesSpiel, true); //kein await
         }
 
         const rest = rangliste.filter(e =>
@@ -1339,11 +1339,11 @@ body.fold67-hide-original > *:not(#fold67-wrapper) {
         );
 
         for (const eintrag of rest) {
-            await renderZeile(restBody, eintrag, aktuellesSpiel, false);
+            await renderZeile(restBody, eintrag, aktuellesSpiel, false); //kein await
         }
     }
 
-    async function ranglisteAktualisieren() {
+    async function ranglisteAktualisieren() { //async muss bleiben
         document.getElementById("refreshButton").disabled = true;
         document.getElementById("refreshButton").innerHTML = "⟳ Aktualisiere...";
 
@@ -1351,11 +1351,11 @@ body.fold67-hide-original > *:not(#fold67-wrapper) {
         document.getElementById("ichBody").innerHTML = "";
         document.getElementById("restBody").innerHTML = "";
 
-        await new Promise(resolve => setTimeout(resolve, 300));
+        await new Promise(resolve => setTimeout(resolve, 300)); //await muss bleiben
 
-        await informationLaden();
+        await informationLaden(); //await muss bleiben
 
-        await ranglisteEintragen();
+        await ranglisteEintragen(); //await kann weg
 
         const suchtext = document.getElementById("suche").value.trim();
 
@@ -1580,11 +1580,11 @@ function flagRain(count = 40) {
   }
 }
     // Initialisierung
-    await checkAuthAndInit();
+    await checkAuthAndInit(); //await nötig!
     await aktuellesSpiel_Laden(); // DOC 2: added before spieleListeLaden
-    await spieleListeLaden();
-    await ranglisteEintragen();
-    await renderNormaleAnsicht();
+    await spieleListeLaden(); //kein await nötig
+    await ranglisteEintragen(); //kein await nötig
+    await renderNormaleAnsicht(); //kein await nötig
 
     // Event-Listener Gruppe 1 
     document.getElementById("tippSpeichern").addEventListener("click", speichern);
@@ -1595,10 +1595,10 @@ function flagRain(count = 40) {
     // Event-Listener Gruppe 3
     document.getElementById("suche").addEventListener("input", spielerSuchen);
     document.getElementById("refreshButton").addEventListener("click", ranglisteAktualisieren);
-    document.getElementById("weiter").addEventListener("click", async function() {
+    document.getElementById("weiter").addEventListener("click", async function() { //kein async und kein await nötig
         await spielRechts(true);
     });
-    document.getElementById("zurueck").addEventListener("click", async function() {
+    document.getElementById("zurueck").addEventListener("click", async function() { //hier analog
         await spielRechts(false);
     });
     document.getElementById("punkte_info").addEventListener("click", (e) => {
