@@ -38,7 +38,7 @@
         //Prüfen, ob jemand eingeloggt ist, falls nicht (also !session, wird sofort zur Login-Seite weitergeleitet)
         if(!session)
        {
-           window.location.href ="login.html";
+           window.location.replace("login.html");
            return;
        }
 
@@ -57,12 +57,12 @@
         // Fehler oder existiert überhaupt ein Profil (dann gilt count speichert 0) , dann wird der Nutzer zur Profilseite geschickt; 
         if(error || count <1 || !count || count>1)
         {
-            window.location.href ="profil.html";
+            window.location.replace("profil.html");
             return;
         }
 
         //nur wenn alle obigen Prüfungen bestanden wurden, landet der User auf der Tippseite: 
-        window.location.href ="Alles.html";
+        window.location.replace("Alles.html");
         return;
         
 }
