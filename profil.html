@@ -475,6 +475,18 @@ body {
 
 /* ENDE Meine Tipps */
 
+/* ANFANG Benutzername-Hinweis 
+wenn man will das das zusätzlich unter dem kasten benutzername nochmal steht damit man das selbst sieht wennman eintippt
+.username-hinweis {
+  margin: -4px 0 12px;
+  font-size: 14px;
+  color: #64748b;
+  font-weight: 600;
+}
+
+ENDE Benutzername-Hinweis */
+
+
 /* ANFANG Datenschutzhinweis sauber */
 
 .form-card .datenschutz-zustimmung {
@@ -570,7 +582,11 @@ body {
                <p class="tipp-hinweis" style="margin-bottom:12px;">Vorname, Name und Benutzername können nach Bestätigung nicht mehr geändert werden!</p>
         <input id="input_vorname" type="text" placeholder="Vorname" />
         <input id="input_name" type="text" placeholder="Nachname" />
-        <input id="input_username" type="text" placeholder="Benutzername" />
+        <input id="input_username" type="text" placeholder="Benutzername (max. 15 Zeichen)" />
+        <!--<p class="username-hinweis">Der Benutzername darfmaximal 15 Zeichen lang sein.</p>
+        wenn man will das das zusätzlich unter dem kasten benutzername nochmal steht damit man das selbst sieht wennman eintippt
+        -->
+        
         <div class="avatar-selector">
             <p>Avatar auswählen:</p>
             <div id="avatar_options" class="avatar-options"></div>
@@ -943,6 +959,11 @@ async function saveProfile() {
 
     const status = document.getElementById("status");
     status.innerText = "";
+    if(username.length > 15)
+    {
+        status.innerText = "Der Benutzername darf nicht länger als 15 Zeichen lang sein";
+        return;
+    }
     //Nur wenn Datenschutzerklärung zugestimmt würde geht profilvervollständigen anfang
     const datenschutzOk = document.getElementById("datenschutz_ok").checked;
     if (!datenschutzOk) 
@@ -1177,6 +1198,18 @@ async function meineTippsLaden() {
 
     document.getElementById("logout").addEventListener("click", logout);
     document.getElementById("save-profile").addEventListener("click", saveProfile);
+    /*
+  OPTIONAL: Harte Begrenzung auf 15 Zeichen beim Tippen
+
+  Wenn diese Funktion aktiviert wird oist es nicht möglich mehr als 15 ziffernbeim benutzernamen zu tippen
+
+  document.getElementById("input_username").addEventListener("input", function () {
+    if (this.value.length > 15) {
+        this.value = this.value.slice(0, 15);
+    }
+  });
+  */
+
     document.getElementById("save-bearbeiten").addEventListener("click", saveBearbeiten);
     document.getElementById("buttonTippsAnzeigen").addEventListener("click", meineTippsLaden);
 
