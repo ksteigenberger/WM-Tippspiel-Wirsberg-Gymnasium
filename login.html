@@ -83,7 +83,6 @@
 
      .register-link {
     display: block;
-    text-align: center;
     font-size: 24px;   /* Größe anpassen */
     font-weight: bold;
     margin-bottom: 20px;
@@ -92,6 +91,10 @@
 }
 
 .register-link:hover {
+    text-decoration: underline;
+}
+
+    .underline {
     text-decoration: underline;
 }
 
@@ -131,8 +134,8 @@
   </div>
   <div id="container">
     <a href="signup.html" class="register-link">
-    Neu hier? Dann hier registrieren!
-</a>
+        Neu hier? Dann <span class="underline">hier registrieren!</span>
+    </a>
     <h2>Login</h2>
 
     <input id="email" type="email" placeholder="Email" />
