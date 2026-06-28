@@ -170,8 +170,8 @@
     }
 
     button:disabled {
-      background-color: #ccc;
-      cursor: not-allowed;
+      background-color: #ccc !important;
+      cursor: not-allowed !important;
     }
 
 
@@ -194,7 +194,7 @@
     }
 
     .info-badge::after {
-      content: "Noch zu tippende Spiele";
+      content: "Aktuell noch zu tippende Spiele";
       position: absolute;
       bottom: 140%;
       right: 0; 
@@ -333,8 +333,9 @@
 }
 
 .punkte-info-badge::after {
-    content: "So ergeben sich die Punkte:\A\ATipp richtig: 4 Punkte\A Differenz richtig: 3 Punkte\A Unentschieden/Sieger richtig: 2 Punkte\A Ansonsten: 0 Punkte\A\A Tore ohne Elfmeterschießen";
+     content: "Tippmodus:\AEs wird das exakte Ergebnis VOR Elfmeterschießen getippt.\A\ATipp richtig: 4 Punkte\A Differenz richtig: 3 Punkte\A Unentschieden/Sieger richtig: 2 Punkte\A Ansonsten: 0 Punkte";
 
+    
     white-space: pre-line;
 
     position: absolute;
@@ -1216,9 +1217,9 @@ body.fold67-hide-original > *:not(#fold67-wrapper) {
     let users = [];
     let tipps = [];
       
-    await informationLaden();
+    await informationLaden(); // runter nach dem Aufruf await checkAuth.. bei den anderen Initialisierungen
     
-    async function informationLaden()
+    async function informationLaden() //hier async notwendig!
     {
         const { data: spiele1, error:  errorspiele} = await supabase.from("spiele").select("*").order("id", {ascending: true});
             if(errorspiele)
@@ -1243,11 +1244,11 @@ body.fold67-hide-original > *:not(#fold67-wrapper) {
     }
 
 
-    async function ranglisteEintragen() {
+    async function ranglisteEintragen() { //hier nicht notwendig
         rangliste = [];
 
         for (let i = 0; i < users.length; i++) {
-            let gesamtPunkte = await gesPunkteBerechnen(users[i].user_ID);
+            let gesamtPunkte = await gesPunkteBerechnen(users[i].user_ID); //await auch nicht, da gesPunkteBerechnen nicht async sein muss
 
             rangliste.push({
                 user_ID: users[i].user_ID,
@@ -1580,7 +1581,8 @@ function flagRain(count = 40) {
   }
 }
     // Initialisierung
-    await checkAuthAndInit();
+    await checkAuthAndInit(); //hier await nötig
+      //hier await infoLaden... aufrufen!
     await aktuellesSpiel_Laden(); // DOC 2: added before spieleListeLaden
     await spieleListeLaden();
     await ranglisteEintragen();
