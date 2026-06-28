@@ -33,31 +33,22 @@
       text-align: center;
       flex-wrap: wrap;
     }
-
+   
+    
     #profil_button {
-        position: absolute;
-        top: 16px;
-        left: 16px;
-        z-index: 9999;
-        font-size: 2em;
-        padding: 8px 14px;
-        border: none;
-        border-radius: 6px;
-        background-color: #0066cc;
-        color: white;
-        cursor: pointer;
-    }
+    padding: 8px 14px;
+    border: none;
+    border-radius: 6px;
+    background-color: #0066cc;
+    color: white;
+    cursor: pointer;
+}
 
 #profil_button:hover {
     background-color: #0052a3;
 }
 
 #logout_button {
-    position: absolute;
-    top: 16px;
-    right: 16px;
-    z-index: 9999;
-    font-size: 2em;
     padding: 8px 14px;
     border: none;
     border-radius: 6px;
@@ -170,8 +161,8 @@
     }
 
     button:disabled {
-      background-color: #ccc;
-      cursor: not-allowed;
+      background-color: #ccc !important;
+      cursor: not-allowed !important;
     }
 
 
@@ -194,7 +185,7 @@
     }
 
     .info-badge::after {
-      content: "Noch zu tippende Spiele";
+      content: "Aktuell noch zu tippende Spiele";
       position: absolute;
       bottom: 140%;
       right: 0; 
@@ -249,17 +240,13 @@
       display: inline-block;
     }
 
-      //
-.oberer-bereich-wrapper {
-    max-width: 650px;       
+    .oberer-bereich-wrapper {
+    max-width: 850px;       
     width: 100%;
     margin: 0 auto;         
     box-sizing: border-box;
     text-align: center;     
     } 
-
-
-      
     /* Style-Bereich von Gruppe 3!!*/
 
 #suche {
@@ -272,10 +259,7 @@
     margin-top: 8px;
     margin-bottom: 6px;
 
-    border:none;
-    border-radius:6px;
-
-    font-size: 2em;
+    font-size: 15px;
     font-weight: bold;
 }
 
@@ -294,8 +278,7 @@
 }
 
 #refreshButton{
-    width:10em;
-    font-size:2em;
+    width:260px;
     padding:8px;
 
     background:#0066cc;
@@ -306,7 +289,7 @@
 
     cursor:pointer;
 
-    font-size:2em;
+    font-size:15px;
     font-weight:bold;
 
     transition:0.2s;
@@ -316,14 +299,18 @@
     background:#0052a3;
 }
 
+#refreshButton{
+    width:180px;
+    font-size:14px;
+}
 
 .punkte-info-badge {
     display: inline-flex;
     align-items: center;
     justify-content: center;
 
-    width: 3.5em;
-    height: 3.5em;
+    width: 38px;
+    height: 38px;
 
     background-color: #e6f2ff;
     border-radius: 8px;
@@ -333,7 +320,7 @@
 }
 
 .punkte-info-badge::after {
-    content: "So ergeben sich die Punkte:\A\ATipp richtig: 4 Punkte\A Differenz richtig: 3 Punkte\A Unentschieden/Sieger richtig: 2 Punkte\A Ansonsten: 0 Punkte\A\A Tore ohne Elfmeterschießen";
+    content: "Tippmodus:\AEs wird das exakte Ergebnis VOR Elfmeterschießen getippt.\A\ATipp richtig: 4 Punkte\A Differenz richtig: 3 Punkte\A Unentschieden/Sieger richtig: 2 Punkte\A Ansonsten: 0 Punkte";
 
     white-space: pre-line;
 
@@ -503,14 +490,14 @@ thead th {
     }
 
     #suche {
-        width: 180px;
-        margin-left: 60px;
-        font-size: 14px;
-    }
+    width: 180px;
+    margin-left: 60px;
+    font-size: 14px;
+}
 
-    #rangliste_tools{
-        gap:8px;
-    }
+#rangliste_tools{
+    gap:8px;
+}
 
 }
 
@@ -552,26 +539,7 @@ body.fold67-hide-original > *:not(#fold67-wrapper) {
   opacity: 0;
 }
 
-.flag-emoji {
-  position: fixed;
-  top: -50px;
-  font-size: 2rem;
-  pointer-events: none;
-  z-index: 9999;
-  user-select: none;
-  animation: flag-fall linear forwards;
-}
 
-@keyframes flag-fall {
-  0% {
-    transform: translateY(0) rotate(0deg);
-    opacity: 1;
-  }
-  100% {
-    transform: translateY(110vh) rotate(360deg);
-    opacity: 0.8;
-  }
-}
   </style>
 </head>
 <body> 
@@ -586,9 +554,7 @@ body.fold67-hide-original > *:not(#fold67-wrapper) {
 </div>
 <br>
 
-                                                                                                                                        
-
-    <div class="oberer-bereich-wrapper">                                                                                                                                           
+<div class="oberer-bereich-wrapper">                                                                                                                                           
 <div id="begruessung_container" style="font-size: 30px; font-weight: bold; color: white; text-shadow: 1px 1px 4px rgba(0,0,0,0.6); margin-bottom: 25px; min-height: 24px;">
     <span id="begruessung_text"></span><span class="cursor">_</span>
 </div>
@@ -636,15 +602,13 @@ body.fold67-hide-original > *:not(#fold67-wrapper) {
         </div>
     </div>
 
-    <div id="countdown_box" style="margin: 20px 0 20px 0; font-size: 22px; font-weight: bold; color: #555; background: #f0f0f0; padding: 6px 12px; border-radius: 20px; display: inline-block;">--</div>
+    <div id="countdown_box" style="margin: 20px 0 20px 0; font-size: 18px; font-weight: bold; color: #555; background: #f0f0f0; padding: 6px 12px; border-radius: 20px; display: inline-block;">--</div>
 
     <br>
 
-   <!-- <div style="font-size: 24px; margin: 20px 0; display: flex; justify-content: center; align-items: center; gap: 15px; flex-wrap: wrap;"> -->
-       <div style="margin: 20px 0; display: flex; justify-content: center; align-items: flex-start; gap: 15px; flex-wrap: wrap;">
-
-
-<div style="display: flex; flex-direction: column; align-items: center; min-width: 100px;">
+<div style="margin: 20px 0; display: flex; justify-content: center; align-items: flex-start; gap: 15px; flex-wrap: wrap;">
+    
+    <div style="display: flex; flex-direction: column; align-items: center; min-width: 100px;">
         <img id="img_flag_a" src="" alt="" style="width: 45px; height: 30px; object-fit: cover; margin-bottom: 5px; border-radius: 3px; box-shadow: 0 1px 3px rgba(0,0,0,0.3); display: none;">
         <span id="team_a" style="font-weight:bold; color: #333; text-shadow: none;">Team A</span>
     </div>
@@ -663,8 +627,7 @@ body.fold67-hide-original > *:not(#fold67-wrapper) {
         <img id="img_flag_b" src="" alt="" style="width: 45px; height: 30px; object-fit: cover; margin-bottom: 5px; border-radius: 3px; box-shadow: 0 1px 3px rgba(0,0,0,0.3); display: none;">
         <span id="team_b" style="font-weight:bold; color: #333; text-shadow: none;">Team B</span>
     </div>
-</div>    
-    
+</div>
     <button id="tippSpeichern" style="width: 100%; padding: 15px; font-size: 18px; font-weight: bold; border-radius: 8px; background-color: red; color: white; border: none; cursor: pointer;">Tipp speichern</button>
 
 </div></div>
@@ -739,15 +702,14 @@ body.fold67-hide-original > *:not(#fold67-wrapper) {
     
 
 
-    <footer id="page_footer" style="margin: 30px auto 20px; max-width: 860px; color: white; display: flex; flex-wrap: wrap; justify-content: center; gap: 12px; font-size: 20px;">
+    <footer id="page_footer" style="margin: 30px auto 20px; max-width: 860px; color: white; display: flex; flex-wrap: wrap; justify-content: center; gap: 12px; font-size: 14px;">
         <a href="datenschutzerklaerung.html" style="color: white; text-decoration: underline;">Datenschutzerklärung</a>
-        <a href="spielregeln.html" style="color: white; text-decoration: underline;">Spielregeln</a>
         <a href="impressum.html" style="color: white; text-decoration: underline;">Impressum</a>
 
-    </footer>
+        <button id="profil_button">zum Profil</button>
 
-    <button id="profil_button">Profil</button>
-    <button id="logout_button">Logout</button>
+        <button id="logout_button" >Logout</button>
+    </footer>
 
  <!--Logik und DB-Verbindung mit JavaScript -->
   <script type="module">
@@ -843,7 +805,7 @@ body.fold67-hide-original > *:not(#fold67-wrapper) {
         document.getElementById("team_b").innerText = spiel.team_b;
         setzeFlagge(spiel.team_a, "img_flag_a");
         setzeFlagge(spiel.team_b, "img_flag_b");
-        
+
         if (spiel.Startzeit) {
             const datumObjekt = new Date(spiel.Startzeit);
             const formatiertesDatum = datumObjekt.toLocaleDateString('de-DE', {
@@ -937,23 +899,19 @@ body.fold67-hide-original > *:not(#fold67-wrapper) {
 
         offeneTippsBerechnen();
     }
-
-
-  const flaggenMap = {
-    "GER": "de",
-    "BRA": "br",
+    const flaggenMap = {
+    "Deutschland": "de",
+    "Brasilien": "br",
     "Frankreich": "fr",
     "Spanien": "es",
     "Italien": "it",
     "England": "gb-eng",
     "Portugal": "pt",
     "Argentinien": "ar",
-    "AF4_a": "de", //test für AFa_4 = DE Flagge zum anschauen wie es aussieht
-    "AF4_b": "br" //test
+    "AF4_a": "de" //test für AFa_4 = DE Flagge zum anschauen wie es aussieht
     };
 
-
-  function setzeFlagge(teamName, elementId) {
+    function setzeFlagge(teamName, elementId) {
     const flagElement = document.getElementById(elementId);
     const laenderKuerzel = flaggenMap[teamName];
     
@@ -964,9 +922,7 @@ body.fold67-hide-original > *:not(#fold67-wrapper) {
         
         flagElement.style.display = "none"; 
         }
-    }      
-
-           
+    }
       
     async function spieleListeLaden() {
         const { data: spiele, error } = await supabase
@@ -1093,10 +1049,6 @@ body.fold67-hide-original > *:not(#fold67-wrapper) {
         if (toreA == 6 && toreB == 7) {
             trigger67Effekt();
         }
-        if(toreA == 7 &&toreB == 1 || toreA == 1 && toreB == 7)
-        {
-            flagRain(80);
-        }
     }
 
 
@@ -1215,39 +1167,31 @@ body.fold67-hide-original > *:not(#fold67-wrapper) {
     let spiele = [];
     let users = [];
     let tipps = [];
-      
-    await informationLaden(); //diesen Aufruf hier löschen und unten nach dem Aufruf  checkAuth..() einfügen!
-    
-    async function informationLaden() //hier braucht man async, da auf supabase gewartet werden muss: 
-    {
-        const { data: spiele1, error:  errorspiele} = await supabase.from("spiele").select("*").order("id", {ascending: true});
-            if(errorspiele)
-            {
-            document.getElementById("ausgabe").innerText=errorspiele.message;
-            }
-    
-        const { data: users1, error: errorusers} = await supabase.from("users").select("*");
-            if(errorusers)
-            {
-                document.getElementById("ausgabe").innerText=errorusers.message;
-            }
-        const { data: tipps1, error: errortipps } = await supabase.from("tipps").select("*");
-            if (errortipps) 
-            {
-                document.getElementById("ausgabe").innerText = errortipps.message;
-            }
-    
-        spiele = spiele1;
-        users = users1;
-        tipps = tipps1;
+
+    const { data: spiele1, error: errorspiele } = await supabase.from("spiele").select("*").order("id", { ascending: true });
+    if (errorspiele) {
+        document.getElementById("ausgabe").innerText = errorspiele.message;
     }
 
+    const { data: users1, error: errorusers } = await supabase.from("users").select("*");
+    if (errorusers) {
+        document.getElementById("ausgabe").innerText = errorusers.message;
+    }
 
-    async function ranglisteEintragen() { //kein async
+    const { data: tipps1, error: errortipps } = await supabase.from("tipps").select("*");
+    if (errortipps) {
+        document.getElementById("ausgabe").innerText = errortipps.message;
+    }
+
+    spiele = spiele1;
+    users = users1;
+    tipps = tipps1;
+
+    async function ranglisteEintragen() {
         rangliste = [];
 
         for (let i = 0; i < users.length; i++) {
-            let gesamtPunkte = await gesPunkteBerechnen(users[i].user_ID); //kein await
+            let gesamtPunkte = await gesPunkteBerechnen(users[i].user_ID);
 
             rangliste.push({
                 user_ID: users[i].user_ID,
@@ -1279,30 +1223,35 @@ body.fold67-hide-original > *:not(#fold67-wrapper) {
 
 
     // DOC 2: getTippTextForUser fetches fresh from Supabase instead of using cached tipps
-    async function getTippTextForUser(userId, spielId) { //kein async
-        
-        if(spiele[spielId]["Spiel_fertig?"])
-        {
+    async function getTippTextForUser(userId, spielId) {
+        if (spiele[spielId]["Spiel_fertig?"]) {
+            const { data: tipps, error } = await supabase
+                .from("tipps")
+                .select("*")
+                .eq("spiel_ID", spielId)
+                .eq("tipper_ID", userId);
+
             const tippDesUsers = tipps.filter(tipp => tipp.spiel_ID === spielId).filter(tipp => tipp.tipper_ID === userId);
-    
-        if (!tippDesUsers || tippDesUsers.length === 0) {
-            return "- : -<sup>0</sup>";
+            if (error) {
+                document.getElementById("ausgabe").innerText = error.message;
+                return "- : -<sup>0</sup>";
+            }
+
+            if (!tippDesUsers || tippDesUsers.length === 0) {
+                return "- : -<sup>0</sup>";
+            }
+
+            const tipp = tippDesUsers[0];
+            const punkte = await punkteBerechnen(spielId, tipp.tore_team_a, tipp.tore_team_b);
+
+            return `${tipp.tore_team_a} : ${tipp.tore_team_b}<sup>${punkte}</sup>`;
+        } else {
+            return "- : -";
         }
-    
-        const tipp = tippDesUsers[0];
-        const punkte = await punkteBerechnen(spielId, tipp.tore_team_a, tipp.tore_team_b); //kein await
-    
-        return `${tipp.tore_team_a} : ${tipp.tore_team_b}<sup>${punkte}</sup>`;
-        }
-        else
-        {
-            return "- : -"
-        }
-        
     }
 
 
-    async function renderNormaleAnsicht() { //kein async
+    async function renderNormaleAnsicht() {
         const top5Body = document.getElementById("top5Body");
         const ichBody = document.getElementById("ichBody");
         const restBody = document.getElementById("restBody");
@@ -1326,11 +1275,11 @@ body.fold67-hide-original > *:not(#fold67-wrapper) {
 
         for (const eintrag of top5) {
             const istIch = eintrag.user_ID === currentUserId;
-            await renderZeile(top5Body, eintrag, aktuellesSpiel, istIch);//kein await
+            await renderZeile(top5Body, eintrag, aktuellesSpiel, istIch);
         }
 
         if (eigenerEintrag && !top5.some(e => e.user_ID === currentUserId)) {
-            await renderZeile(ichBody, eigenerEintrag, aktuellesSpiel, true); //kein await
+            await renderZeile(ichBody, eigenerEintrag, aktuellesSpiel, true);
         }
 
         const rest = rangliste.filter(e =>
@@ -1339,11 +1288,11 @@ body.fold67-hide-original > *:not(#fold67-wrapper) {
         );
 
         for (const eintrag of rest) {
-            await renderZeile(restBody, eintrag, aktuellesSpiel, false); //kein await
+            await renderZeile(restBody, eintrag, aktuellesSpiel, false);
         }
     }
 
-    async function ranglisteAktualisieren() { //async muss bleiben
+    async function ranglisteAktualisieren() {
         document.getElementById("refreshButton").disabled = true;
         document.getElementById("refreshButton").innerHTML = "⟳ Aktualisiere...";
 
@@ -1351,11 +1300,15 @@ body.fold67-hide-original > *:not(#fold67-wrapper) {
         document.getElementById("ichBody").innerHTML = "";
         document.getElementById("restBody").innerHTML = "";
 
-        await new Promise(resolve => setTimeout(resolve, 300)); //await muss bleiben
+        const { data: neueSpiele } = await supabase.from("spiele").select("*").order("id", { ascending: true });
+        const { data: neueUsers } = await supabase.from("users").select("*");
+        const { data: neueTipps } = await supabase.from("tipps").select("*");
 
-        await informationLaden(); //await muss bleiben
+        if (neueSpiele) spiele = neueSpiele;
+        if (neueUsers) users = neueUsers;
+        if (neueTipps) tipps = neueTipps;
 
-        await ranglisteEintragen(); //await kann weg
+        await ranglisteEintragen();
 
         const suchtext = document.getElementById("suche").value.trim();
 
@@ -1364,7 +1317,7 @@ body.fold67-hide-original > *:not(#fold67-wrapper) {
         } else {
             await spielerSuchen();
         }
-        
+        await new Promise(resolve => setTimeout(resolve, 1000));
         document.getElementById("refreshButton").innerHTML = "↻ Aktualisieren";
         document.getElementById("refreshButton").disabled = false;
     }
@@ -1553,38 +1506,13 @@ async function renderZeile(tbody, eintrag, spielId, istEigeneZeile = false) {
         }, 1550);
     }
 
-const flags = [
-  'https://flagcdn.com/w80/br.png',
-  'https://flagcdn.com/w80/de.png',
-  'https://flagcdn.com/w80/cw.png'
-];
 
-function flagRain(count = 40) {
-  for (let i = 0; i < count; i++) {
-    const flag = document.createElement('img');
-    flag.src = flags[Math.floor(Math.random() * flags.length)];
-    flag.classList.add('flag-emoji');
-    flag.style.left = Math.random() * 100 + 'vw';
-
-    const duration = 3 + Math.random() * 3;
-    const delay = Math.random() * 2;
-    flag.style.animationDuration = duration + 's';
-    flag.style.animationDelay = delay + 's';
-
-    const size = 30 + Math.random() * 30;
-    flag.style.width = size + 'px';
-
-    document.body.appendChild(flag);
-
-    setTimeout(() => flag.remove(), (duration + delay) * 1000 + 200);
-  }
-}
     // Initialisierung
-    await checkAuthAndInit(); //await nötig!
+    await checkAuthAndInit();
     await aktuellesSpiel_Laden(); // DOC 2: added before spieleListeLaden
-    await spieleListeLaden(); //kein await nötig
-    await ranglisteEintragen(); //kein await nötig
-    await renderNormaleAnsicht(); //kein await nötig
+    await spieleListeLaden();
+    await ranglisteEintragen();
+    await renderNormaleAnsicht();
 
     // Event-Listener Gruppe 1 
     document.getElementById("tippSpeichern").addEventListener("click", speichern);
@@ -1595,10 +1523,10 @@ function flagRain(count = 40) {
     // Event-Listener Gruppe 3
     document.getElementById("suche").addEventListener("input", spielerSuchen);
     document.getElementById("refreshButton").addEventListener("click", ranglisteAktualisieren);
-    document.getElementById("weiter").addEventListener("click", async function() { //kein async und kein await nötig
+    document.getElementById("weiter").addEventListener("click", async function() {
         await spielRechts(true);
     });
-    document.getElementById("zurueck").addEventListener("click", async function() { //hier analog
+    document.getElementById("zurueck").addEventListener("click", async function() {
         await spielRechts(false);
     });
     document.getElementById("punkte_info").addEventListener("click", (e) => {
