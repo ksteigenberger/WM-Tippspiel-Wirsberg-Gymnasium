@@ -1168,13 +1168,26 @@ async function meineTippsLaden() {
 
         gesamtpunkte += punkte;
 
-        tabelle.innerHTML += `
-            <tr>
-                <td>${spiel.team_a} - ${spiel.team_b}</td>
-                <td>${tipp.tore_team_a} : ${tipp.tore_team_b}</td>
-                <td>${punkte}</td>
-            </tr>
-        `;
+        if(spiel["Spiel_fertig?"])
+        {
+            tabelle.innerHTML += `
+                <tr>
+                    <td>${spiel.team_a} - ${spiel.team_b}</td>
+                    <td>${tipp.tore_team_a} : ${tipp.tore_team_b}</td>
+                    <td>${punkte}</td>
+                </tr>
+            `;
+        }
+        else
+        {
+            tabelle.innerHTML += `
+                <tr>
+                    <td>${spiel.team_a} - ${spiel.team_b}</td>
+                    <td>${tipp.tore_team_a} : ${tipp.tore_team_b}</td>
+                    <td>${"-"}</td>
+                </tr>
+            `;
+        }
     });
 
     tabelle.innerHTML += `
@@ -1185,6 +1198,7 @@ async function meineTippsLaden() {
         </tr>
     `;
 }
+
 
 // ENDE Meine Tipps anzeigen
 
