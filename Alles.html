@@ -34,21 +34,31 @@
       flex-wrap: wrap;
     }
    
-    
+ 
     #profil_button {
-    padding: 8px 14px;
-    border: none;
-    border-radius: 6px;
-    background-color: #0066cc;
-    color: white;
-    cursor: pointer;
-}
+        position: absolute;
+        top: 16px;
+        left: 16px;
+        z-index: 9999;
+        font-size: 2em;
+        padding: 8px 14px;
+        border: none;
+        border-radius: 6px;
+        background-color: #0066cc;
+        color: white;
+        cursor: pointer;
+    }
 
 #profil_button:hover {
     background-color: #0052a3;
 }
 
 #logout_button {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    z-index: 9999;
+    font-size: 2em;
     padding: 8px 14px;
     border: none;
     border-radius: 6px;
@@ -60,7 +70,6 @@
 #logout_button:hover {
     background-color: #b30000;
 }
-
     #logo-container {
       position: relative;
       display: inline-block;
