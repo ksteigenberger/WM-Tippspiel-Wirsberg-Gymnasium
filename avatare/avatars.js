@@ -1,13 +1,13 @@
 window.avatarFiles = [
-  "Bellingham.png",
   "DennisUndav.png",
-  "LamineYamal.png",
+  "AlexandraPopp.png",
   "ManuelNeuer.png",
-  "Mbappe.png",
   "Messi.png",
   "Ronaldo.png",
-  "AlexandraPopp.png",
   "AlexiaPutellas.png",
+  "LamineYamal.png",
+  "Bellingham.png",
+  "Mbappe.png",
   "Marta.png",
   "Maradona.png"
 ];
