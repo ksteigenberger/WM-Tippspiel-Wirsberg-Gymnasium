@@ -1204,7 +1204,7 @@ async function meineTippsLaden() {
 
     async function logout() {
         await supabase.auth.signOut();
-        window.location.href = "login.html";
+        window.location.replace("login.html");
     }
 
     renderAvatarOptions();
