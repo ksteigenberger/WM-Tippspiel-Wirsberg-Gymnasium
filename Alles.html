@@ -759,11 +759,11 @@ body.fold67-hide-original > *:not(#fold67-wrapper) {
 
     document.getElementById("logout_button").addEventListener("click", async () => {
         await supabase.auth.signOut();
-        window.location.href = "index.html";
+        window.location.replace("index.html");
     });
 
     document.getElementById("profil_button").addEventListener("click", () => {
-        window.location.href = "profil.html";
+        window.location.replace("profil.html");
     });
 
     
