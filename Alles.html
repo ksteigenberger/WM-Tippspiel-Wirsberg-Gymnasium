@@ -1155,7 +1155,7 @@ body.fold67-hide-original > *:not(#fold67-wrapper) {
         counterSpan.innerText = offeneTipps;
     }
 
-    function spielWechseln(richtung) {
+    async function spielWechseln(richtung) {
         const select = document.getElementById("spiel_select");
         const currentIndex = select.selectedIndex;
         const totalOptions = select.options.length;
@@ -1170,7 +1170,7 @@ body.fold67-hide-original > *:not(#fold67-wrapper) {
         }
 
         select.selectedIndex = newIndex;
-        spielLaden();
+        await spielLaden();
     }
 
 
@@ -1584,7 +1584,7 @@ function flagRain(count = 40) {
     await checkAuthAndInit(); //hier await nötig
     await informationLaden(); 
      aktuellesSpiel_Laden(); // DOC 2: added before spieleListeLaden
-     spieleListeLaden();
+     await spieleListeLaden();
      ranglisteEintragen();
      renderNormaleAnsicht();
 
