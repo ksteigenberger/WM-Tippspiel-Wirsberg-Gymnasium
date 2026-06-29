@@ -327,7 +327,7 @@
 }
 
 .punkte-info-badge::after {
-     content: "Tippmodus:\AEs wird das exakte Ergebnis VOR Elfmeterschießen getippt.\A\ATipp richtig: 4 Punkte\A Differenz richtig: 3 Punkte\A Unentschieden/Sieger richtig: 2 Punkte\A Ansonsten: 0 Punkte";
+     content: "Tippmodus: Es wird das exakte Ergebnis VOR Elfmeterschießen getippt.\A\ATipp richtig: 4 Punkte\A Differenz richtig: 3 Punkte\A Unentschieden/Sieger richtig: 2 Punkte\A Ansonsten: 0 Punkte";
 
     
     white-space: pre-line;
@@ -756,6 +756,14 @@ body.fold67-hide-original > *:not(#fold67-wrapper) {
     const supabaseKey = "sb_publishable_7ih4VSPUkXVfHkBa7lrDCA_mO_d0pW1";
 
     const supabase = createClient(supabaseUrl, supabaseKey);
+      //falls die Seite per Browser-Zurück aus dem Cache erscheint: 
+    window.addEventListener("pageshow", async () =>{
+        const {data: {session}} = await supabase.auth.getSession();
+        if(!session)
+        {
+            window.location.replace("index.html");
+        }
+    });
 
     document.getElementById("logout_button").addEventListener("click", async () => {
         await supabase.auth.signOut();
