@@ -1119,7 +1119,7 @@ async function meineTippsLaden() {
     const { data: { session }, error: authError } = await supabase.auth.getSession();
 
     if (authError || !session) {
-        window.location.href = "login.html";
+        window.location.replace("login.html");
         return;
     }
 
