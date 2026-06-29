@@ -639,9 +639,17 @@ body.fold67-hide-original > *:not(#fold67-wrapper) {
        <div style="margin: 20px 0; display: flex; justify-content: center; align-items: flex-start; gap: 15px; flex-wrap: wrap;">
 
 
-<div style="display: flex; flex-direction: column; align-items: center; min-width: 100px;">
-        <img id="img_flag_a" src="" alt="" style="width: 45px; height: 30px; object-fit: cover; margin-bottom: 5px; border-radius: 3px; box-shadow: 0 1px 3px rgba(0,0,0,0.3); display: none;">
-        <span id="team_a" style="font-weight:bold; color: #333; text-shadow: none;">Team A</span>
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+        
+        <div style="font-size:20px; color: #333; position: relative; z-index: 1;">
+            Anstoß: <span id="spiel_datum">--.--.</span> | <span id="spiel_zeit">--:--</span> Uhr
+        </div>
+        
+        <div class="info-badge" id="info_badge_tips" onclick="this.classList.toggle('active'); event.stopPropagation();" style="z-index: 11;">
+            <span class="info-icon-blue">i</span>
+            <span id="offene_tipps_count">--</span>
+        </div>
+        
     </div>
     
     <div style="display: flex; align-items: center; gap: 10px; margin-top: 25px;">
@@ -791,7 +799,7 @@ body.fold67-hide-original > *:not(#fold67-wrapper) {
 
         function type() {
             if (i < text.length) {
-                element.innerText += text.charAt(i);
+                element.textContent += text.charAt(i);
                 i++;
                 setTimeout(type, 65);
             }
@@ -1355,6 +1363,8 @@ body.fold67-hide-original > *:not(#fold67-wrapper) {
         document.getElementById("restBody").innerHTML = "";
 
         await new Promise(resolve => setTimeout(resolve, 300));
+
+        await spielLaden();
 
         await informationLaden();
 
