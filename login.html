@@ -156,7 +156,13 @@
       const supabaseKey = "sb_publishable_7ih4VSPUkXVfHkBa7lrDCA_mO_d0pW1";
 
       const supabase = createClient(supabaseUrl, supabaseKey);
-
+      
+    //falls Nutzer schon eingeloggt ist!
+      const { data: {session}} = await supabase.auth.getSession();
+      if(session)
+      {
+        window.location.replace("index.html");
+      }
       
       function validateEmail(email) {
         // Regulärer Ausdruck für die grundlegende E-Mail-Syntax
