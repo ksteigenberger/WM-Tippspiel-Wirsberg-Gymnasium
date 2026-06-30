@@ -1364,32 +1364,40 @@ body.fold67-hide-original > *:not(#fold67-wrapper) {
     }
 
     async function ranglisteAktualisieren() {
-        document.getElementById("refreshButton").disabled = true;
-        document.getElementById("refreshButton").innerHTML = "⟳ Aktualisiere...";
 
-        document.getElementById("top5Body").innerHTML = "";
-        document.getElementById("ichBody").innerHTML = "";
-        document.getElementById("restBody").innerHTML = "";
-
-        await new Promise(resolve => setTimeout(resolve, 300));
-
-        await spielLaden();
-
-        await informationLaden();
-
-         ranglisteEintragen();
-
-        const suchtext = document.getElementById("suche").value.trim();
-
-        if (suchtext === "") {
-             renderNormaleAnsicht();
-        } else {
-             spielerSuchen();
-        }
         
-        document.getElementById("refreshButton").innerHTML = "↻ Aktualisieren";
-        document.getElementById("refreshButton").disabled = false;
+    document.getElementById("refreshButton").disabled = true;
+    document.getElementById("refreshButton").innerHTML = "⟳ Aktualisiere...";
+
+    document.getElementById("top5Body").innerHTML = "";
+    document.getElementById("ichBody").innerHTML = "";
+    document.getElementById("restBody").innerHTML = "";
+
+    await new Promise(resolve => setTimeout(resolve, 300));
+
+    await informationLaden();
+
+    await spieleListeLaden();
+
+    ranglisteEintragen();
+
+    const suchtext = document.getElementById("suche").value.trim();
+
+    if (suchtext === "") {
+        renderNormaleAnsicht();
+    } else {
+        spielerSuchen();
     }
+
+    document.getElementById("refreshButton").innerHTML = "↻ Aktualisieren";
+    document.getElementById("refreshButton").disabled = false;
+}
+
+
+
+
+
+    
 
  function renderZeile(tbody, eintrag, spielId, istEigeneZeile = false) {
     const row = tbody.insertRow();
