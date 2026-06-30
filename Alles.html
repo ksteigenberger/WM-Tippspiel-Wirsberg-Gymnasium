@@ -867,11 +867,12 @@ body.fold67-hide-original > *:not(#fold67-wrapper) {
             document.getElementById("spiel_zeit").innerText = "--:--";
         }
 
-        if (name) {
-            const { data: userDaten, error: userError } = await supabase
-                .from("users") 
-                .select("*")    
-                .ilike("username", name)
+        if (currentUserId) {
+            const { data: tipp, error: tippError } = await supabase
+                .from("tipps")
+                .select("tore_team_a, tore_team_b")
+                .eq("tipper_ID", currentUserId) 
+                .eq("spiel_ID", id)
                 .maybeSingle();
 
             if (meineLadeId !== spielLadeId) return;
@@ -1037,6 +1038,12 @@ body.fold67-hide-original > *:not(#fold67-wrapper) {
     }
 
     async function speichern() {
+
+        if (!currentUserId) {
+            alert("Fehler: Du bist nicht eingeloggt oder deine Sitzung ist abgelaufen.");
+            return;
+        }
+        
         const name = document.getElementById("name").value;
         const spielID = document.getElementById("spiel_select").value;
         const teamA = document.getElementById("team_a").innerText;
@@ -1077,7 +1084,7 @@ body.fold67-hide-original > *:not(#fold67-wrapper) {
         const { error } = await supabase
             .from("tipps") 
             .upsert([{
-                tipper_ID: userUUID, 
+                tipper_ID: currentUserId, 
                 spiel_ID: spielID,
                 tore_team_a: toreA,
                 tore_team_b: toreB
@@ -1111,7 +1118,7 @@ body.fold67-hide-original > *:not(#fold67-wrapper) {
         const name = document.getElementById("name").value.trim();
         const counterSpan = document.getElementById("offene_tipps_count");
         
-        if (!name) {
+        if (!currentUserId) {
             counterSpan.innerText = "--";
             return;
         }
@@ -1139,7 +1146,7 @@ body.fold67-hide-original > *:not(#fold67-wrapper) {
         const { data: tipps, error: tippsError } = await supabase
             .from("tipps")
             .select("spiel_ID")
-            .eq("tipper_ID", userUUID);
+            .eq("tipper_ID", currentUserId);
         if (tippsError || !tipps) return;
 
         const getippteSpielIDs = new Set(tipps.map(t => String(t.spiel_ID)));
