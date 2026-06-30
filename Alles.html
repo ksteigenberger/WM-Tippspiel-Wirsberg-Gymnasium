@@ -1077,7 +1077,7 @@ body.fold67-hide-original > *:not(#fold67-wrapper) {
         const { error } = await supabase
             .from("tipps") 
             .upsert([{
-                tipper_ID: userUUID, 
+                tipper_ID: currentUserId, 
                 spiel_ID: spielID,
                 tore_team_a: toreA,
                 tore_team_b: toreB
