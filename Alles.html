@@ -1220,7 +1220,7 @@ body.fold67-hide-original > *:not(#fold67-wrapper) {
             document.getElementById("ausgabe").innerText=errorspiele.message;
             }
     
-        const { data: users1, error: errorusers} = await supabase.from("users").select("*");
+        const { data: users1, error: errorusers} = await supabase.from("users_public").select("user_ID,username,avatar");
             if(errorusers)
             {
                 document.getElementById("ausgabe").innerText=errorusers.message;
