@@ -808,7 +808,7 @@ body.fold67-hide-original > *:not(#fold67-wrapper) {
         let meineLadeId = ++spielLadeId;
 
         const id = document.getElementById("spiel_select").value;
-        const name = document.getElementById("name").value.trim();
+        //const name = document.getElementById("name").value.trim();
 
         if (countdownInterval) {
             clearInterval(countdownInterval);
@@ -866,32 +866,34 @@ body.fold67-hide-original > *:not(#fold67-wrapper) {
             document.getElementById("spiel_datum").innerText = "--.--.";
             document.getElementById("spiel_zeit").innerText = "--:--";
         }
+        //ok
 
-        if (name) {
-            const { data: userDaten, error: userError } = await supabase
-                .from("users") 
-                .select("*")    
-                .ilike("username", name)
-                .maybeSingle();
+        //if (name) {
+            //const { data: userDaten, error: userError } = await supabase
+                //.from("users") 
+                //.select("*")    
+                //.ilike("username", name)
+                //.maybeSingle();
 
-            if (meineLadeId !== spielLadeId) return;
-            if (!userError && userDaten) {
-                const userUUID = userDaten.user_ID || userDaten.user_id;
+           // if (meineLadeId !== spielLadeId) return;
 
+        if(currentUserId){
+          
                 const { data: tipp, error: tippError } = await supabase
                     .from("tipps")
                     .select("tore_team_a, tore_team_b")
-                    .eq("tipper_ID", userUUID) 
+                    .eq("tipper_ID", currentUserId) 
                     .eq("spiel_ID", id)
                     .maybeSingle(); 
 
                 if (meineLadeId !== spielLadeId) return;
+                
                 if (!tippError && tipp) {
                     document.getElementById("tore_a").placeholder = tipp.tore_team_a;
                     document.getElementById("tore_b").placeholder = tipp.tore_team_b;
                 }
             }
-        }
+       // }
 
         const istSpielFertig = spiel["Spiel_fertig?"];
         if (istSpielFertig) {
@@ -1037,47 +1039,36 @@ body.fold67-hide-original > *:not(#fold67-wrapper) {
     }
 
     async function speichern() {
-        const name = document.getElementById("name").value;
+        if(!currentUserId){
+            alert("Fehler: Du bist nicht eingeloggt oder deine Sitzung ist abgelaufen.");
+            return;
+        }
+        //const name = document.getElementById("name").value;
         const spielID = document.getElementById("spiel_select").value;
         const teamA = document.getElementById("team_a").innerText;
         const teamB = document.getElementById("team_b").innerText;
         const rohWertA = document.getElementById("tore_a").value;
         const rohWertB = document.getElementById("tore_b").value;
 
-        if (!name || !spielID || teamA === "") {
+        if (!spielID || teamA === "") {
             alert("Fehler: Spiel konnte nicht geladen werden.");
+            return;
+        }
+        if (rohWertA === "" || rohWertB === "") {
+            alert("Bitte gib für beide Teams Tore ein, bevor du speicherst!");
             return;
         }
 
         const toreA = Number(rohWertA);
         const toreB = Number(rohWertB);
 
-        if (rohWertA === "" || rohWertB === "") {
-            alert("Bitte gib für beide Teams Tore ein, bevor du speicherst!");
-            return;
-        }
+       
 
-        const { data: userDaten, error: userError } = await supabase
-            .from("users") 
-            .select("*")
-            .ilike("username", name)
-            .maybeSingle();
-
-        if (userError || !userDaten) {
-            alert("Fehler: Profil wurde nicht in der Datenbank gefunden!");
-            return;
-        }
-
-        const userUUID = userDaten.user_ID || userDaten.user_id;
-        if (!userUUID) {
-            alert("Fehler: Die ID des Nutzers konnte nicht ausgelesen werden.");
-            return;
-        }
-
+        
         const { error } = await supabase
             .from("tipps") 
             .upsert([{
-                tipper_ID: userUUID, 
+                tipper_ID: currentUserId, 
                 spiel_ID: spielID,
                 tore_team_a: toreA,
                 tore_team_b: toreB
@@ -1108,39 +1099,35 @@ body.fold67-hide-original > *:not(#fold67-wrapper) {
 
 
     async function offeneTippsBerechnen() {
-        const name = document.getElementById("name").value.trim();
+        //const name = document.getElementById("name").value.trim();
         const counterSpan = document.getElementById("offene_tipps_count");
         
-        if (!name) {
+        if (!currentUserId) {
             counterSpan.innerText = "--";
             return;
         }
 
-        const { data: userDaten, error: userError } = await supabase
-            .from("users") 
-            .select("*")
-            .ilike("username", name)
-            .maybeSingle();
-
-        if (userError || !userDaten) {
-            counterSpan.innerText = "--";
-            return;
-        }
-
-        const userUUID = userDaten.user_ID || userDaten.user_id;
-        
+               
         const { data: spiele, error: spieleError } = await supabase
             .from("spiele")
             .select('id, Startzeit, "Spiel_fertig?"')
             .eq("spiel_freigeschaltet", true);
             
-        if (spieleError || !spiele) return;
+        if (spieleError || !spiele) {
+            counterSpan.innerText = "--";
+            return;
+        }
 
         const { data: tipps, error: tippsError } = await supabase
             .from("tipps")
             .select("spiel_ID")
-            .eq("tipper_ID", userUUID);
-        if (tippsError || !tipps) return;
+            .eq("tipper_ID", currentUserId);
+        
+        if (tippsError || !tipps) 
+        {
+            counterSpan.innerText="--";
+            return;
+        }
 
         const getippteSpielIDs = new Set(tipps.map(t => String(t.spiel_ID)));
         let offeneTipps = 0;
