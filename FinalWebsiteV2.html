@@ -6,23 +6,24 @@
 
   <style>
    body {
-  margin: 0;
-  height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: flex-start; /* <- nach oben statt Mitte */
-  padding-top: 50px;       /* Abstand nach oben */
-  background-image: url("rasen chatgpt.png");
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-  overflow: hidden;
+    margin: 0;
+    min-height: 100vh;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;   /* WICHTIG: vertikal zentrieren */
+
+    padding-top: 120px;            /* entfernen, sonst verschiebt es wieder */
+
+    background-image: url("rasen chatgpt.png");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+
+    overflow-x: hidden;
 }
 
-    #logo-container {
-      position: relative;
-      display: inline-block;
-    }
 
     #logo {
       width: 510px;
@@ -91,6 +92,40 @@
 
     filter:blur(1px);
 }
+
+#logo-container {
+    position: absolute;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+#rangliste_tools {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.table-shell {
+    width: 90%;
+    max-width: 1100px;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#spielT {
+    display: inline-block;
+    text-align: center;
+}
+
+th:last-child {
+    text-align: center;
+}
+
+
 
 @keyframes drehen{
     from{
