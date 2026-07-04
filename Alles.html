@@ -1238,30 +1238,78 @@ body.fold67-hide-original > *:not(#fold67-wrapper) {
       
     
     
-    async function informationLaden() //hier async notwendig!
-    {
-        const { data: spiele1, error:  errorspiele} = await supabase.from("spiele").select("*").order("id", {ascending: true});
-            if(errorspiele)
-            {
-            document.getElementById("ausgabe").innerText=errorspiele.message;
-            }
+    //async function informationLaden() //hier async notwendig!
+    //{
+      //  const { data: spiele1, error:  errorspiele} = await supabase.from("spiele").select("*").order("id", {ascending: true});
+        //    if(errorspiele)
+          //  {
+           // document.getElementById("ausgabe").innerText=errorspiele.message;
+            //}
     
-        const { data: users1, error: errorusers} = await supabase.from("users_public").select("user_ID,username,avatar");
-            if(errorusers)
-            {
-                document.getElementById("ausgabe").innerText=errorusers.message;
-            }
-        const { data: tipps1, error: errortipps } = await supabase.from("tipps").select("*");
-            if (errortipps) 
-            {
-                document.getElementById("ausgabe").innerText = errortipps.message;
-            }
+   //     const { data: users1, error: errorusers} = await supabase.from("users_public").select("user_ID,username,avatar");
+     //       if(errorusers)
+       //     {
+         //       document.getElementById("ausgabe").innerText=errorusers.message;
+           // }
+        //const { data: tipps1, error: errortipps } = await supabase.from("tipps").select("*");
+         //   if (errortipps) 
+           // {
+             //   document.getElementById("ausgabe").innerText = errortipps.message;
+            //}
     
-        spiele = spiele1;
-        users = users1;
-        tipps = tipps1;
+        //spiele = spiele1;
+        //users = users1;
+       // tipps = tipps1;
+    //}
+
+
+      async function ladeAlleDatensaetze(tabelle, selectText = "*", orderSpalte = null) {
+    let alle = [];
+    let start = 0;
+    const blockgroesse = 1000;
+
+    while (true) {
+        let query = supabase
+            .from(tabelle)
+            .select(selectText)
+            .range(start, start + blockgroesse - 1);
+
+        if (orderSpalte) {
+            query = query.order(orderSpalte, { ascending: true });
+        }
+
+        const { data, error } = await query;
+
+        if (error) {
+            throw error;
+        }
+
+        alle = alle.concat(data);
+
+        if (data.length < blockgroesse) {
+            break;
+        }
+
+        start += blockgroesse;
     }
 
+    return alle;
+}
+
+async function informationLaden() {
+    try {
+        spiele = await ladeAlleDatensaetze("spiele", "*", "id");
+        users = await ladeAlleDatensaetze("users_public", "user_ID,username,avatar");
+        tipps = await ladeAlleDatensaetze("tipps", "*");
+
+        console.log("Geladene Spiele:", spiele.length);
+        console.log("Geladene User:", users.length);
+        console.log("Geladene Tipps:", tipps.length);
+    } catch (error) {
+        document.getElementById("ausgabe").innerText = error.message;
+        console.error(error);
+    }
+}
 
      function ranglisteEintragen() { //hier nicht notwendig
         rangliste = [];
