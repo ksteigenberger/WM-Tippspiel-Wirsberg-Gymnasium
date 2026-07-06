@@ -532,6 +532,36 @@ ENDE Benutzername-Hinweis */
 
 /* ENDE Datenschutzhinweis sauber */
 
+/* ANFANG Zusatztipps nach Deadline gesperrt */
+
+.zusatztipps.geschlossen {
+  opacity: 0.58;
+  position: relative;
+}
+
+.zusatztipps.geschlossen select,
+.zusatztipps.geschlossen input {
+  cursor: not-allowed;
+  background: #f1f5f9;
+  color: #64748b;
+}
+
+.deadline-hinweis {
+  display: none;
+  margin: 12px 0 0;
+  padding: 12px 14px;
+  border-radius: 10px;
+  background: #fff7ed;
+  border: 1px solid #fed7aa;
+  color: #9a3412;
+  font-size: 15px;
+  font-weight: 700;
+  line-height: 1.35;
+}
+
+/* ENDE Zusatztipps nach Deadline gesperrt */
+
+
   </style>
 
 </head>
@@ -593,7 +623,9 @@ ENDE Benutzername-Hinweis */
         </div>
         <div class="zusatztipps">
   <h2>Zusatztipps - 3 Extrapunkte pro richtiger Antwort</h2>
-
+  <p id="zusatztipps_deadline_hinweis" class="deadline-hinweis">
+  Die Frist für die Zusatztipps ist abgelaufen. Diese Tipps konnten nur bis zum 4. Juli 2026 um 14:20 Uhr abgegeben werden. Man kann das Profil dennoch vervollständigen und für alle kommenden Spiele tippen. Da es auf richtige Tipps bis zu 4 Punkten gibt, ist mit viel Fußballkenntnis immernoch ein hohes Ranking zu erreichen!
+  </p>
   <label for="input_weltmeister">Wer wird Weltmeister?</label>
   <select id="input_weltmeister">
     <option value="">Bitte auswählen</option>
@@ -688,6 +720,37 @@ ENDE Benutzername-Hinweis */
     function istVorDeadline() {
         return new Date() < DEADLINE;
     }
+
+    function aktualisiereZusatztippsStatus() {
+    const zusatztippsBox = document.querySelector("#profile_completion .zusatztipps");
+    const hinweis = document.getElementById("zusatztipps_deadline_hinweis");
+
+    const felder = [
+        document.getElementById("input_weltmeister"),
+        document.getElementById("input_vizeweltmeister"),
+        document.getElementById("input_bester_spieler")
+    ];
+
+    const abgabeOffen = istVorDeadline();
+
+    if (zusatztippsBox) {
+        zusatztippsBox.classList.toggle("geschlossen", !abgabeOffen);
+    }
+
+    if (hinweis) {
+        hinweis.style.display = abgabeOffen ? "none" : "block";
+    }
+
+    felder.forEach((feld) => {
+        if (!feld) return;
+
+        feld.disabled = !abgabeOffen;
+
+        if (!abgabeOffen && feld.tagName === "INPUT") {
+            feld.placeholder = "Abgabefrist verpasst";
+        }
+    });
+  }
 
     // ANFANG WM-Teams
 // status: "imTurnier" = auswählbar
@@ -889,16 +952,24 @@ async function loadProfile() {
     return;
     }
 
-    const isComplete = Boolean(
-        profile.username &&
-        profile.Vorname &&
-        profile.Name &&
-        profile.avatar &&
-        tipps &&
-        tipps.weltmeister &&
-        tipps.viezeweltmeister &&
-        tipps.besterspieler
-    );
+const profilBasisVollstaendig = Boolean(
+    profile.username &&
+    profile.Vorname &&
+    profile.Name &&
+    profile.avatar
+);
+
+const zusatztippsVollstaendig = Boolean(
+    tipps &&
+    tipps.weltmeister &&
+    tipps.viezeweltmeister &&
+    tipps.besterspieler
+);
+
+const isComplete = istVorDeadline()
+    ? Boolean(profilBasisVollstaendig && zusatztippsVollstaendig)
+    : profilBasisVollstaendig;
+
 
     if (profileStatus) {
         profileStatus.innerText = isComplete ? "Profil vollständig" : "Profil unvollständig";
@@ -920,6 +991,7 @@ async function loadProfile() {
     document.getElementById("input_weltmeister").value = tipps?.weltmeister || "";
     document.getElementById("input_vizeweltmeister").value = tipps?.viezeweltmeister || "";
     document.getElementById("input_bester_spieler").value = tipps?.besterspieler || "";
+    aktualisiereZusatztippsStatus();
 
     document.getElementById("profile_completion").style.display = isComplete ? "none" : "block";
     document.querySelector(".profil").style.display = isComplete ? "block" : "none"; //neu: Profil anzeigen, wenn vollständig
@@ -959,41 +1031,44 @@ async function saveProfile() {
 
     const status = document.getElementById("status");
     status.innerText = "";
-    if(username.length > 15)
-    {
-        status.innerText = "Der Benutzername darf nicht länger als 15 Zeichen lang sein";
-        return;
-    }
-    //Nur wenn Datenschutzerklärung zugestimmt würde geht profilvervollständigen anfang
-    const datenschutzOk = document.getElementById("datenschutz_ok").checked;
-    if (!datenschutzOk) 
-    {
-    status.innerText = "Bitte stimme der Datenschutzerklärung zu.";
-    return;
-    }
-    //Nur wenn Datenschutzerklärung zugestimmt würde geht profilvervollständigen ende
-    if (
-        !vorname ||
-        !name ||
-        !username ||
-        !selectedAvatar ||
-        !weltmeisterTipp ||
-        !vizeweltmeisterTipp ||
-        !besterSpielerTipp
-    ) {
-        status.innerText = "Bitte fülle dein Profil vollständig aus und gib alle Zusatztipps ab.";
+
+    if (username.length > 15) {
+        status.innerText = "Der Benutzername darf nicht länger als 15 Zeichen sein.";
         return;
     }
 
-    if (weltmeisterTipp === vizeweltmeisterTipp) {
-        status.innerText = "Weltmeister und Vizeweltmeister dürfen nicht gleich sein.";
+    const datenschutzOk = document.getElementById("datenschutz_ok").checked;
+
+    if (!datenschutzOk) {
+        status.innerText = "Bitte stimme der Datenschutzerklärung zu.";
         return;
     }
-    if (istTeamAusgeschieden(weltmeisterTipp) || istTeamAusgeschieden(vizeweltmeisterTipp)) {
-    status.innerText = "Ausgeschiedene Teams können nicht mehr als Weltmeister oder Vizeweltmeister getippt werden.";
-    return;
+
+    if (!vorname || !name || !username || !selectedAvatar) {
+        status.innerText = "Bitte fülle Vorname, Nachname, Benutzername aus und wähle einen Avatar.";
+        return;
     }
-    // 1. Profil in users speichern
+
+    const zusatztippsNochOffen = istVorDeadline();
+
+    if (zusatztippsNochOffen) {
+        if (!weltmeisterTipp || !vizeweltmeisterTipp || !besterSpielerTipp) {
+            status.innerText = "Bitte fülle dein Profil vollständig aus und gib alle Zusatztipps ab.";
+            return;
+        }
+
+        if (weltmeisterTipp === vizeweltmeisterTipp) {
+            status.innerText = "Weltmeister und Vizeweltmeister dürfen nicht gleich sein.";
+            return;
+        }
+
+        if (istTeamAusgeschieden(weltmeisterTipp) || istTeamAusgeschieden(vizeweltmeisterTipp)) {
+            status.innerText = "Ausgeschiedene Teams können nicht mehr als Weltmeister oder Vizeweltmeister getippt werden.";
+            return;
+        }
+    }
+
+    // 1. Profil immer speichern
     const { error: profileError } = await supabase.from("users").upsert([
         {
             user_ID: user.id,
@@ -1009,19 +1084,21 @@ async function saveProfile() {
         return;
     }
 
-    // 2. Zusatztipps in zusatztipps speichern
-    const { error: tippsError } = await supabase.from("zusatztipps").upsert([
-        {
-            user_ID: user.id,
-            weltmeister: weltmeisterTipp,
-            viezeweltmeister: vizeweltmeisterTipp,
-            besterspieler: besterSpielerTipp
-        }
-    ], { onConflict: "user_ID" });
+    // 2. Zusatztipps nur speichern, wenn die Frist noch offen ist
+    if (zusatztippsNochOffen) {
+        const { error: tippsError } = await supabase.from("zusatztipps").upsert([
+            {
+                user_ID: user.id,
+                weltmeister: weltmeisterTipp,
+                viezeweltmeister: vizeweltmeisterTipp,
+                besterspieler: besterSpielerTipp
+            }
+        ], { onConflict: "user_ID" });
 
-    if (tippsError) {
-        status.innerText = tippsError.message;
-        return;
+        if (tippsError) {
+            status.innerText = tippsError.message;
+            return;
+        }
     }
 
     window.location.replace("index.html");
@@ -1209,6 +1286,7 @@ async function meineTippsLaden() {
 
     renderAvatarOptions();
     renderTeamSelects();
+    aktualisiereZusatztippsStatus();
 
     document.getElementById("logout").addEventListener("click", logout);
     document.getElementById("save-profile").addEventListener("click", saveProfile);
