@@ -2,154 +2,2466 @@
 <html lang="de">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Final</title>
 
   <style>
-   body {
-  margin: 0;
-  height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: flex-start; /* <- nach oben statt Mitte */
-  padding-top: 50px;       /* Abstand nach oben */
-  background-image: url("rasen chatgpt.png");
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-  overflow: hidden;
-}
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+
+      display: flex;
+      justify-content: flex-start;
+      align-items: center;
+      flex-direction: column;
+
+      padding: 50px 12px 40px;
+
+      font-family: Arial, sans-serif;
+      text-align: center;
+
+      background-image: url("rasen chatgpt.png");
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      background-attachment: fixed;
+
+      overflow-x: hidden;
+      overflow-y: auto;
+    }
+
+    #finalseite {
+      width: min(980px, 100%);
+      margin: 0 auto;
+    }
+
+    /* =====================================================
+       URSPRÜNGLICHES LOGO, SONNE UND BALL
+       ===================================================== */
 
     #logo-container {
       position: relative;
       display: inline-block;
+      margin-bottom: 18px;
     }
 
     #logo {
+      position: relative;
+      z-index: 2;
+
       width: 510px;
+      max-width: 92vw;
       height: auto;
+
+      display: block;
     }
 
     #ball-wrapper {
-  position: absolute;
-  left: 13.3%;
-  top: 39%;
-  transform: translate(-50%, -50%);
-  animation: flug 1.5s ease-out forwards;
-  z-index: 10;
-}
+      position: absolute;
+
+      left: 13.3%;
+      top: 39%;
+
+      transform: translate(-50%, -50%);
+
+      animation: flug 1.5s ease-out forwards;
+
+      z-index: 10;
+    }
 
     #ball {
       width: 24px;
       height: 24px;
+
+      display: block;
+
       animation: spin 15s linear infinite;
     }
 
+    #sonne {
+      position: absolute;
 
-#sonne{
-    position:absolute;
+      right: 1px;
+      top: 6px;
 
-    /* Position hinter dem Pokalkopf */
-    right: 1px;
-    top:6px;
+      width: 65px;
+      height: 45px;
 
-    width:65px;
-    height:45px;
+      transform-origin: center;
 
-    transform-origin:center;
-    animation:drehen 20s linear infinite;
+      animation: drehen 20s linear infinite;
 
-    z-index:0;
-}
+      z-index: 0;
+    }
 
-#logo{
-    position:relative;
-    z-index:2;
-}
+    .strahl {
+      position: absolute;
 
-.strahl{
-    position:absolute;
+      left: 50%;
+      top: 50%;
 
-    left:50%;
-    top:50%;
+      width: 6px;
+      height: 55px;
 
-    width:6px;
-    height:55px;
-
-    background:linear-gradient(
+      background: linear-gradient(
         to top,
-        rgba(255,210,0,0),
-        rgba(255,230,90,.9)
-    );
+        rgba(255, 210, 0, 0),
+        rgba(255, 230, 90, 0.9)
+      );
 
-    border-radius:10px;
+      border-radius: 10px;
 
-    transform:
-        translate(-50%,-100%)
+      transform:
+        translate(-50%, -100%)
         rotate(calc(var(--i) * 30deg));
 
-    transform-origin:center bottom;
+      transform-origin: center bottom;
 
-    filter:blur(1px);
-}
+      filter: blur(1px);
+    }
 
-@keyframes drehen{
-    from{
-        transform:rotate(0deg);
+    @keyframes drehen {
+      from {
+        transform: rotate(0deg);
+      }
+
+      to {
+        transform: rotate(360deg);
+      }
     }
-    to{
-        transform:rotate(360deg);
-    }
-}
 
     @keyframes spin {
-      from { transform: rotate(0deg); }
-      to { transform: rotate(360deg); }
+      from {
+        transform: rotate(0deg);
+      }
+
+      to {
+        transform: rotate(360deg);
+      }
     }
 
     @keyframes flug {
-  from {
-    transform:
-      translate(-50%, -50%)
-      translate(430px, 400px)
-      scale(4);      /* Start: 4-mal so groß */
-  }
+      from {
+        transform:
+          translate(-50%, -50%)
+          translate(430px, 400px)
+          scale(4);
+      }
 
-  to {
-    transform:
-      translate(-50%, -50%)
-      translate(0, 0)
-      scale(1);      /* Endgröße = aktuelle Größe (26px) */
-  }
-}
+      to {
+        transform:
+          translate(-50%, -50%)
+          translate(0, 0)
+          scale(1);
+      }
+    }
+
+    /* =====================================================
+       ÜBERSCHRIFT UND KLEINE SUCHLEISTE
+       ===================================================== */
+
+    #ranglisten-titel {
+      margin: 0 0 10px;
+
+      color: white;
+
+      font-size: clamp(23px, 4vw, 34px);
+      font-weight: 900;
+
+      text-shadow:
+        2px 2px 6px rgba(0, 0, 0, 0.75);
+    }
+
+    #suche-wrapper {
+      display: flex;
+      justify-content: flex-end;
+
+      margin: 0 0 8px;
+    }
+
+    #suche {
+      width: 230px;
+      max-width: 58vw;
+      height: 36px;
+
+      padding: 6px 10px;
+
+      border: 1px solid rgba(255, 255, 255, 0.85);
+      border-radius: 7px;
+
+      outline: none;
+
+      font-size: 14px;
+      font-weight: bold;
+
+      box-shadow:
+        0 3px 9px rgba(0, 0, 0, 0.18);
+    }
+
+    #suche:focus {
+      border-color: #0066cc;
+    }
+
+    #ausgabe {
+      min-height: 20px;
+
+      margin-bottom: 6px;
+
+      color: white;
+
+      font-size: 14px;
+      font-weight: bold;
+
+      text-shadow:
+        1px 1px 4px rgba(0, 0, 0, 0.8);
+    }
+
+    /* =====================================================
+       RANGLISTE
+       ===================================================== */
+
+    .table-shell {
+      width: 100%;
+
+      /*
+       * Wichtig:
+       * keine horizontale Scrollfläche.
+       */
+      overflow: visible;
+
+      background: white;
+
+      border-radius: 12px;
+
+      box-shadow:
+        0 8px 25px rgba(0, 0, 0, 0.3);
+    }
+
+    .rangliste-table {
+      width: 100%;
+
+      border-collapse: collapse;
+      table-layout: fixed;
+    }
+
+    /*
+     * Prozentuale Spaltenbreiten.
+     * Dadurch bleibt die gesamte Tabelle innerhalb
+     * der Bildschirmbreite.
+     */
+
+    .col-platz {
+      width: 11%;
+    }
+
+    .col-user {
+      width: 21%;
+    }
+
+    .col-punkte {
+      width: 13%;
+    }
+
+    .col-spiel {
+      width: 27.5%;
+    }
+
+    .col-zusatz {
+      width: 27.5%;
+    }
+
+    th,
+    td {
+      height: 60px;
+
+      padding: 8px 5px;
+
+      border: 1px solid #d2d2d2;
+
+      background: white;
+
+      text-align: center;
+      vertical-align: middle;
+
+      font-size: clamp(13px, 2vw, 18px);
+      font-weight: bold;
+      line-height: 1.15;
+
+      overflow-wrap: anywhere;
+      word-break: break-word;
+    }
+
+    thead th {
+      height: 80px;
+
+      background: #ececec;
+
+      font-size: clamp(12px, 1.8vw, 16px);
+    }
+
+    tbody tr:hover td {
+      background: #f4f8ff;
+    }
+
+    /*
+     * Die Gewinner werden stärker hervorgehoben.
+     */
+
+    .platz-1 td {
+      background: #fff4b8;
+      font-weight: 900;
+    }
+
+    .platz-2 td {
+      background: #f1f1f1;
+    }
+
+    .platz-3 td {
+      background: #f5dfcf;
+    }
+
+    /*
+     * Der eingeloggte Spieler erhält nur einen blauen Rahmen.
+     * Dadurch wird die Gewinnerfarbe nicht überschrieben.
+     */
+
+    .eigene-zeile td {
+      outline: 2px solid #0066cc;
+      outline-offset: -2px;
+    }
+
+    /* =====================================================
+       PFEILE IN DEN BEIDEN TIPP-SPALTEN
+       ===================================================== */
+
+    .navigation-kopf {
+      display: grid;
+
+      grid-template-columns:
+        30px
+        minmax(0, 1fr)
+        30px;
+
+      align-items: center;
+
+      gap: 4px;
+    }
+
+    .nav-button {
+      width: 30px;
+      height: 32px;
+
+      padding: 0;
+
+      border: none;
+      border-radius: 6px;
+
+      background: #e60000;
+      color: white;
+
+      font-size: 17px;
+      font-weight: bold;
+
+      cursor: pointer;
+    }
+
+    .nav-button:hover {
+      background: #b90000;
+    }
+
+    .kopf-titel,
+    .kopf-ergebnis {
+      display: block;
+
+      overflow-wrap: anywhere;
+
+      line-height: 1.1;
+    }
+
+    .kopf-titel {
+      font-size: inherit;
+    }
+
+    .kopf-ergebnis {
+      margin-top: 4px;
+
+      color: #555;
+
+      font-size: 0.86em;
+    }
+
+    .tipp-punkte {
+      margin-left: 3px;
+
+      color: #e60000;
+
+      font-size: 0.72em;
+
+      vertical-align: super;
+    }
+
+    .tipp-punkte.offen {
+      color: #666;
+
+      font-size: 0.65em;
+    }
+
+    .keine-treffer td {
+      height: 70px;
+
+      color: #555;
+    }
+
+    /* =====================================================
+       HANDY
+       ===================================================== */
+
+    @media (max-width: 600px) {
+
+      body {
+        padding: 22px 5px 30px;
+
+        background-attachment: scroll;
+      }
+
+      #logo-container {
+        margin-bottom: 12px;
+      }
+
+      #logo {
+        max-width: 94vw;
+      }
+
+      #ranglisten-titel {
+        margin-bottom: 7px;
+
+        font-size: 23px;
+      }
+
+      #suche-wrapper {
+        justify-content: center;
+
+        margin-bottom: 6px;
+      }
+
+      #suche {
+        width: 175px;
+        max-width: 70vw;
+        height: 32px;
+
+        font-size: 12px;
+      }
+
+      .table-shell {
+        border-radius: 8px;
+      }
+
+      th,
+      td {
+        height: 52px;
+
+        padding: 5px 2px;
+
+        font-size: 11px;
+      }
+
+      thead th {
+        height: 72px;
+
+        font-size: 10px;
+      }
+
+      .navigation-kopf {
+        grid-template-columns:
+          22px
+          minmax(0, 1fr)
+          22px;
+
+        gap: 2px;
+      }
+
+      .nav-button {
+        width: 22px;
+        height: 27px;
+
+        border-radius: 5px;
+
+        font-size: 13px;
+      }
+
+      .kopf-ergebnis {
+        margin-top: 3px;
+
+        font-size: 9px;
+      }
+
+      .tipp-punkte {
+        margin-left: 1px;
+      }
+    }
+
+    /*
+     * Sehr schmale Handys.
+     */
+
+    @media (max-width: 390px) {
+
+      .col-platz {
+        width: 10%;
+      }
+
+      .col-user {
+        width: 20%;
+      }
+
+      .col-punkte {
+        width: 12%;
+      }
+
+      .col-spiel {
+        width: 29%;
+      }
+
+      .col-zusatz {
+        width: 29%;
+      }
+
+      th,
+      td {
+        padding: 4px 1px;
+
+        font-size: 10px;
+      }
+
+      thead th {
+        font-size: 9px;
+      }
+
+      .navigation-kopf {
+        grid-template-columns:
+          19px
+          minmax(0, 1fr)
+          19px;
+      }
+
+      .nav-button {
+        width: 19px;
+        height: 25px;
+
+        font-size: 12px;
+      }
+    }
   </style>
 </head>
 
 <body>
 
-  <div id="logo-container">
+  <main id="finalseite">
 
-    <div id="sonne">
-      <div class="strahl" style="--i:0"></div>
-      <div class="strahl" style="--i:1"></div>
-      <div class="strahl" style="--i:2"></div>
-      <div class="strahl" style="--i:3"></div>
-      <div class="strahl" style="--i:4"></div>
-      <div class="strahl" style="--i:5"></div>
-      <div class="strahl" style="--i:6"></div>
-      <div class="strahl" style="--i:7"></div>
-      <div class="strahl" style="--i:8"></div>
-      <div class="strahl" style="--i:9"></div>
-      <div class="strahl" style="--i:10"></div>
-      <div class="strahl" style="--i:11"></div>
+    <!-- ===================================================
+         URSPRÜNGLICHER LOGOBEREICH
+         =================================================== -->
+
+    <div id="logo-container">
+
+      <div id="sonne">
+
+        <div
+          class="strahl"
+          style="--i:0"
+        ></div>
+
+        <div
+          class="strahl"
+          style="--i:1"
+        ></div>
+
+        <div
+          class="strahl"
+          style="--i:2"
+        ></div>
+
+        <div
+          class="strahl"
+          style="--i:3"
+        ></div>
+
+        <div
+          class="strahl"
+          style="--i:4"
+        ></div>
+
+        <div
+          class="strahl"
+          style="--i:5"
+        ></div>
+
+        <div
+          class="strahl"
+          style="--i:6"
+        ></div>
+
+        <div
+          class="strahl"
+          style="--i:7"
+        ></div>
+
+        <div
+          class="strahl"
+          style="--i:8"
+        ></div>
+
+        <div
+          class="strahl"
+          style="--i:9"
+        ></div>
+
+        <div
+          class="strahl"
+          style="--i:10"
+        ></div>
+
+        <div
+          class="strahl"
+          style="--i:11"
+        ></div>
+
+      </div>
+
+      <img
+        id="logo"
+        src="logo mit pokal.png"
+        alt="Logo"
+      >
+
+      <span id="ball-wrapper">
+
+        <img
+          id="ball"
+          src="fussball_ohne_schatten.png"
+          alt="Ball"
+        >
+
+      </span>
+
     </div>
 
-    <img id="logo" src="logo mit pokal.png" alt="Logo">
+    <!-- ===================================================
+         FINAL-RANGLISTE
+         =================================================== -->
 
-    <span id="ball-wrapper">
-      <img id="ball" src="fussball_ohne_schatten.png" alt="Ball">
-    </span>
+    <h1 id="ranglisten-titel">
+      🏆 Finale Rangliste
+    </h1>
 
-  </div>
+    <div id="suche-wrapper">
+
+      <input
+        id="suche"
+        type="text"
+        placeholder="Spieler suchen …"
+        autocomplete="off"
+      >
+
+    </div>
+
+    <div
+      id="ausgabe"
+      aria-live="polite"
+    ></div>
+
+    <div class="table-shell">
+
+      <table class="rangliste-table">
+
+        <colgroup>
+
+          <col class="col-platz">
+
+          <col class="col-user">
+
+          <col class="col-punkte">
+
+          <col class="col-spiel">
+
+          <col class="col-zusatz">
+
+        </colgroup>
+
+        <thead>
+
+          <tr>
+
+            <th>
+              Platz
+            </th>
+
+            <th>
+              Spieler
+            </th>
+
+            <th>
+              Punkte
+            </th>
+
+            <!-- Spieltipps -->
+
+            <th>
+
+              <div class="navigation-kopf">
+
+                <button
+                  id="spielZurueck"
+                  class="nav-button"
+                  type="button"
+                  aria-label="Vorheriges Spiel"
+                >
+                  ←
+                </button>
+
+                <span>
+
+                  <span
+                    id="spielTitel"
+                    class="kopf-titel"
+                  >
+                    Spiel
+                  </span>
+
+                  <span
+                    id="spielErgebnis"
+                    class="kopf-ergebnis"
+                  >
+                    –
+                  </span>
+
+                </span>
+
+                <button
+                  id="spielWeiter"
+                  class="nav-button"
+                  type="button"
+                  aria-label="Nächstes Spiel"
+                >
+                  →
+                </button>
+
+              </div>
+
+            </th>
+
+            <!-- Zusatztipps -->
+
+            <th>
+
+              <div class="navigation-kopf">
+
+                <button
+                  id="zusatzZurueck"
+                  class="nav-button"
+                  type="button"
+                  aria-label="Vorheriger Zusatztipp"
+                >
+                  ←
+                </button>
+
+                <span>
+
+                  <span
+                    id="zusatzTitel"
+                    class="kopf-titel"
+                  >
+                    Weltmeister
+                  </span>
+
+                  <span
+                    id="zusatzErgebnis"
+                    class="kopf-ergebnis"
+                  >
+                    Ergebnis offen
+                  </span>
+
+                </span>
+
+                <button
+                  id="zusatzWeiter"
+                  class="nav-button"
+                  type="button"
+                  aria-label="Nächster Zusatztipp"
+                >
+                  →
+                </button>
+
+              </div>
+
+            </th>
+
+          </tr>
+
+        </thead>
+
+        <tbody id="ranglisteBody"></tbody>
+
+      </table>
+
+    </div>
+
+  </main>
+
+  <script type="module">
+
+    /* =====================================================
+       SUPABASE
+       ===================================================== */
+
+    import {
+      createClient
+    } from "https://esm.sh/@supabase/supabase-js@2";
+
+
+    const supabase =
+      createClient(
+
+        "https://kmhwwdsuzphkpfupkynf.supabase.co",
+
+        "sb_publishable_7ih4VSPUkXVfHkBa7lrDCA_mO_d0pW1"
+
+      );
+
+
+    /* =====================================================
+       SPÄTER HIER DIE ECHTEN ERGEBNISSE EINTRAGEN
+
+       Leere Werte bedeuten:
+       Das Ergebnis steht noch nicht fest und es werden
+       dafür noch keine Zusatzpunkte verteilt.
+       ===================================================== */
+
+    const OFFIZIELLE_ERGEBNISSE = {
+
+      weltmeister: "",
+
+      vizeweltmeister: "",
+
+      besterspieler: ""
+
+    };
+
+
+    /* =====================================================
+       PUNKTE
+       ===================================================== */
+
+    const PUNKTE = {
+
+      exakt: 4,
+
+      differenz: 3,
+
+      sieger: 2,
+
+      unentschieden: 2,
+
+      zusatz: 3
+
+    };
+
+
+    const ZUSATZ_KATEGORIEN = [
+
+      {
+        key: "weltmeister",
+        titel: "Weltmeister"
+      },
+
+      {
+        key: "vizeweltmeister",
+        titel: "Vizeweltmeister"
+      },
+
+      {
+        key: "besterspieler",
+        titel: "Bester Spieler"
+      }
+
+    ];
+
+
+    /* =====================================================
+       VARIABLEN
+       ===================================================== */
+
+    let currentUserId = null;
+
+    let spiele = [];
+
+    let users = [];
+
+    let tipps = [];
+
+    let zusatztipps = [];
+
+    let rangliste = [];
+
+    let spielIndex = 0;
+
+    let zusatzIndex = 0;
+
+
+    /* =====================================================
+       DATEN LADEN
+       ===================================================== */
+
+    async function ladeAlle(
+      tabelle,
+      spalten = "*",
+      sortierung = null
+    ) {
+
+      let ergebnis = [];
+
+      let start = 0;
+
+
+      while (true) {
+
+        let query = supabase
+
+          .from(tabelle)
+
+          .select(spalten)
+
+          .range(
+            start,
+            start + 999
+          );
+
+
+        if (sortierung) {
+
+          query = query.order(
+
+            sortierung,
+
+            {
+              ascending: true
+            }
+
+          );
+
+        }
+
+
+        const {
+          data,
+          error
+        } = await query;
+
+
+        if (error) {
+
+          throw new Error(
+
+            `${tabelle}: ${error.message}`
+
+          );
+
+        }
+
+
+        ergebnis.push(
+
+          ...(data || [])
+
+        );
+
+
+        if (
+          !data ||
+          data.length < 1000
+        ) {
+
+          break;
+
+        }
+
+
+        start += 1000;
+
+      }
+
+
+      return ergebnis;
+
+    }
+
+
+    async function datenLaden() {
+
+      [
+        spiele,
+        users,
+        tipps,
+        zusatztipps
+      ] = await Promise.all([
+
+        ladeAlle(
+          "spiele",
+          "*",
+          "id"
+        ),
+
+        ladeAlle(
+          "users_public",
+          "user_ID,username,avatar"
+        ),
+
+        ladeAlle(
+          "tipps"
+        ),
+
+        ladeAlle(
+          "zusatztipps"
+        )
+
+      ]);
+
+    }
+
+
+    async function userErmitteln() {
+
+      const {
+        data
+      } = await supabase.auth.getSession();
+
+
+      currentUserId =
+        data?.session?.user?.id || null;
+
+    }
+
+
+    /* =====================================================
+       TEXTE VERGLEICHEN
+       ===================================================== */
+
+    function normalisieren(text) {
+
+      return String(text || "")
+
+        .normalize("NFD")
+
+        .replace(
+          /[\u0300-\u036f]/g,
+          ""
+        )
+
+        .replace(
+          /ß/g,
+          "ss"
+        )
+
+        .toLowerCase()
+
+        .replace(
+          /[^a-z0-9 ]/g,
+          " "
+        )
+
+        .replace(
+          /\s+/g,
+          " "
+        )
+
+        .trim();
+
+    }
+
+
+    /*
+     * Berechnet kleine Unterschiede zwischen Namen.
+     */
+
+    function abstand(a, b) {
+
+      const zeile = Array.from(
+
+        {
+          length: b.length + 1
+        },
+
+        (_, i) => i
+
+      );
+
+
+      for (
+        let i = 1;
+        i <= a.length;
+        i++
+      ) {
+
+        let vorher =
+          zeile[0];
+
+
+        zeile[0] = i;
+
+
+        for (
+          let j = 1;
+          j <= b.length;
+          j++
+        ) {
+
+          const alt =
+            zeile[j];
+
+
+          zeile[j] = Math.min(
+
+            zeile[j] + 1,
+
+            zeile[j - 1] + 1,
+
+            vorher
+            +
+            (
+              a[i - 1] === b[j - 1]
+                ? 0
+                : 1
+            )
+
+          );
+
+
+          vorher = alt;
+
+        }
+
+      }
+
+
+      return zeile[b.length];
+
+    }
+
+
+    /*
+     * Beispiele, die als gleich gelten:
+     *
+     * Mbappé
+     * Mbappe
+     * Kylian Mbappé
+     * Kylian Mbape
+     */
+
+    function spielernameStimmt(
+      tipp,
+      ergebnis
+    ) {
+
+      const a =
+        normalisieren(tipp);
+
+
+      const b =
+        normalisieren(ergebnis);
+
+
+      if (
+        !a ||
+        !b
+      ) {
+
+        return false;
+
+      }
+
+
+      const kompaktA =
+        a.replaceAll(
+          " ",
+          ""
+        );
+
+
+      const kompaktB =
+        b.replaceAll(
+          " ",
+          ""
+        );
+
+
+      if (
+        kompaktA === kompaktB
+      ) {
+
+        return true;
+
+      }
+
+
+      if (
+
+        Math.min(
+          kompaktA.length,
+          kompaktB.length
+        ) >= 5
+
+        &&
+
+        (
+          kompaktA.includes(
+            kompaktB
+          )
+
+          ||
+
+          kompaktB.includes(
+            kompaktA
+          )
+        )
+
+      ) {
+
+        return true;
+
+      }
+
+
+      const woerterA =
+        a
+          .split(" ")
+          .filter(
+            wort =>
+              wort.length >= 4
+          );
+
+
+      const woerterB =
+        b
+          .split(" ")
+          .filter(
+            wort =>
+              wort.length >= 4
+          );
+
+
+      return woerterA.some(
+
+        wortA =>
+
+          woerterB.some(
+
+            wortB => {
+
+              const erlaubteFehler =
+
+                Math.max(
+                  wortA.length,
+                  wortB.length
+                ) >= 8
+
+                  ? 2
+
+                  : 1;
+
+
+              return abstand(
+                wortA,
+                wortB
+              ) <= erlaubteFehler;
+
+            }
+
+          )
+
+      );
+
+    }
+
+
+    /* =====================================================
+       SPIELPUNKTE
+       ===================================================== */
+
+    function holeSpiel(spielId) {
+
+      return spiele.find(
+
+        spiel =>
+          String(spiel.id)
+          ===
+          String(spielId)
+
+      );
+
+    }
+
+
+    function spielIstFertig(spiel) {
+
+      return Boolean(
+
+        spiel?.["Spiel_fertig?"]
+
+      );
+
+    }
+
+
+    function spielpunkte(
+      spielId,
+      tippA,
+      tippB
+    ) {
+
+      const spiel =
+        holeSpiel(spielId);
+
+
+      if (
+        !spielIstFertig(spiel)
+      ) {
+
+        return 0;
+
+      }
+
+
+      if (
+        spiel.tore_team_a == null
+        ||
+        spiel.tore_team_b == null
+      ) {
+
+        return 0;
+
+      }
+
+
+      const a =
+        Number(tippA);
+
+
+      const b =
+        Number(tippB);
+
+
+      const echtA =
+        Number(
+          spiel.tore_team_a
+        );
+
+
+      const echtB =
+        Number(
+          spiel.tore_team_b
+        );
+
+
+      if (
+
+        ![
+          a,
+          b,
+          echtA,
+          echtB
+        ].every(
+          Number.isFinite
+        )
+
+      ) {
+
+        return 0;
+
+      }
+
+
+      const echteDifferenz =
+        echtA - echtB;
+
+
+      const tippDifferenz =
+        a - b;
+
+
+      if (
+        a === echtA
+        &&
+        b === echtB
+      ) {
+
+        return PUNKTE.exakt;
+
+      }
+
+
+      if (
+
+        echteDifferenz === tippDifferenz
+
+        &&
+
+        echteDifferenz !== 0
+
+      ) {
+
+        return PUNKTE.differenz;
+
+      }
+
+
+      if (
+
+        echteDifferenz === 0
+
+        &&
+
+        tippDifferenz === 0
+
+      ) {
+
+        return PUNKTE.unentschieden;
+
+      }
+
+
+      if (
+
+        Math.sign(
+          echteDifferenz
+        )
+
+        ===
+
+        Math.sign(
+          tippDifferenz
+        )
+
+      ) {
+
+        return PUNKTE.sieger;
+
+      }
+
+
+      return 0;
+
+    }
+
+
+    /* =====================================================
+       ZUSATZTIPPS
+       ===================================================== */
+
+    function zusatzDatensatz(userId) {
+
+      return zusatztipps.find(
+
+        tipp =>
+          String(tipp.user_ID)
+          ===
+          String(userId)
+
+      );
+
+    }
+
+
+    function zusatzWert(
+      userId,
+      kategorie
+    ) {
+
+      const tipp =
+        zusatzDatensatz(userId);
+
+
+      if (!tipp) {
+
+        return "";
+
+      }
+
+
+      if (
+        kategorie === "weltmeister"
+      ) {
+
+        return (
+          tipp.weltmeister
+          ||
+          ""
+        );
+
+      }
+
+
+      if (
+        kategorie === "besterspieler"
+      ) {
+
+        return (
+
+          tipp.besterspieler
+
+          ||
+
+          tipp.bester_spieler
+
+          ||
+
+          ""
+
+        );
+
+      }
+
+
+      /*
+       * Eure Spalte kann viezeweltmeister heißen.
+       * Die anderen Schreibweisen werden ebenfalls unterstützt.
+       */
+
+      return (
+
+        tipp.vizeweltmeister
+
+        ||
+
+        tipp.viezeweltmeister
+
+        ||
+
+        tipp.vize_weltmeister
+
+        ||
+
+        ""
+
+      );
+
+    }
+
+
+    function zusatzpunkte(
+      userId,
+      kategorie
+    ) {
+
+      const tipp =
+        zusatzWert(
+          userId,
+          kategorie
+        );
+
+
+      const ergebnis =
+        OFFIZIELLE_ERGEBNISSE[
+          kategorie
+        ];
+
+
+      if (
+        !normalisieren(ergebnis)
+      ) {
+
+        return 0;
+
+      }
+
+
+      const stimmt =
+
+        kategorie === "besterspieler"
+
+          ? spielernameStimmt(
+              tipp,
+              ergebnis
+            )
+
+          : normalisieren(tipp)
+            ===
+            normalisieren(ergebnis);
+
+
+      return stimmt
+        ? PUNKTE.zusatz
+        : 0;
+
+    }
+
+
+    /* =====================================================
+       GESAMTPUNKTE UND RANGLISTE
+       ===================================================== */
+
+    function gesamtpunkte(userId) {
+
+      const punkteAusSpielen = tipps
+
+        .filter(
+
+          tipp =>
+            String(tipp.tipper_ID)
+            ===
+            String(userId)
+
+        )
+
+        .reduce(
+
+          (
+            summe,
+            tipp
+          ) =>
+
+            summe
+
+            +
+
+            spielpunkte(
+
+              tipp.spiel_ID,
+
+              tipp.tore_team_a,
+
+              tipp.tore_team_b
+
+            ),
+
+          0
+
+        );
+
+
+      const punkteAusZusatz =
+        ZUSATZ_KATEGORIEN.reduce(
+
+          (
+            summe,
+            kategorie
+          ) =>
+
+            summe
+
+            +
+
+            zusatzpunkte(
+
+              userId,
+
+              kategorie.key
+
+            ),
+
+          0
+
+        );
+
+
+      return (
+        punkteAusSpielen
+        +
+        punkteAusZusatz
+      );
+
+    }
+
+
+    function ranglisteBerechnen() {
+
+      rangliste = users.map(
+
+        user => ({
+
+          user_ID:
+            user.user_ID,
+
+          username:
+            user.username
+            ||
+            "Unbekannt",
+
+          punkte:
+            gesamtpunkte(
+              user.user_ID
+            )
+
+        })
+
+      );
+
+
+      rangliste.sort(
+
+        (
+          a,
+          b
+        ) =>
+
+          b.punkte
+          -
+          a.punkte
+
+          ||
+
+          a.username.localeCompare(
+            b.username,
+            "de"
+          )
+
+      );
+
+
+      let rang = 1;
+
+      let letztePunkte = null;
+
+
+      rangliste.forEach(
+
+        (
+          eintrag,
+          index
+        ) => {
+
+          if (
+
+            letztePunkte !== null
+
+            &&
+
+            eintrag.punkte
+            <
+            letztePunkte
+
+          ) {
+
+            rang =
+              index + 1;
+
+          }
+
+
+          eintrag.rang =
+            rang;
+
+
+          letztePunkte =
+            eintrag.punkte;
+
+        }
+
+      );
+
+    }
+
+
+    function formatPlatz(rang) {
+
+      if (
+        rang === 1
+      ) {
+
+        return "🥇 1";
+
+      }
+
+
+      if (
+        rang === 2
+      ) {
+
+        return "🥈 2";
+
+      }
+
+
+      if (
+        rang === 3
+      ) {
+
+        return "🥉 3";
+
+      }
+
+
+      return String(rang);
+
+    }
+
+
+    /* =====================================================
+       SPIEL- UND ZUSATZTIPP-NAVIGATION
+       ===================================================== */
+
+    function startspielSetzen() {
+
+      const letzterFertigerIndex =
+        spiele.reduce(
+
+          (
+            letzter,
+            spiel,
+            index
+          ) =>
+
+            spielIstFertig(spiel)
+
+              ? index
+
+              : letzter,
+
+          -1
+
+        );
+
+
+      spielIndex =
+
+        letzterFertigerIndex >= 0
+
+          ? letzterFertigerIndex
+
+          : 0;
+
+    }
+
+
+    function spielWechseln(richtung) {
+
+      if (
+        !spiele.length
+      ) {
+
+        return;
+
+      }
+
+
+      spielIndex = (
+
+        spielIndex
+
+        +
+
+        richtung
+
+        +
+
+        spiele.length
+
+      ) % spiele.length;
+
+
+      tabelleRendern();
+
+    }
+
+
+    function zusatzWechseln(richtung) {
+
+      zusatzIndex = (
+
+        zusatzIndex
+
+        +
+
+        richtung
+
+        +
+
+        ZUSATZ_KATEGORIEN.length
+
+      ) % ZUSATZ_KATEGORIEN.length;
+
+
+      tabelleRendern();
+
+    }
+
+
+    /* =====================================================
+       TABELLENKOPF
+       ===================================================== */
+
+    function kopfAktualisieren() {
+
+      const spiel =
+        spiele[spielIndex];
+
+
+      const kategorie =
+        ZUSATZ_KATEGORIEN[
+          zusatzIndex
+        ];
+
+
+      const zusatzErgebnis =
+        OFFIZIELLE_ERGEBNISSE[
+          kategorie.key
+        ];
+
+
+      document
+        .getElementById(
+          "spielTitel"
+        )
+        .textContent = spiel
+
+          ? (
+              spiel.name
+
+              ||
+
+              `${spiel.team_a || "?"} - ${spiel.team_b || "?"}`
+            )
+
+          : "Keine Spiele";
+
+
+      document
+        .getElementById(
+          "spielErgebnis"
+        )
+        .textContent = spielIstFertig(spiel)
+
+          ? `${spiel.tore_team_a} : ${spiel.tore_team_b}`
+
+          : "Ergebnis offen";
+
+
+      document
+        .getElementById(
+          "zusatzTitel"
+        )
+        .textContent =
+          kategorie.titel;
+
+
+      document
+        .getElementById(
+          "zusatzErgebnis"
+        )
+        .textContent =
+          normalisieren(
+            zusatzErgebnis
+          )
+
+            ? `Ergebnis: ${zusatzErgebnis}`
+
+            : "Ergebnis offen";
+
+    }
+
+
+    /* =====================================================
+       TABELLENZELLEN
+       ===================================================== */
+
+    function wertMitPunkten(
+      zelle,
+      wert,
+      punkte,
+      offen = false
+    ) {
+
+      zelle.textContent =
+        wert || "–";
+
+
+      const hochgestellt =
+        document.createElement(
+          "sup"
+        );
+
+
+      hochgestellt.className =
+        `tipp-punkte${offen ? " offen" : ""}`;
+
+
+      hochgestellt.textContent =
+        offen
+          ? "offen"
+          : punkte;
+
+
+      zelle.appendChild(
+        hochgestellt
+      );
+
+    }
+
+
+    function spielTipp(userId) {
+
+      const spiel =
+        spiele[spielIndex];
+
+
+      if (
+        !spielIstFertig(spiel)
+      ) {
+
+        return {
+
+          wert: "– : –",
+
+          punkte: 0,
+
+          offen: true
+
+        };
+
+      }
+
+
+      const tipp = tipps.find(
+
+        eintrag =>
+
+          String(eintrag.tipper_ID)
+          ===
+          String(userId)
+
+          &&
+
+          String(eintrag.spiel_ID)
+          ===
+          String(spiel.id)
+
+      );
+
+
+      if (!tipp) {
+
+        return {
+
+          wert: "– : –",
+
+          punkte: 0,
+
+          offen: false
+
+        };
+
+      }
+
+
+      return {
+
+        wert:
+          `${tipp.tore_team_a} : ${tipp.tore_team_b}`,
+
+        punkte:
+          spielpunkte(
+
+            spiel.id,
+
+            tipp.tore_team_a,
+
+            tipp.tore_team_b
+
+          ),
+
+        offen:
+          false
+
+      };
+
+    }
+
+
+    function zusatzTipp(userId) {
+
+      const kategorie =
+        ZUSATZ_KATEGORIEN[
+          zusatzIndex
+        ];
+
+
+      const ergebnisIstOffen =
+        !normalisieren(
+
+          OFFIZIELLE_ERGEBNISSE[
+            kategorie.key
+          ]
+
+        );
+
+
+      return {
+
+        wert:
+          zusatzWert(
+
+            userId,
+
+            kategorie.key
+
+          ) || "–",
+
+        punkte:
+          ergebnisIstOffen
+
+            ? 0
+
+            : zusatzpunkte(
+
+                userId,
+
+                kategorie.key
+
+              ),
+
+        offen:
+          ergebnisIstOffen
+
+      };
+
+    }
+
+
+    /* =====================================================
+       ZEILE ANZEIGEN
+       ===================================================== */
+
+    function zeileRendern(
+      tbody,
+      eintrag
+    ) {
+
+      const zeile =
+        tbody.insertRow();
+
+
+      /*
+       * Top 3 besonders hervorheben.
+       */
+
+      if (
+        eintrag.rang <= 3
+      ) {
+
+        zeile.classList.add(
+
+          `platz-${eintrag.rang}`
+
+        );
+
+      }
+
+
+      /*
+       * Eingeloggten Benutzer zusätzlich umrahmen.
+       */
+
+      if (
+
+        String(eintrag.user_ID)
+
+        ===
+
+        String(currentUserId)
+
+      ) {
+
+        zeile.classList.add(
+          "eigene-zeile"
+        );
+
+      }
+
+
+      zeile
+        .insertCell()
+        .textContent =
+          formatPlatz(
+            eintrag.rang
+          );
+
+
+      zeile
+        .insertCell()
+        .textContent =
+          eintrag.username;
+
+
+      zeile
+        .insertCell()
+        .textContent =
+          eintrag.punkte;
+
+
+      const spielDaten =
+        spielTipp(
+          eintrag.user_ID
+        );
+
+
+      wertMitPunkten(
+
+        zeile.insertCell(),
+
+        spielDaten.wert,
+
+        spielDaten.punkte,
+
+        spielDaten.offen
+
+      );
+
+
+      const zusatzDaten =
+        zusatzTipp(
+          eintrag.user_ID
+        );
+
+
+      wertMitPunkten(
+
+        zeile.insertCell(),
+
+        zusatzDaten.wert,
+
+        zusatzDaten.punkte,
+
+        zusatzDaten.offen
+
+      );
+
+    }
+
+
+    /* =====================================================
+       TOP 5 ODER SUCHERGEBNISSE
+       ===================================================== */
+
+    function sichtbareSpieler() {
+
+      const suche =
+        normalisieren(
+
+          document
+            .getElementById(
+              "suche"
+            )
+            .value
+
+        );
+
+
+      /*
+       * Ohne Suche:
+       * Nur die fünf besten Spieler.
+       */
+
+      if (!suche) {
+
+        return rangliste.slice(
+          0,
+          5
+        );
+
+      }
+
+
+      /*
+       * Mit Suche:
+       * Alle passenden Spieler.
+       */
+
+      return rangliste.filter(
+
+        eintrag =>
+
+          normalisieren(
+            eintrag.username
+          ).includes(
+            suche
+          )
+
+      );
+
+    }
+
+
+    /* =====================================================
+       TABELLE RENDERN
+       ===================================================== */
+
+    function tabelleRendern() {
+
+      kopfAktualisieren();
+
+
+      const tbody =
+        document.getElementById(
+          "ranglisteBody"
+        );
+
+
+      const eintraege =
+        sichtbareSpieler();
+
+
+      tbody.innerHTML = "";
+
+
+      if (
+        !eintraege.length
+      ) {
+
+        const zeile =
+          tbody.insertRow();
+
+
+        zeile.className =
+          "keine-treffer";
+
+
+        const zelle =
+          zeile.insertCell();
+
+
+        zelle.colSpan = 5;
+
+
+        zelle.textContent =
+          "Kein Spieler gefunden.";
+
+
+        return;
+
+      }
+
+
+      eintraege.forEach(
+
+        eintrag =>
+
+          zeileRendern(
+
+            tbody,
+
+            eintrag
+
+          )
+
+      );
+
+    }
+
+
+    /* =====================================================
+       SEITE STARTEN
+       ===================================================== */
+
+    async function initialisieren() {
+
+      const ausgabe =
+        document.getElementById(
+          "ausgabe"
+        );
+
+
+      ausgabe.textContent =
+        "Rangliste wird geladen …";
+
+
+      try {
+
+        await userErmitteln();
+
+        await datenLaden();
+
+        startspielSetzen();
+
+        ranglisteBerechnen();
+
+        tabelleRendern();
+
+
+        ausgabe.textContent = "";
+
+      } catch (error) {
+
+        console.error(error);
+
+
+        ausgabe.textContent =
+          `Fehler beim Laden: ${error.message}`;
+
+      }
+
+    }
+
+
+    /* =====================================================
+       BUTTONS UND SUCHFELD
+       ===================================================== */
+
+    document
+      .getElementById(
+        "suche"
+      )
+      .addEventListener(
+        "input",
+        tabelleRendern
+      );
+
+
+    document
+      .getElementById(
+        "spielZurueck"
+      )
+      .addEventListener(
+        "click",
+        () => spielWechseln(-1)
+      );
+
+
+    document
+      .getElementById(
+        "spielWeiter"
+      )
+      .addEventListener(
+        "click",
+        () => spielWechseln(1)
+      );
+
+
+    document
+      .getElementById(
+        "zusatzZurueck"
+      )
+      .addEventListener(
+        "click",
+        () => zusatzWechseln(-1)
+      );
+
+
+    document
+      .getElementById(
+        "zusatzWeiter"
+      )
+      .addEventListener(
+        "click",
+        () => zusatzWechseln(1)
+      );
+
+
+    initialisieren();
+
+  </script>
 
 </body>
 </html>
