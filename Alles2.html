@@ -1,0 +1,1292 @@
+<!DOCTYPE html> 
+<html lang="de"> 
+<head> 
+    <meta charset="UTF-8"> 
+    <title>WM 2026 Tippspiel</title> 
+  <style>
+/*@font-face {
+      font-family: 'MeineSchrift';
+      src: url('GREGH___.ttf');
+    }*/
+
+    body {
+      font-family: Arial, sans-serif;
+      background-image: url("rasen chatgpt.png");
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      background-attachment: fixed;
+      text-align: center;
+      margin: 40px;
+      padding-top: 200px;
+      position: relative;
+    }
+
+
+    #header {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      justify-content: center;
+      gap: 15px;
+      margin-top: -120px;
+      text-align: center;
+      flex-wrap: wrap;
+    }
+
+    #profil_button {
+        position: absolute;
+        top: 16px;
+        left: 16px;
+        z-index: 9999;
+        font-size: 2em;
+        padding: 8px 14px;
+        border: none;
+        border-radius: 6px;
+        background-color: #0066cc;
+        color: white;
+        cursor: pointer;
+    }
+
+#profil_button:hover {
+    background-color: #0052a3;
+}
+
+#logout_button {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    z-index: 9999;
+    font-size: 2em;
+    padding: 8px 14px;
+    border: none;
+    border-radius: 6px;
+    background-color: #e60000;
+    color: white;
+    cursor: pointer;
+}
+
+#logout_button:hover {
+    background-color: #b30000;
+}
+
+    #logo-container {
+      position: relative;
+      display: inline-block;
+    }
+
+    #logo {
+        display: inline-block;
+        position: relative;
+        left: 20px;   
+        right: 20px;  
+        top: 10px;    
+        bottom: 10px; 
+        font-size: 90px;
+        font-family: 'MeineSchrift', sans-serif; 
+        color: white;
+        font-weight: bold;
+        letter-spacing: 0px;
+        text-shadow: 3px 3px 8px rgba(0,0,0,0.3);
+    }
+
+    /* DOC 2: z-index:10 added */
+    #ball-wrapper {
+      position: absolute;
+      left: 17.4%;
+      top: 61%;
+      transform: translate(-50%,-50%);
+      animation: flug 1.5s ease-out forwards;
+      z-index: 10;
+    }
+
+    #ball {
+      width: 44px;
+      height: 44px;
+      font-size: 38px;
+      line-height: 44px;
+      position: relative;
+      z-index: 2;
+      display: inline-block;
+      animation: spin 15s linear infinite;
+    }
+
+
+
+    label {
+      font-size: 28px;
+      font-weight: bold;
+      color: white;
+      text-shadow: 2px 2px 6px rgba(0,0,0,0.6);
+    }
+
+    #team_a, #team_b {
+      font-size: 28px;
+      color: white;
+      text-shadow: 2px 2px 8px rgba(0,0,0,0.7);
+    }
+
+
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0; }
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    /* DOC 2: updated flug animation with scale effect */
+    @keyframes flug {
+      from {
+        transform:
+          translate(-50%, -50%)
+          translate(430px, 400px)
+          scale(4);
+      }
+      to {
+        transform:
+          translate(-50%, -50%)
+          translate(0, 0)
+          scale(1);
+      }
+    }
+
+
+    button {
+      padding: 10px 20px;
+      border-radius: 5px;
+      border: none;
+      background-color: red;
+      color: white;
+      cursor: pointer;
+    }
+
+    button:disabled {
+      background-color: #ccc !important;
+      cursor: not-allowed !important;
+    }
+
+
+   
+    .info-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background-color: #e6f2ff;
+      color: #0066cc;
+      padding: 8px 14px;
+      border-radius: 20px;
+      font-size: 15px;
+      font-weight: bold;
+      font-family: Arial, sans-serif;
+      cursor: pointer;
+      position: relative;
+      border: 1px solid #cce5ff;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+
+    .info-badge::after {
+      content: "Aktuell noch zu tippende Spiele!";
+      position: absolute;
+      bottom: 140%;
+      right: 0; 
+      background-color: #0066cc;
+      color: white;
+      padding: 6px 10px;
+      border-radius: 5px;
+      font-size: 14px;
+      font-family: Arial, sans-serif;
+      font-weight: normal;
+      white-space: nowrap;
+      visibility: hidden;
+      opacity: 0;
+      transition: opacity 0.2s ease-in-out;
+      pointer-events: none;
+      z-index: 999;
+      box-shadow: 0px 2px 5px rgba(0,0,0,0.2);
+    }
+
+    .info-badge::before {
+      content: "";
+      position: absolute;
+      bottom: 120%;
+      right: 25px; 
+      border-width: 6px;
+      border-style: solid;
+      border-color: #0066cc transparent transparent transparent;
+      visibility: hidden;
+      opacity: 0;
+      transition: opacity 0.2s ease-in-out;
+      pointer-events: none;
+      z-index: 999;
+    }
+
+    .info-badge:hover::after, .info-badge:hover::before,
+    .info-badge.active::after, .info-badge.active::before {
+      visibility: visible;
+      opacity: 1;
+    }
+
+    .info-icon-blue {
+      color: white;
+      background-color: #0066cc;
+      border-radius: 50%;
+      width: 22px;
+      height: 22px;
+      font-size: 14px;
+      line-height: 22px;
+      text-align: center;
+      font-family: "Georgia", serif;
+      font-weight: bold;
+      display: inline-block;
+    }
+
+      
+.oberer-bereich-wrapper {
+    max-width: 650px !important;       
+    width: 100% !important;
+    margin: 0 auto;         
+    box-sizing: border-box;
+    text-align: center;     
+    } 
+
+
+      
+    /* Style-Bereich von Gruppe 3!!*/
+
+#suche {
+    display: block;
+    width: 260px;
+    padding: 8px;
+
+    margin-left: 0;
+
+    margin-top: 8px;
+    margin-bottom: 6px;
+
+    border:none;
+    border-radius:6px;
+
+    font-size: 2em;
+    font-weight: bold;
+}
+
+#textFeld
+{
+    width: 650px;
+    margin: 20px auto 24px;
+    background: white;
+    padding: 26px 30px;
+    font-size: 28px;
+    font-weight: bold;
+    text-shadow: 2px 2px 6px rgba(0,0,0,0.4);
+    border-radius: 16px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.18);
+    box-sizing: border-box;
+}
+
+#rangliste_tools{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    overflow: visible;
+
+    position: relative;
+    z-index: 10000;
+
+    width:100%;
+    margin-top:8px;
+    margin-bottom:6px;
+}
+
+#refreshButton{
+    width:10em;
+    font-size:2em;
+    padding:8px;
+
+    background:#0066cc;
+    color:white;
+
+    border:none;
+    border-radius:6px;
+
+    cursor:pointer;
+
+    font-size:2em;
+    font-weight:bold;
+
+    transition:0.2s;
+}
+
+#refreshButton:hover{
+    background:#0052a3;
+}
+
+
+.punkte-info-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 3.5em;
+    height: 3.5em;
+
+    background-color: #e6f2ff;
+    border-radius: 8px;
+    cursor: pointer;
+    position: relative;
+    flex-shrink: 0;
+}
+
+.punkte-info-badge::after {
+     content: "Tippmodus: Es wird das exakte Ergebnis VOR Elfmeterschießen getippt.\A\ATipp richtig: 4 Punkte\A Differenz richtig: 3 Punkte\A Unentschieden/Sieger richtig: 2 Punkte\A Ansonsten: 0 Punkte";
+
+    
+    white-space: pre-line;
+
+    position: absolute;
+    top: calc(100% + 8px);
+    left: 50%;
+    transform: translateX(-50%);
+
+    width: 260px;
+
+    background: #0066cc;
+    color: white;
+
+    padding: 12px;
+    border-radius: 8px;
+
+    font-size: 13px;
+    font-weight: bold;
+    line-height: 1.5;
+
+    visibility: hidden;
+    opacity: 0;
+
+    transition: opacity .2s;
+
+    pointer-events: none;
+
+    z-index: 9999;
+
+    box-shadow: 0 4px 12px rgba(0,0,0,.25);
+}
+
+.punkte-info-badge::before {
+    content: "";
+
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+
+    border-width: 7px;
+    border-style: solid;
+    border-color: #0066cc transparent transparent transparent;
+
+    visibility: hidden;
+    opacity: 0;
+
+    transition: opacity .2s;
+
+    pointer-events: none;
+}
+
+.punkte-info-badge:hover::after,
+.punkte-info-badge:hover::before,
+.punkte-info-badge.active::after,
+.punkte-info-badge.active::before {
+    visibility: visible;
+    opacity: 1;
+}
+
+#ausgabe {
+    color: red;
+    margin: 10px 0;
+    min-height: 20px;
+}
+
+.table-shell {
+    width: 100%;
+    overflow: hidden;
+    background: white;
+    border-radius: 10px 10px 0px 0px;
+}
+
+.rangliste-table {
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: fixed;
+    border-spacing: 0;
+}
+
+.col-platz  { width: 90px; }
+.col-user   { width: 220px; }
+.col-punkte { width: 110px; }
+
+.col-tipp {
+    width: auto;
+}
+
+.col-tipp-rest {
+    width: calc(100% - 70px - 220px - 90px - 14px);
+}
+
+th,
+td {
+    border: 1px solid #cfcfcf;
+    padding: 8px 10px;
+    text-align: center;
+    font-size: 16pt;
+    font-weight: 700;
+    height: 42px;
+    box-sizing: border-box;
+    background: white;
+}
+
+thead th {
+    background: #ececec;
+    font-size: 16pt;
+    font-weight: 800;
+}
+
+.eigene-zeile {
+    background-color: #ffe34d !important;
+    font-weight: 900;
+}
+
+.eigene-zeile td {
+    background-color: #ffe34d !important;
+}
+
+#spielT {
+    display: inline-block;
+    min-width: 180px;
+    white-space: pre-line;
+    line-height: 1.2;
+    font-size: 14px;
+}
+
+.scroll-wrapper {
+    max-height: 380px;
+    overflow-y: auto;
+    overflow-x: hidden;
+
+    scrollbar-gutter: stable;
+
+    background: white;
+    border-radius: 0 0 10px 10px;
+}
+
+#fixedTable {
+    border-bottom: none;
+}
+
+#fixedTable tr:last-child td {
+    border-bottom: none;
+}
+
+#restTable tr:first-child td {
+    border-top: 1px solid #ccc;
+}
+
+@media (max-width: 768px) {
+
+    th,
+    td {
+        font-size: 13pt;
+        padding: 6px 4px;
+        height: 38px;
+    }
+
+    thead th {
+        font-size: 13pt;
+    }
+
+    #spielT {
+        font-size: 13pt;
+        font-weight: bold;
+    }
+
+    #suche {
+        width: 180px;
+        margin-left: 60px;
+        font-size: 14px;
+    }
+
+    #rangliste_tools{
+        gap:8px;
+    }
+
+}
+
+/* DOC 2: fold67 easter egg styles */
+#fold67-wrapper {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  pointer-events: none;
+}
+
+.fold67-strip {
+  position: absolute;
+  top: 0;
+  height: 100%;
+  overflow: hidden;
+}
+
+.fold67-strip-inner {
+  position: absolute;
+  top: 0;
+  height: 100%;
+}
+
+@keyframes fold67Strip {
+  0%   { transform: translateY(0) skewY(0deg); }
+  20%  { transform: translateY(calc(var(--d) * -160px)) skewY(calc(var(--d) * -3deg)); }
+  40%  { transform: translateY(calc(var(--d) * 80px))  skewY(calc(var(--d) * 1.6deg)); }
+  60%  { transform: translateY(calc(var(--d) * -40px)) skewY(calc(var(--d) * -0.8deg)); }
+  80%  { transform: translateY(calc(var(--d) * 20px))   skewY(calc(var(--d) * 0.4deg)); }
+  100% { transform: translateY(0) skewY(0deg); }
+}
+
+.fold67-strip.active {
+  animation: fold67Strip 1.5s ease-in-out;
+}
+
+body.fold67-hide-original > *:not(#fold67-wrapper) {
+  opacity: 0;
+}
+
+.flag-emoji {
+  position: fixed;
+  top: -50px;
+  font-size: 2rem;
+  pointer-events: none;
+  z-index: 9999;
+  user-select: none;
+  animation: flag-fall linear forwards;
+}
+
+@keyframes flag-fall {
+  0% {
+    transform: translateY(0) rotate(0deg);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(110vh) rotate(360deg);
+    opacity: 0.8;
+  }
+}
+  </style>
+</head>
+<body> 
+
+<div id="header">
+  <div id="logo-container">
+    <img id="logo" src="logo mit titel final.png">
+    <span id="ball-wrapper">
+        <img id="ball" src="fussball_ohne_schatten.png">
+    </span>
+  </div>
+</div>
+<br>
+
+                                                                                                                                        
+
+    <div class="oberer-bereich-wrapper">                                                                                                                                           
+<div id="begruessung_container" style="font-size: 30px; font-weight: bold; color: white; text-shadow: 1px 1px 4px rgba(0,0,0,0.6); margin-bottom: 25px; min-height: 24px;">
+    <span id="begruessung_text"></span>
+</div>
+
+
+
+<input type="hidden" id="name">
+<span id="limit-error" style="display: none;"></span>
+<br>
+
+<label>Spiel auswählen:</label><br>
+<div style="display: flex; justify-content: center; align-items: center; gap: 12px; margin-top: 15px; width: 100%;">
+    <button id="btn_prev" style="padding: 12px 20px; font-size: 16px; border-radius: 8px;">◀</button>
+    
+    <select id="spiel_select" style="padding: 12px 20px; font-size: 16px; border-radius: 8px; cursor: pointer; flex: 1; max-width: 300px; text-align: center; text-align-last: center;">
+        <option value="" disabled>-- Bitte wählen --</option>
+    </select>
+    
+    <button id="btn_next" style="padding: 12px 20px; font-size: 18px; border-radius: 8px;">▶</button>
+</div>
+
+<br><br>
+
+<div id="tipp_box" style="position: relative; display: inline-block; background-color: white; padding: 25px; border-radius: 15px; box-shadow: 0 4px 12px rgba(0,0,0,0.2); width: 100%; max-width: 100%; box-sizing: border-box;">
+
+    <div id="overlay" style="display: none; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(5px); z-index: 10; flex-direction: column; justify-content: center; align-items: center; border-radius: 15px;">
+    
+    <div style="font-size: 22px; font-weight: bold; color: #333; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px;">Spiel vorbei</div>
+    
+    <div style="display: flex; justify-content: center; align-items: center; gap: 20px; padding: 10px;">
+        <div id="overlay_team_a" style="font-size: 20px; font-weight: bold; color: #333; min-width: 80px; text-align: right;">Team A</div>
+        <div id="overlay_score" style="font-size: 42px; font-weight: bold; color: #e60000;">0 : 0</div>
+        <div id="overlay_team_b" style="font-size: 20px; font-weight: bold; color: #333; min-width: 80px; text-align: left;">Team B</div>
+    </div>
+    
+</div>
+
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+        
+        <div style="font-size:20px; color: #333; position: relative; z-index: 1;">
+            Anstoß: <span id="spiel_datum">--.--.</span> | <span id="spiel_zeit">--:--</span> Uhr
+        </div>
+        
+        <div class="info-badge" id="info_badge_tips" onclick="this.classList.toggle('active'); event.stopPropagation();" style="z-index: 11;">
+            <span class="info-icon-blue">i</span>
+            <span id="offene_tipps_count">--</span>
+        </div>
+        
+    </div>
+
+    <div id="countdown_box" style="margin: 20px 0 20px 0; font-size: 22px; font-weight: bold; color: #555; background: #f0f0f0; padding: 6px 12px; border-radius: 20px; display: inline-block;">--</div>
+
+    <br>
+
+   <!-- <div style="font-size: 24px; margin: 20px 0; display: flex; justify-content: center; align-items: center; gap: 15px; flex-wrap: wrap;"> -->
+       <div style="margin: 20px 0; display: flex; justify-content: center; align-items: flex-start; gap: 15px; flex-wrap: wrap;">
+
+
+<div style="display: flex; flex-direction: column; align-items: center; min-width: 100px;">
+        <img id="img_flag_a" src="" alt="" style="width: 45px; height: 30px; object-fit: cover; margin-bottom: 5px; border-radius: 3px; box-shadow: 0 1px 3px rgba(0,0,0,0.3); display: none;">
+        <span id="team_a" style="font-weight:bold; color: #333; text-shadow: none;">Team A</span>
+    </div>
+    
+    <div style="display: flex; align-items: center; gap: 10px; margin-top: 25px;">
+        <input type="number" id="tore_a" min="0" step="1" oninput="this.value = this.value.replace(/[^0-9]/g, '');" 
+               style="width: 60px; height: 50px; padding: 5px; text-align: center; font-size: 24px; font-weight: bold; border: 2px solid #ccc; border-radius: 8px;" placeholder="-"> 
+        
+        <span style="font-size: 28px; font-weight: bold; color: #333;">:</span> 
+        
+        <input type="number" id="tore_b" min="0" step="1" oninput="this.value = this.value.replace(/[^0-9]/g, '');" 
+               style="width: 60px; height: 50px; padding: 5px; text-align: center; font-size: 24px; font-weight: bold; border: 2px solid #ccc; border-radius: 8px;" placeholder="-"> 
+    </div>
+    
+    <div style="display: flex; flex-direction: column; align-items: center; min-width: 100px;">
+        <img id="img_flag_b" src="" alt="" style="width: 45px; height: 30px; object-fit: cover; margin-bottom: 5px; border-radius: 3px; box-shadow: 0 1px 3px rgba(0,0,0,0.3); display: none;">
+        <span id="team_b" style="font-weight:bold; color: #333; text-shadow: none;">Team B</span>
+    </div>
+</div>    
+    
+    <button id="tippSpeichern" style="width: 100%; padding: 15px; font-size: 18px; font-weight: bold; border-radius: 8px; background-color: red; color: white; border: none; cursor: pointer;">Tipp speichern</button>
+
+</div></div>
+
+<!-- Anzeige Gruppe 3-->
+
+  <div id="anzeige"></div> 
+<div id="textFeld">🥳🎉🥳 <br> Die finale Rangliste wird bei der Preisverleihung am Schulfest veröffentlicht. 🥳🎉🥳</div>
+ <!-- Suchfeld, Aktualisier Button und Info Kästchen für Punkte Berechnung -->
+
+
+
+<!-- Scrollbarer Restbereich -->
+<div class="scroll-wrapper">
+    <table class="rangliste-table" id="restTable">
+        <colgroup>
+            <col class="col-platz">
+            <col class="col-user">
+            <col class="col-punkte">
+            <col class="col-tipp-rest">
+        </colgroup>
+
+        <tbody id="restBody"></tbody>
+    </table>
+</div>
+    
+
+
+    <footer id="page_footer" style="margin: 30px auto 20px; max-width: 860px; color: white; display: flex; flex-wrap: wrap; justify-content: center; gap: 12px; font-size: 20px;">
+        <a href="datenschutzerklaerung.html" style="color: white; text-decoration: underline;">Datenschutzerklärung</a>
+        <a href="spielregeln.html" style="color: white; text-decoration: underline;">Spielregeln</a>
+        <a href="impressum.html" style="color: white; text-decoration: underline;">Impressum</a>
+
+    </footer>
+
+    <button id="profil_button">Profil</button>
+    <button id="logout_button">Logout</button>
+
+ <!--Logik und DB-Verbindung mit JavaScript -->
+  <script type="module">
+
+     //---------------------------------------------------------------------
+    //Supabase Verbindung (nicht ändern!!)
+    //----------------------------------------------------------------------
+    import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+
+    const supabaseUrl = "https://kmhwwdsuzphkpfupkynf.supabase.co";
+    const supabaseKey = "sb_publishable_7ih4VSPUkXVfHkBa7lrDCA_mO_d0pW1";
+
+    const supabase = createClient(supabaseUrl, supabaseKey);
+      //falls die Seite per Browser-Zurück aus dem Cache erscheint: 
+    window.addEventListener("pageshow", async () =>{
+        const {data: {session}} = await supabase.auth.getSession();
+        if(!session)
+        {
+            window.location.replace("index.html");
+        }
+    });
+
+    document.getElementById("logout_button").addEventListener("click", async () => {
+        await supabase.auth.signOut();
+        window.location.replace("index.html");
+    });
+
+    document.getElementById("profil_button").addEventListener("click", () => {
+        window.location.replace("profil.html");
+    });
+
+     let currentUserId = null;
+    //----------------------------------------------------------------------
+    //Gruppe1: Eingabe
+    //----------------------------------------------------------------------
+    let countdownInterval = null;
+    let spielLadeId = 0;
+
+
+    function starteBegruessungAnim() {
+        const name = document.getElementById("name").value.trim() || "Tipper";
+        const text = `Hallo ${name}! Bereit zum Tippen?`;
+        const element = document.getElementById("begruessung_text");
+        element.innerText = "";
+        let i = 0;
+
+        function type() {
+            if (i < text.length) {
+                element.textContent += text.charAt(i);
+                i++;
+                setTimeout(type, 65);
+            }
+        }
+        type();
+    }
+
+
+    async function spielLaden() {
+
+        let meineLadeId = ++spielLadeId;
+
+        const id = document.getElementById("spiel_select").value;
+        //const name = document.getElementById("name").value.trim();
+
+        if (countdownInterval) {
+            clearInterval(countdownInterval);
+            countdownInterval = null;
+        }
+
+        document.getElementById("overlay").style.display = "none";
+        document.getElementById("tippSpeichern").disabled = false;
+        document.getElementById("tore_a").disabled = false;
+        document.getElementById("tore_b").disabled = false;
+        document.getElementById("tore_a").value = "";
+        document.getElementById("tore_b").value = "";
+        document.getElementById("tore_a").placeholder = "-";
+        document.getElementById("tore_b").placeholder = "-";
+
+        if (!id) {
+            document.getElementById("spiel_datum").innerText = "--.--.";
+            document.getElementById("spiel_zeit").innerText = "--:--";
+            document.getElementById("countdown_box").innerText = "--";
+            offeneTippsBerechnen();
+            return;
+        }
+
+        const { data: spiel, error } = await supabase
+            .from("spiele")
+            .select('team_a, team_b, Startzeit, "Spiel_fertig?", tore_team_a, tore_team_b')
+            .eq("id", id)
+            .single();
+
+        if (meineLadeId !== spielLadeId) return;
+        if (error) {
+            alert("Fehler beim Laden der Spieldaten von ID " + id);
+            console.error(error);
+            return;
+        }
+
+        document.getElementById("team_a").innerText = spiel.team_a;
+        document.getElementById("team_b").innerText = spiel.team_b;
+        setzeFlagge(spiel.team_a, "img_flag_a");
+        setzeFlagge(spiel.team_b, "img_flag_b");
+        
+        if (spiel.Startzeit) {
+            const datumObjekt = new Date(spiel.Startzeit);
+            const formatiertesDatum = datumObjekt.toLocaleDateString('de-DE', {
+                day: '2-digit',
+                month: '2-digit'
+            });
+            const formatierteZeit = datumObjekt.toLocaleTimeString('de-DE', {
+                hour: '2-digit',
+                minute: '2-digit'
+            });
+            document.getElementById("spiel_datum").innerText = formatiertesDatum;
+            document.getElementById("spiel_zeit").innerText = formatierteZeit;
+        } else {
+            document.getElementById("spiel_datum").innerText = "--.--.";
+            document.getElementById("spiel_zeit").innerText = "--:--";
+        }
+        //ok
+
+        //if (name) {
+            //const { data: userDaten, error: userError } = await supabase
+                //.from("users") 
+                //.select("*")    
+                //.ilike("username", name)
+                //.maybeSingle();
+
+           // if (meineLadeId !== spielLadeId) return;
+
+        if(currentUserId){
+          
+                const { data: tipp, error: tippError } = await supabase
+                    .from("tipps")
+                    .select("tore_team_a, tore_team_b")
+                    .eq("tipper_ID", currentUserId) 
+                    .eq("spiel_ID", id)
+                    .maybeSingle(); 
+
+                if (meineLadeId !== spielLadeId) return;
+                
+                if (!tippError && tipp) {
+                    document.getElementById("tore_a").placeholder = tipp.tore_team_a;
+                    document.getElementById("tore_b").placeholder = tipp.tore_team_b;
+                }
+            }
+       // }
+
+        const istSpielFertig = spiel["Spiel_fertig?"];
+        if (istSpielFertig) {
+            document.getElementById("countdown_box").innerText = "Beendet";
+            document.getElementById("overlay_team_a").innerText = spiel.team_a;
+            document.getElementById("overlay_team_b").innerText = spiel.team_b;
+            document.getElementById("overlay_score").innerText = `${spiel.tore_team_a} : ${spiel.tore_team_b}`;
+            document.getElementById("overlay").style.display = "flex";
+            document.getElementById("tippSpeichern").disabled = true;
+            document.getElementById("tore_a").disabled = true;
+            document.getElementById("tore_b").disabled = true;
+        } else if (spiel.Startzeit) {
+            const startzeitMs = new Date(spiel.Startzeit).getTime();
+            const berechneCountdown = () => {
+                const jetztMs = new Date().getTime();
+                const verbleibendeZeit = startzeitMs - jetztMs;
+
+                if (verbleibendeZeit <= 0) {
+                    document.getElementById("countdown_box").innerText = "Spiel läuft...";
+                    document.getElementById("tippSpeichern").disabled = true;
+                    document.getElementById("tore_a").disabled = true;
+                    document.getElementById("tore_b").disabled = true;
+                    if (countdownInterval) {
+                        clearInterval(countdownInterval);
+                        countdownInterval = null;
+                    }
+                } else {
+                    const tage = Math.floor(verbleibendeZeit / (1000 * 60 * 60 * 24));
+                    const stunden = Math.floor((verbleibendeZeit % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                    const minuten = Math.floor((verbleibendeZeit % (1000 * 60 * 60)) / (1000 * 60));
+                    const sekunden = Math.floor((verbleibendeZeit % (1000 * 60)) / 1000);
+
+                    let text = "Tippen möglich bis: ";
+                    if (tage > 0) text += `${tage}d `;
+                    text += `${stunden}h ${minuten}m ${sekunden}s`;
+
+                    document.getElementById("countdown_box").innerText = text;
+                }
+            };
+
+            berechneCountdown();
+            const jetztMs = new Date().getTime();
+            if (startzeitMs - jetztMs > 0) {
+                countdownInterval = setInterval(berechneCountdown, 1000);
+            }
+        } else {
+            document.getElementById("countdown_box").innerText = "--";
+        }
+
+        offeneTippsBerechnen();
+    }
+
+
+  const flaggenMap = {
+    
+    "BRA": "br",
+    "FRA": "fr",
+    "ESP": "es",
+    "MAR": "ma",
+    "ENG": "gb-eng",
+    "POR": "pt",
+    "ARG": "ar",
+     
+    "PAR":"py",
+    "CAN": "ca",
+    "MEX":"mx",
+    "SUI":"ch",
+    "BHI":"ba",
+    "USA":"us",
+    "AUS":"au",
+
+    "CIV": "ci", // Elfenbeinküste
+    "ECU": "ec", // Ecuador
+    "SWE": "se", // Schweden
+    "BEL": "be", // Belgien
+    "EGY": "eg", // Ägypten
+    "CPV": "cv", // Kap Verde
+    "SEN": "sn", // Senegal
+    "NOR": "no", // Norwegen
+    "DZA": "dz", // Algerien
+    "AUT": "at", // Österreich
+    "COD": "cd", // DR Kongo
+    "COL": "co", // Kolumbien
+    "CRO": "hr", // Kroatien
+    "GHA": "gh"  // Ghana
+
+
+
+
+      
+      
+    };
+
+
+  function setzeFlagge(teamName, elementId) {
+    const flagElement = document.getElementById(elementId);
+    const laenderKuerzel = flaggenMap[teamName];
+    
+    if (laenderKuerzel) {
+        flagElement.src = `https://flagcdn.com/w80/${laenderKuerzel}.png`;
+        flagElement.style.display = "block";
+    } else {
+        
+        flagElement.style.display = "none"; 
+        }
+    }      
+
+           
+      
+    async function spieleListeLaden() {
+        const { data: spiele, error } = await supabase
+        .from("spiele")
+        .select('id, team_a, team_b, name, Startzeit, "Spiel_fertig?"') 
+        .eq("spiel_freigeschaltet", true) 
+        .order("id", { ascending: true });
+
+        if (error) {
+            console.error("Fehler beim Laden der Spieleliste:", error.message);
+            return;
+        }
+
+        const select = document.getElementById("spiel_select");
+        select.innerHTML = '<option value="" disabled>-- Bitte wählen --</option>';
+
+        if (spiele) {
+            spiele.forEach(spiel => {
+                const option = document.createElement("option");
+                option.value = spiel.id;
+                option.text = spiel.name || `${spiel.team_a} gegen ${spiel.team_b}`; 
+                select.appendChild(option);
+            });
+
+            const jetztMs = new Date().getTime();
+            let closestSpielId = spiele[0].id;
+            let minDiffZukunft = Infinity;
+            let minDiffVergangenheit = Infinity;
+            let pastClosestId = spiele[0].id;
+
+            spiele.forEach(spiel => {
+                if (spiel.Startzeit && !spiel["Spiel_fertig?"]) {
+                    const spielMs = new Date(spiel.Startzeit).getTime();
+                    const diff = spielMs - jetztMs;
+
+                    if (diff >= 0) {
+                        if (diff < minDiffZukunft) {
+                            minDiffZukunft = diff;
+                            closestSpielId = spiel.id;
+                        }
+                    } else {
+                        if (Math.abs(diff) < minDiffVergangenheit) {
+                            minDiffVergangenheit = Math.abs(diff);
+                            pastClosestId = spiel.id;
+                        }
+                    }
+                }
+            });
+
+            if (minDiffZukunft !== Infinity) {
+                select.value = closestSpielId;
+            } else if (minDiffVergangenheit !== Infinity) {
+                select.value = pastClosestId;
+            } else if (spiele.length > 0) {
+                select.value = spiele[0].id;
+            }
+        }
+
+        await spielLaden();
+        starteBegruessungAnim();
+    }
+
+    async function speichern() {
+        if(!currentUserId){
+            alert("Fehler: Du bist nicht eingeloggt oder deine Sitzung ist abgelaufen.");
+            return;
+        }
+        //const name = document.getElementById("name").value;
+        const spielID = document.getElementById("spiel_select").value;
+        const teamA = document.getElementById("team_a").innerText;
+        const teamB = document.getElementById("team_b").innerText;
+        const rohWertA = document.getElementById("tore_a").value;
+        const rohWertB = document.getElementById("tore_b").value;
+
+        if (!spielID || teamA === "") {
+            alert("Fehler: Spiel konnte nicht geladen werden.");
+            return;
+        }
+        if (rohWertA === "" || rohWertB === "") {
+            alert("Bitte gib für beide Teams Tore ein, bevor du speicherst!");
+            return;
+        }
+
+        const toreA = Number(rohWertA);
+        const toreB = Number(rohWertB);
+
+       
+
+        
+        const { error } = await supabase
+            .from("tipps") 
+            .upsert([{
+                tipper_ID: currentUserId, 
+                spiel_ID: spielID,
+                tore_team_a: toreA,
+                tore_team_b: toreB
+            }],
+            { onConflict: 'tipper_ID,spiel_ID' });
+
+        if (error) {
+            alert("Fehler beim Speichern: " + error.message);
+        } else {
+            alert("Tipp für " + teamA + " vs. " + teamB + " wurde gespeichert!");
+            document.getElementById("tore_a").placeholder = toreA;
+            document.getElementById("tore_b").placeholder = toreB;
+            document.getElementById("tore_a").value = "";
+            document.getElementById("tore_b").value = "";
+
+            offeneTippsBerechnen();
+        }
+
+        // DOC 2: trigger easter egg on 6:7 tip
+        if (toreA == 6 && toreB == 7) {
+            trigger67Effekt();
+        }
+        if(toreA == 7 &&toreB == 1 || toreA == 1 && toreB == 7)
+        {
+            flagRain(80);
+        }
+    }
+
+
+    async function offeneTippsBerechnen() {
+        //const name = document.getElementById("name").value.trim();
+        const counterSpan = document.getElementById("offene_tipps_count");
+        
+        if (!currentUserId) {
+            counterSpan.innerText = "--";
+            return;
+        }
+
+               
+        const { data: spiele, error: spieleError } = await supabase
+            .from("spiele")
+            .select('id, Startzeit, "Spiel_fertig?"')
+            .eq("spiel_freigeschaltet", true);
+            
+        if (spieleError || !spiele) {
+            counterSpan.innerText = "--";
+            return;
+        }
+
+        const { data: tipps, error: tippsError } = await supabase
+            .from("tipps")
+            .select("spiel_ID")
+            .eq("tipper_ID", currentUserId);
+        
+        if (tippsError || !tipps) 
+        {
+            counterSpan.innerText="--";
+            return;
+        }
+
+        const getippteSpielIDs = new Set(tipps.map(t => String(t.spiel_ID)));
+        let offeneTipps = 0;
+        const jetztMs = new Date().getTime();
+
+        spiele.forEach(spiel => {
+            if (!getippteSpielIDs.has(String(spiel.id))) {
+                const istFertig = spiel["Spiel_fertig?"];
+                const startzeitMs = spiel.Startzeit ? new Date(spiel.Startzeit).getTime() : 0;
+                const läuftBereits = spiel.Startzeit && (startzeitMs <= jetztMs);
+                
+                if (!istFertig && !läuftBereits) {
+                    offeneTipps++;
+                }
+            }
+        });
+
+        counterSpan.innerText = offeneTipps;
+    }
+
+    async function spielWechseln(richtung) {
+        const select = document.getElementById("spiel_select");
+        const currentIndex = select.selectedIndex;
+        const totalOptions = select.options.length;
+
+        if (totalOptions <= 1) return;
+        let newIndex = currentIndex + richtung;
+
+        if (newIndex < 1) {
+            newIndex = totalOptions - 1;
+        } else if (newIndex >= totalOptions) {
+            newIndex = 1;
+        }
+
+        select.selectedIndex = newIndex;
+        await spielLaden();
+    }
+
+
+    // Authentifizierung
+    async function checkAuthAndInit() {
+        const { data: { session }, error: authError } = await supabase.auth.getSession();
+
+        if (authError || !session) {
+            window.location.replace("index.html");
+            throw new Error("Nicht eingeloggt.");
+        }
+
+        const user = session.user;
+        currentUserId = user.id;
+
+        const { data: userDaten, error: userError } = await supabase
+            .from("users")
+            .select("username")
+            .eq("user_ID", user.id)
+            .maybeSingle();
+
+        if (userError || !userDaten) {
+            window.location.replace("profil.html");
+            throw new Error("Profil fehlt");
+        }
+
+        document.getElementById("name").value = userDaten.username;
+        document.getElementById("begruessung_text").innerText = "Hallo " + userDaten.username + "! Bereit zum Tippen?";
+    }
+
+
+    // Funktionsdefinitionen von Gruppe 3 !!
+
+    
+
+    let points_for_l1_prediction = 4;
+    let points_for_l2_prediction = 3;
+    let points_for_l3_prediction = 2;
+    let points_for_draw_prediction = 2;
+    let aktuellesSpiel = 0;
+    let rangliste = [];
+    let zeileT = [];
+    let spiele = [];
+    let users = [];
+    let tipps = [];
+      
+    
+    
+    //async function informationLaden() //hier async notwendig!
+    //{
+      //  const { data: spiele1, error:  errorspiele} = await supabase.from("spiele").select("*").order("id", {ascending: true});
+        //    if(errorspiele)
+          //  {
+           // document.getElementById("ausgabe").innerText=errorspiele.message;
+            //}
+    
+   //     const { data: users1, error: errorusers} = await supabase.from("users_public").select("user_ID,username,avatar");
+     //       if(errorusers)
+       //     {
+         //       document.getElementById("ausgabe").innerText=errorusers.message;
+           // }
+        //const { data: tipps1, error: errortipps } = await supabase.from("tipps").select("*");
+         //   if (errortipps) 
+           // {
+             //   document.getElementById("ausgabe").innerText = errortipps.message;
+            //}
+    
+        //spiele = spiele1;
+        //users = users1;
+       // tipps = tipps1;
+    //}
+
+    // DOC 2: auto-set aktuellesSpiel to last finished game on init
+     function aktuellesSpiel_Laden() {
+        for (let i = 0; i < spiele.length; i++) {
+            if (spiele[i]["Spiel_fertig?"]) {
+                aktuellesSpiel = i;
+            }
+        }
+    }
+
+    // DOC 2: fold/wave easter egg triggered by 6:7 tip or searching "67"
+ 
+
+    // Initialisierung
+    await checkAuthAndInit(); //hier await nötig
+    //await informationLaden(); 
+     aktuellesSpiel_Laden(); // DOC 2: added before spieleListeLaden
+     await spieleListeLaden();
+    // ranglisteEintragen();
+    // renderNormaleAnsicht();
+
+    // Event-Listener Gruppe 1 
+    document.getElementById("tippSpeichern").addEventListener("click", speichern);
+    document.getElementById("spiel_select").addEventListener("change", spielLaden);
+    document.getElementById("btn_prev").addEventListener("click", () => spielWechseln(-1));
+    document.getElementById("btn_next").addEventListener("click", () => spielWechseln(1));
+   
+    // Event-Listener Gruppe 3
+    document.getElementById("suche").addEventListener("input", spielerSuchen);
+    document.getElementById("refreshButton").addEventListener("click", ranglisteAktualisieren);
+    document.getElementById("weiter").addEventListener("click",  function() {
+         spielRechts(true);
+    });
+    document.getElementById("zurueck").addEventListener("click",  function() {
+         spielRechts(false);
+    });
+    document.getElementById("punkte_info").addEventListener("click", (e) => {
+        e.stopPropagation();
+        e.currentTarget.classList.toggle("active");
+    });
+    
+    // Allgemeine Event-Listener
+    window.addEventListener("click", (e) => {
+        const badge = document.getElementById("info_badge_tips");
+        const badge2 = document.getElementById("punkte_info");
+
+        if (badge && !e.target.closest("#info_badge_tips")) {
+            badge.classList.remove("active");
+        }
+
+        if (badge2 && !e.target.closest("#punkte_info")) {
+            badge2.classList.remove("active");
+        }
+
+        const err = document.getElementById("limit-error");
+        if (err) err.classList.remove("active");
+    });
+
+    </script> 
+</body> 
+</html>
