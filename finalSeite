@@ -1,155 +1,220 @@
 <!DOCTYPE html>
 <html lang="de">
-<head>
-  <meta charset="UTF-8">
-  <title>Final</title>
+        <head>
+        <meta charset="UTF-8">
+        <title>Final</title>
 
-  <style>
-   body {
-  margin: 0;
-  height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: flex-start; /* <- nach oben statt Mitte */
-  padding-top: 50px;       /* Abstand nach oben */
-  background-image: url("rasen chatgpt.png");
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-  overflow: hidden;
-}
+        <style>
+        body {
+        margin: 0;
+        height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: flex-start; /* <- nach oben statt Mitte */
+        padding-top: 50px;       /* Abstand nach oben */
+        background-image: url("rasen chatgpt.png");
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        overflow: hidden;
+        }
 
-    #logo-container {
-      position: relative;
-      display: inline-block;
-    }
+            #logo-container {
+            position: relative;
+            display: inline-block;
+            }
 
-    #logo {
-      width: 510px;
-      height: auto;
-    }
+            #logo {
+            width: 510px;
+            height: auto;
+            }
 
-    #ball-wrapper {
-  position: absolute;
-  left: 13.3%;
-  top: 39%;
-  transform: translate(-50%, -50%);
-  animation: flug 1.5s ease-out forwards;
-  z-index: 10;
-}
+            #ball-wrapper {
+        position: absolute;
+        left: 13.3%;
+        top: 39%;
+        transform: translate(-50%, -50%);
+        animation: flug 1.5s ease-out forwards;
+        z-index: 10;
+        }
 
-    #ball {
-      width: 24px;
-      height: 24px;
-      animation: spin 15s linear infinite;
-    }
+            #ball {
+            width: 24px;
+            height: 24px;
+            animation: spin 15s linear infinite;
+            }
 
 
-#sonne{
-    position:absolute;
+        #sonne{
+            position:absolute;
 
-    /* Position hinter dem Pokalkopf */
-    right: 1px;
-    top:6px;
+            /* Position hinter dem Pokalkopf */
+            right: 1px;
+            top:6px;
 
-    width:65px;
-    height:45px;
+            width:65px;
+            height:45px;
 
-    transform-origin:center;
-    animation:drehen 20s linear infinite;
+            transform-origin:center;
+            animation:drehen 20s linear infinite;
 
-    z-index:0;
-}
+            z-index:0;
+        }
 
-#logo{
-    position:relative;
-    z-index:2;
-}
+        #logo{
+            position:relative;
+            z-index:2;
+        }
 
-.strahl{
-    position:absolute;
+        .strahl{
+            position:absolute;
 
-    left:50%;
-    top:50%;
+            left:50%;
+            top:50%;
 
-    width:6px;
-    height:55px;
+            width:6px;
+            height:55px;
 
-    background:linear-gradient(
-        to top,
-        rgba(255,210,0,0),
-        rgba(255,230,90,.9)
-    );
+            background:linear-gradient(
+                to top,
+                rgba(255,210,0,0),
+                rgba(255,230,90,.9)
+            );
 
-    border-radius:10px;
+            border-radius:10px;
 
-    transform:
-        translate(-50%,-100%)
-        rotate(calc(var(--i) * 30deg));
+            transform:
+                translate(-50%,-100%)
+                rotate(calc(var(--i) * 30deg));
 
-    transform-origin:center bottom;
+            transform-origin:center bottom;
 
-    filter:blur(1px);
-}
+            filter:blur(1px);
+        }
 
-@keyframes drehen{
-    from{
-        transform:rotate(0deg);
-    }
-    to{
-        transform:rotate(360deg);
-    }
-}
+        @keyframes drehen{
+            from{
+                transform:rotate(0deg);
+            }
+            to{
+                transform:rotate(360deg);
+            }
+        }
 
-    @keyframes spin {
-      from { transform: rotate(0deg); }
-      to { transform: rotate(360deg); }
-    }
+            @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+            }
 
-    @keyframes flug {
-  from {
-    transform:
-      translate(-50%, -50%)
-      translate(430px, 400px)
-      scale(4);      /* Start: 4-mal so groß */
-  }
+            @keyframes flug {
+        from {
+            transform:
+            translate(-50%, -50%)
+            translate(430px, 400px)
+            scale(4);      /* Start: 4-mal so groß */
+        }
 
-  to {
-    transform:
-      translate(-50%, -50%)
-      translate(0, 0)
-      scale(1);      /* Endgröße = aktuelle Größe (26px) */
-  }
-}
-  </style>
-</head>
+        to {
+            transform:
+            translate(-50%, -50%)
+            translate(0, 0)
+            scale(1);      /* Endgröße = aktuelle Größe (26px) */
+        }
+        }
+        </style>
+        </head>
 
-<body>
+        <body>
 
-  <div id="logo-container">
+        <div id="logo-container">
 
-    <div id="sonne">
-      <div class="strahl" style="--i:0"></div>
-      <div class="strahl" style="--i:1"></div>
-      <div class="strahl" style="--i:2"></div>
-      <div class="strahl" style="--i:3"></div>
-      <div class="strahl" style="--i:4"></div>
-      <div class="strahl" style="--i:5"></div>
-      <div class="strahl" style="--i:6"></div>
-      <div class="strahl" style="--i:7"></div>
-      <div class="strahl" style="--i:8"></div>
-      <div class="strahl" style="--i:9"></div>
-      <div class="strahl" style="--i:10"></div>
-      <div class="strahl" style="--i:11"></div>
-    </div>
+            <div id="sonne">
+            <div class="strahl" style="--i:0"></div>
+            <div class="strahl" style="--i:1"></div>
+            <div class="strahl" style="--i:2"></div>
+            <div class="strahl" style="--i:3"></div>
+            <div class="strahl" style="--i:4"></div>
+            <div class="strahl" style="--i:5"></div>
+            <div class="strahl" style="--i:6"></div>
+            <div class="strahl" style="--i:7"></div>
+            <div class="strahl" style="--i:8"></div>
+            <div class="strahl" style="--i:9"></div>
+            <div class="strahl" style="--i:10"></div>
+            <div class="strahl" style="--i:11"></div>
+            </div>
 
-    <img id="logo" src="logo mit pokal.png" alt="Logo">
+            <img id="logo" src="logo mit pokal.png" alt="Logo">
 
-    <span id="ball-wrapper">
-      <img id="ball" src="fussball_ohne_schatten.png" alt="Ball">
-    </span>
+            <span id="ball-wrapper">
+            <img id="ball" src="fussball_ohne_schatten.png" alt="Ball">
+            </span>
 
-  </div>
+        </div>
 
-</body>
+
+
+        
+            <script type="module">
+
+                const weltmeister = "";
+                const vizeweltmeister = "";
+                const besterspieler = "";
+                let extraTipps = [];
+
+                extraTipps = await ZusatztippsLaden();
+
+                async function ZusatztippsLaden() 
+                {
+                    const { data: Extratipps, error:  errorExtratipps} = await supabase.from("zusatztipps").select("*");
+                    if(errorspiele)
+                    {
+                        document.getElementById("ausgabe").innerText=errorExtratipps.message;
+                    }
+                }
+
+
+
+                function gesPunkteBerechnenMitExtra(tipper_ID)
+                {
+                    let answer = gesPunkteBerechnen();
+                    const extraTippsDesUsers = extraTipps.filter(extratipp => extratipp.user_ID === tipper_ID);
+                    
+
+                    if (extraTippsDesUsers.weltmeister == weltmeister)
+                    {
+                        answer += 3;
+                    }
+                    if(extraTippsDesUsers.vizeweltmeister == vizeweltmeister)
+                    {
+                        answer += 3;
+                    }
+                    if(besterSpielerPrüfen(extraTippDesUsers.besterSpieler))
+                    {
+                        answer += 3;
+                    }
+                    return answer;
+                }
+
+
+                function bereinigeString(str) {
+                return str
+                    .normalize("NFD")                 
+                    .replace(/[\u0300-\u036f]/g, "")  
+                    .replace(/[^a-zA-Z0-9]/g, "")     
+                    .toLowerCase();
+                }
+
+
+
+                function besterSpielerPrüfen(getippteBesteSpieler)
+                {
+                    return bereinigeString(getippteBesteSpieler).trim().toLowerCase() === besterspieler.trim().toLowerCase();
+                }
+
+
+
+            </script>
+
+
+        </body>
 </html>
