@@ -475,6 +475,18 @@ body {
 
 /* ENDE Meine Tipps */
 
+/* ANFANG Benutzername-Hinweis 
+wenn man will das das zusätzlich unter dem kasten benutzername nochmal steht damit man das selbst sieht wennman eintippt
+.username-hinweis {
+  margin: -4px 0 12px;
+  font-size: 14px;
+  color: #64748b;
+  font-weight: 600;
+}
+
+ENDE Benutzername-Hinweis */
+
+
 /* ANFANG Datenschutzhinweis sauber */
 
 .form-card .datenschutz-zustimmung {
@@ -519,6 +531,36 @@ body {
 }
 
 /* ENDE Datenschutzhinweis sauber */
+
+/* ANFANG Zusatztipps nach Deadline gesperrt */
+
+.zusatztipps.geschlossen {
+  opacity: 0.58;
+  position: relative;
+}
+
+.zusatztipps.geschlossen select,
+.zusatztipps.geschlossen input {
+  cursor: not-allowed;
+  background: #f1f5f9;
+  color: #64748b;
+}
+
+.deadline-hinweis {
+  display: none;
+  margin: 12px 0 0;
+  padding: 12px 14px;
+  border-radius: 10px;
+  background: #fff7ed;
+  border: 1px solid #fed7aa;
+  color: #9a3412;
+  font-size: 15px;
+  font-weight: 700;
+  line-height: 1.35;
+}
+
+/* ENDE Zusatztipps nach Deadline gesperrt */
+
 
   </style>
 
@@ -570,14 +612,20 @@ body {
                <p class="tipp-hinweis" style="margin-bottom:12px;">Vorname, Name und Benutzername können nach Bestätigung nicht mehr geändert werden!</p>
         <input id="input_vorname" type="text" placeholder="Vorname" />
         <input id="input_name" type="text" placeholder="Nachname" />
-        <input id="input_username" type="text" placeholder="Benutzername" />
+        <input id="input_username" type="text" placeholder="Benutzername (max. 15 Zeichen)" />
+        <!--<p class="username-hinweis">Der Benutzername darfmaximal 15 Zeichen lang sein.</p>
+        wenn man will das das zusätzlich unter dem kasten benutzername nochmal steht damit man das selbst sieht wennman eintippt
+        -->
+        
         <div class="avatar-selector">
             <p>Avatar auswählen:</p>
             <div id="avatar_options" class="avatar-options"></div>
         </div>
         <div class="zusatztipps">
-  <h2>Zusatztipps</h2>
-
+  <h2>Zusatztipps - 3 Extrapunkte pro richtiger Antwort</h2>
+  <p id="zusatztipps_deadline_hinweis" class="deadline-hinweis">
+  Die Frist für die Zusatztipps ist abgelaufen. Diese Tipps konnten nur bis zum 4. Juli 2026 um 14:20 Uhr abgegeben werden. Man kann das Profil dennoch vervollständigen und für alle kommenden Spiele tippen. Da es auf richtige Tipps bis zu 4 Punkten gibt, ist mit viel Fußballkenntnis immernoch ein hohes Ranking zu erreichen!
+  </p>
   <label for="input_weltmeister">Wer wird Weltmeister?</label>
   <select id="input_weltmeister">
     <option value="">Bitte auswählen</option>
@@ -588,7 +636,7 @@ body {
     <option value="">Bitte auswählen</option>
   </select>
 
-  <label for="input_bester_spieler">Wer wird bester Spieler?</label>
+  <label for="input_bester_spieler">Wer wird bester Feldspieler?</label>
   <input id="input_bester_spieler" type="text" placeholder="z. B. Mbappe, Messi, Bellingham..." />
 
 </div>
@@ -596,7 +644,7 @@ body {
   <input id="datenschutz_ok" type="checkbox" />
   <label for="datenschutz_ok">
     Ich stimme der
-    <a href="datenschutzerklärung.html" target="_blank">Datenschutzerklärung</a>
+    <a href="datenschutzerklaerung.html" target="_blank">Datenschutzerklärung</a>
     zu und habe diese durchgelesen.
   </label>
 </div>
@@ -673,14 +721,45 @@ body {
         return new Date() < DEADLINE;
     }
 
+    function aktualisiereZusatztippsStatus() {
+    const zusatztippsBox = document.querySelector("#profile_completion .zusatztipps");
+    const hinweis = document.getElementById("zusatztipps_deadline_hinweis");
+
+    const felder = [
+        document.getElementById("input_weltmeister"),
+        document.getElementById("input_vizeweltmeister"),
+        document.getElementById("input_bester_spieler")
+    ];
+
+    const abgabeOffen = istVorDeadline();
+
+    if (zusatztippsBox) {
+        zusatztippsBox.classList.toggle("geschlossen", !abgabeOffen);
+    }
+
+    if (hinweis) {
+        hinweis.style.display = abgabeOffen ? "none" : "block";
+    }
+
+    felder.forEach((feld) => {
+        if (!feld) return;
+
+        feld.disabled = !abgabeOffen;
+
+        if (!abgabeOffen && feld.tagName === "INPUT") {
+            feld.placeholder = "Abgabefrist verpasst";
+        }
+    });
+  }
+
     // ANFANG WM-Teams
 // status: "imTurnier" = auswählbar
 // status: "ausgeschieden" = sichtbar, aber nicht auswählbar
 
 const wmTeams = [
     { name: "Mexiko", status: "imTurnier" },
-    { name: "Südafrika", status: "imTurnier" },
-    { name: "Südkorea", status: "imTurnier" },
+    { name: "Südafrika", status: "ausgeschieden" },
+    { name: "Südkorea", status: "ausgeschieden" },
     { name: "Tschechien", status: "ausgeschieden" },
 
     { name: "Kanada", status: "imTurnier" },
@@ -691,36 +770,36 @@ const wmTeams = [
     { name: "Brasilien", status: "imTurnier" },
     { name: "Marokko", status: "imTurnier" },
     { name: "Haiti", status: "ausgeschieden" },
-    { name: "Schottland", status: "imTurnier" },
+    { name: "Schottland", status: "ausgeschieden" },
 
     { name: "USA", status: "imTurnier" },
     { name: "Paraguay", status: "imTurnier" },
     { name: "Australien", status: "imTurnier" },
     { name: "Türkei", status: "ausgeschieden" },
 
-    { name: "Deutschland", status: "imTurnier" },
+    { name: "Deutschland", status: "ausgeschieden" },
     { name: "Curacao", status: "ausgeschieden" },
     { name: "Elfenbeinküste", status: "imTurnier" },
     { name: "Ecuador", status: "imTurnier" },
 
-    { name: "Niederlande", status: "imTurnier" },
-    { name: "Japan", status: "imTurnier" },
+    { name: "Niederlande", status: "ausgeschieden" },
+    { name: "Japan", status: "ausgeschieden" },
     { name: "Schweden", status: "imTurnier" },
     { name: "Tunesien", status: "ausgeschieden" },
 
     { name: "Belgien", status: "imTurnier" },
     { name: "Ägypten", status: "imTurnier" },
-    { name: "Iran", status: "imTurnier" },
-    { name: "Neuseeland", status: "imTurnier" },
+    { name: "Iran", status: "ausgeschieden" },
+    { name: "Neuseeland", status: "ausgeschieden" },
 
     { name: "Spanien", status: "imTurnier" },
     { name: "Kap Verde", status: "imTurnier" },
-    { name: "Saudi-Arabien", status: "imTurnier" },
-    { name: "Uruguay", status: "imTurnier" },
+    { name: "Saudi-Arabien", status: "ausgeschieden" },
+    { name: "Uruguay", status: "ausgeschieden" },
 
     { name: "Frankreich", status: "imTurnier" },
     { name: "Senegal", status: "imTurnier" },
-    { name: "Irak", status: "imTurnier" },
+    { name: "Irak", status: "ausgeschieden" },
     { name: "Norwegen", status: "imTurnier" },
 
     { name: "Argentinien", status: "imTurnier" },
@@ -730,13 +809,13 @@ const wmTeams = [
 
     { name: "Portugal", status: "imTurnier" },
     { name: "DR Kongo", status: "imTurnier" },
-    { name: "Usbekistan", status: "imTurnier" },
+    { name: "Usbekistan", status: "ausgeschieden" },
     { name: "Kolumbien", status: "imTurnier" },
 
     { name: "England", status: "imTurnier" },
     { name: "Kroatien", status: "imTurnier" },
     { name: "Ghana", status: "imTurnier" },
-    { name: "Panama", status: "imTurnier" }
+    { name: "Panama", status: "ausgeschieden" }
 ];
 
 // ENDE WM-Teams
@@ -830,7 +909,7 @@ async function loadProfile() {
     const { data: { session }, error: authError } = await supabase.auth.getSession();
 
     if (authError || !session) {
-        window.location.href = "login.html";
+        window.location.replace("login.html");
         return;
     }
 
@@ -873,16 +952,24 @@ async function loadProfile() {
     return;
     }
 
-    const isComplete = Boolean(
-        profile.username &&
-        profile.Vorname &&
-        profile.Name &&
-        profile.avatar &&
-        tipps &&
-        tipps.weltmeister &&
-        tipps.viezeweltmeister &&
-        tipps.besterspieler
-    );
+const profilBasisVollstaendig = Boolean(
+    profile.username &&
+    profile.Vorname &&
+    profile.Name &&
+    profile.avatar
+);
+
+const zusatztippsVollstaendig = Boolean(
+    tipps &&
+    tipps.weltmeister &&
+    tipps.viezeweltmeister &&
+    tipps.besterspieler
+);
+
+const isComplete = istVorDeadline()
+    ? Boolean(profilBasisVollstaendig && zusatztippsVollstaendig)
+    : profilBasisVollstaendig;
+
 
     if (profileStatus) {
         profileStatus.innerText = isComplete ? "Profil vollständig" : "Profil unvollständig";
@@ -904,6 +991,7 @@ async function loadProfile() {
     document.getElementById("input_weltmeister").value = tipps?.weltmeister || "";
     document.getElementById("input_vizeweltmeister").value = tipps?.viezeweltmeister || "";
     document.getElementById("input_bester_spieler").value = tipps?.besterspieler || "";
+    aktualisiereZusatztippsStatus();
 
     document.getElementById("profile_completion").style.display = isComplete ? "none" : "block";
     document.querySelector(".profil").style.display = isComplete ? "block" : "none"; //neu: Profil anzeigen, wenn vollständig
@@ -927,7 +1015,7 @@ async function saveProfile() {
     const { data: { session }, error: authError } = await supabase.auth.getSession();
 
     if (authError || !session) {
-        window.location.href = "login.html";
+        window.location.replace("login.html");
         return;
     }
 
@@ -943,36 +1031,44 @@ async function saveProfile() {
 
     const status = document.getElementById("status");
     status.innerText = "";
-    //Nur wenn Datenschutzerklärung zugestimmt würde geht profilvervollständigen anfang
-    const datenschutzOk = document.getElementById("datenschutz_ok").checked;
-    if (!datenschutzOk) 
-    {
-    status.innerText = "Bitte stimme der Datenschutzerklärung zu.";
-    return;
-    }
-    //Nur wenn Datenschutzerklärung zugestimmt würde geht profilvervollständigen ende
-    if (
-        !vorname ||
-        !name ||
-        !username ||
-        !selectedAvatar ||
-        !weltmeisterTipp ||
-        !vizeweltmeisterTipp ||
-        !besterSpielerTipp
-    ) {
-        status.innerText = "Bitte fülle dein Profil vollständig aus und gib alle Zusatztipps ab.";
+
+    if (username.length > 15) {
+        status.innerText = "Der Benutzername darf nicht länger als 15 Zeichen sein.";
         return;
     }
 
-    if (weltmeisterTipp === vizeweltmeisterTipp) {
-        status.innerText = "Weltmeister und Vizeweltmeister dürfen nicht gleich sein.";
+    const datenschutzOk = document.getElementById("datenschutz_ok").checked;
+
+    if (!datenschutzOk) {
+        status.innerText = "Bitte stimme der Datenschutzerklärung zu.";
         return;
     }
-    if (istTeamAusgeschieden(weltmeisterTipp) || istTeamAusgeschieden(vizeweltmeisterTipp)) {
-    status.innerText = "Ausgeschiedene Teams können nicht mehr als Weltmeister oder Vizeweltmeister getippt werden.";
-    return;
+
+    if (!vorname || !name || !username || !selectedAvatar) {
+        status.innerText = "Bitte fülle Vorname, Nachname, Benutzername aus und wähle einen Avatar.";
+        return;
     }
-    // 1. Profil in users speichern
+
+    const zusatztippsNochOffen = istVorDeadline();
+
+    if (zusatztippsNochOffen) {
+        if (!weltmeisterTipp || !vizeweltmeisterTipp || !besterSpielerTipp) {
+            status.innerText = "Bitte fülle dein Profil vollständig aus und gib alle Zusatztipps ab.";
+            return;
+        }
+
+        if (weltmeisterTipp === vizeweltmeisterTipp) {
+            status.innerText = "Weltmeister und Vizeweltmeister dürfen nicht gleich sein.";
+            return;
+        }
+
+        if (istTeamAusgeschieden(weltmeisterTipp) || istTeamAusgeschieden(vizeweltmeisterTipp)) {
+            status.innerText = "Ausgeschiedene Teams können nicht mehr als Weltmeister oder Vizeweltmeister getippt werden.";
+            return;
+        }
+    }
+
+    // 1. Profil immer speichern
     const { error: profileError } = await supabase.from("users").upsert([
         {
             user_ID: user.id,
@@ -988,22 +1084,24 @@ async function saveProfile() {
         return;
     }
 
-    // 2. Zusatztipps in zusatztipps speichern
-    const { error: tippsError } = await supabase.from("zusatztipps").upsert([
-        {
-            user_ID: user.id,
-            weltmeister: weltmeisterTipp,
-            viezeweltmeister: vizeweltmeisterTipp,
-            besterspieler: besterSpielerTipp
-        }
-    ], { onConflict: "user_ID" });
+    // 2. Zusatztipps nur speichern, wenn die Frist noch offen ist
+    if (zusatztippsNochOffen) {
+        const { error: tippsError } = await supabase.from("zusatztipps").upsert([
+            {
+                user_ID: user.id,
+                weltmeister: weltmeisterTipp,
+                viezeweltmeister: vizeweltmeisterTipp,
+                besterspieler: besterSpielerTipp
+            }
+        ], { onConflict: "user_ID" });
 
-    if (tippsError) {
-        status.innerText = tippsError.message;
-        return;
+        if (tippsError) {
+            status.innerText = tippsError.message;
+            return;
+        }
     }
 
-    window.location.href = "index.html";
+    window.location.replace("index.html");
 }
 
     // NEU: Zusatztipps bearbeiten
@@ -1014,7 +1112,7 @@ async function saveProfile() {
         }
 
         const { data: { session } } = await supabase.auth.getSession();
-        if (!session) { window.location.href = "login.html"; return; }
+        if (!session) { window.location.replace("login.html"); return; }
 
         const user = session.user;
         const weltmeister = document.getElementById("bearbeiten_weltmeister").value;
@@ -1098,7 +1196,7 @@ async function meineTippsLaden() {
     const { data: { session }, error: authError } = await supabase.auth.getSession();
 
     if (authError || !session) {
-        window.location.href = "login.html";
+        window.location.replace("login.html");
         return;
     }
 
@@ -1147,13 +1245,26 @@ async function meineTippsLaden() {
 
         gesamtpunkte += punkte;
 
-        tabelle.innerHTML += `
-            <tr>
-                <td>${spiel.team_a} - ${spiel.team_b}</td>
-                <td>${tipp.tore_team_a} : ${tipp.tore_team_b}</td>
-                <td>${punkte}</td>
-            </tr>
-        `;
+        if(spiel["Spiel_fertig?"])
+        {
+            tabelle.innerHTML += `
+                <tr>
+                    <td>${spiel.team_a} - ${spiel.team_b}</td>
+                    <td>${tipp.tore_team_a} : ${tipp.tore_team_b}</td>
+                    <td>${punkte}</td>
+                </tr>
+            `;
+        }
+        else
+        {
+            tabelle.innerHTML += `
+                <tr>
+                    <td>${spiel.team_a} - ${spiel.team_b}</td>
+                    <td>${tipp.tore_team_a} : ${tipp.tore_team_b}</td>
+                    <td>${"-"}</td>
+                </tr>
+            `;
+        }
     });
 
     tabelle.innerHTML += `
@@ -1165,18 +1276,32 @@ async function meineTippsLaden() {
     `;
 }
 
+
 // ENDE Meine Tipps anzeigen
 
     async function logout() {
         await supabase.auth.signOut();
-        window.location.href = "login.html";
+        window.location.replace("login.html");
     }
 
     renderAvatarOptions();
     renderTeamSelects();
+    aktualisiereZusatztippsStatus();
 
     document.getElementById("logout").addEventListener("click", logout);
     document.getElementById("save-profile").addEventListener("click", saveProfile);
+    /*
+  OPTIONAL: Harte Begrenzung auf 15 Zeichen beim Tippen
+
+  Wenn diese Funktion aktiviert wird oist es nicht möglich mehr als 15 ziffernbeim benutzernamen zu tippen
+
+  document.getElementById("input_username").addEventListener("input", function () {
+    if (this.value.length > 15) {
+        this.value = this.value.slice(0, 15);
+    }
+  });
+  */
+
     document.getElementById("save-bearbeiten").addEventListener("click", saveBearbeiten);
     document.getElementById("buttonTippsAnzeigen").addEventListener("click", meineTippsLaden);
 
