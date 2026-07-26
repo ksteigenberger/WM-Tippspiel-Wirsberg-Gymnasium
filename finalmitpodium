@@ -1,0 +1,2071 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>WIG-WM Rangliste</title>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<style>
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Arial',sans-serif;
+}
+
+body{
+    min-height:100vh;
+    background:
+    linear-gradient(
+        180deg,
+        #063d22,
+        #087a3c,
+        #12b85a
+    );
+
+    color:white;
+    overflow-x:hidden;
+}
+
+
+/* Hintergrund Effekte */
+
+.background{
+    position:fixed;
+    inset:0;
+    pointer-events:none;
+    overflow:hidden;
+}
+
+.circle{
+    position:absolute;
+    border-radius:50%;
+    background:rgba(255,255,255,.08);
+}
+
+.circle:nth-child(1){
+    width:400px;
+    height:400px;
+    top:-150px;
+    left:-100px;
+}
+
+.circle:nth-child(2){
+    width:500px;
+    height:500px;
+    bottom:-200px;
+    right:-150px;
+}
+
+ #logo-container {
+      position: relative;
+      display: inline-block;
+    }
+
+    #logo {
+      width: 510px;
+      height: auto;
+    }
+
+    #ball-wrapper {
+        position: absolute;
+        left: 13.3%;
+        top: 39%;
+        transform: translate(-50%, -50%);
+        animation: flug 1.5s ease-out forwards;
+        z-index: 10;
+    }
+
+    #ball {
+      width: 24px;
+      height: 24px;
+      animation: spin 15s linear infinite;
+    }
+
+
+#sonne{
+    position:absolute;
+
+    /* Position hinter dem Pokalkopf */
+    right: 1px;
+    top:6px;
+
+    width:65px;
+    height:45px;
+
+    transform-origin:center;
+    animation:drehen 20s linear infinite;
+
+    z-index:0;
+}
+
+#logo{
+    position:relative;
+    z-index:2;
+}
+
+.strahl{
+    position:absolute;
+
+    left:50%;
+    top:50%;
+
+    width:6px;
+    height:55px;
+
+    background:linear-gradient(
+        to top,
+        rgba(255,210,0,0),
+        rgba(255,230,90,.9)
+    );
+
+    border-radius:10px;
+
+    transform:
+        translate(-50%,-100%)
+        rotate(calc(var(--i) * 30deg));
+
+    transform-origin:center bottom;
+
+    filter:blur(1px);
+}
+
+@keyframes drehen{
+    from{
+        transform:rotate(0deg);
+    }
+    to{
+        transform:rotate(360deg);
+    }
+}
+
+    @keyframes spin {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+
+    @keyframes flug {
+  from {
+    transform:
+      translate(-50%, -50%)
+      translate(430px, 400px)
+      scale(4);      /* Start: 4-mal so groß */
+  }
+
+  to {
+    transform:
+      translate(-50%, -50%)
+      translate(0, 0)
+      scale(1);      /* Endgröße = aktuelle Größe (26px) */
+  }
+}
+
+
+
+/* Hauptcontainer */
+
+.container{
+    width:95%;
+    max-width:1200px;
+    margin:auto;
+    padding:40px 0 60px;
+}
+
+
+/* Überschrift */
+
+.title{
+    text-align:center;
+    font-size:clamp(2rem,5vw,3.5rem);
+    font-weight:900;
+    margin-bottom:50px;
+
+    text-shadow:
+    0 5px 20px rgba(0,0,0,.4);
+
+    animation:titleIn 1s ease forwards;
+}
+
+
+@keyframes titleIn{
+
+from{
+    opacity:0;
+    transform:translateY(-50px);
+}
+
+to{
+    opacity:1;
+    transform:translateY(0);
+}
+
+}
+
+
+
+/* Podest */
+
+.podium{
+
+display:flex;
+justify-content:center;
+align-items:flex-end;
+gap:25px;
+
+margin-bottom:60px;
+
+}
+
+
+.player{
+
+display:flex;
+flex-direction:column;
+align-items:center;
+
+opacity:0;
+
+animation:
+playerIn .9s ease forwards;
+
+}
+
+
+.player:nth-child(1){
+animation-delay:.5s;
+}
+
+.player:nth-child(2){
+animation-delay:.2s;
+}
+
+.player:nth-child(3){
+animation-delay:.8s;
+}
+
+
+
+@keyframes playerIn{
+
+from{
+opacity:0;
+transform:
+translateY(200px)
+scale(.7);
+}
+
+to{
+opacity:1;
+transform:
+translateY(0)
+scale(1);
+}
+
+}
+
+
+
+/* Profilbilder */
+
+.avatar{
+
+width:120px;
+height:120px;
+
+border-radius:50%;
+
+overflow:hidden;
+
+border:6px solid white;
+
+background:#ddd;
+
+box-shadow:
+0 15px 30px rgba(0,0,0,.4);
+
+margin-bottom:15px;
+
+}
+
+
+.first .avatar{
+
+width:160px;
+height:160px;
+
+}
+
+
+
+.avatar img{
+
+width:100%;
+height:100%;
+
+object-fit:cover;
+
+}
+
+
+
+/* Namen */
+
+.username{
+
+font-size:1.3rem;
+font-weight:bold;
+
+margin-bottom:10px;
+
+}
+
+
+
+/* Podestblöcke */
+
+
+.block{
+
+width:190px;
+
+border-radius:
+20px 20px 0 0;
+
+display:flex;
+
+justify-content:center;
+
+align-items:flex-start;
+
+padding-top:25px;
+
+font-size:3rem;
+
+font-weight:900;
+
+color:#222;
+
+box-shadow:
+0 20px 40px rgba(0,0,0,.35);
+
+}
+
+
+
+.first .block{
+
+height:300px;
+
+background:
+linear-gradient(
+#ffe066,
+#d9a900
+);
+
+}
+
+
+
+.second .block{
+
+height:230px;
+
+background:
+linear-gradient(
+#eee,
+#999
+);
+
+}
+
+
+
+.third .block{
+
+height:180px;
+
+background:
+linear-gradient(
+#d89055,
+#8b4a1e
+);
+
+color:white;
+
+}
+
+
+
+/* Top 10 */
+
+
+.ranking{
+
+background:
+rgba(255,255,255,.12);
+
+backdrop-filter:blur(10px);
+
+border-radius:25px;
+
+padding:25px;
+
+box-shadow:
+0 20px 40px rgba(0,0,0,.25);
+
+}
+
+
+
+.ranking h2{
+
+text-align:center;
+
+font-size:2rem;
+
+margin-bottom:25px;
+
+}
+
+
+
+.row{
+
+display:flex;
+
+align-items:center;
+
+justify-content:space-between;
+
+background:
+rgba(255,255,255,.15);
+
+margin:10px 0;
+
+padding:12px 20px;
+
+border-radius:15px;
+
+animation:
+rowIn .6s ease forwards;
+
+opacity:0;
+
+}
+
+
+
+@keyframes rowIn{
+
+from{
+opacity:0;
+transform:translateX(-50px);
+}
+
+to{
+opacity:1;
+transform:translateX(0);
+}
+
+}
+
+
+
+.row img{
+
+width:55px;
+
+height:55px;
+
+border-radius:50%;
+
+object-fit:cover;
+
+border:3px solid white;
+
+}
+
+
+
+.rankNumber{
+
+font-size:1.5rem;
+
+font-weight:bold;
+
+width:50px;
+
+}
+
+
+
+.nameBox{
+
+flex:1;
+
+font-size:1.2rem;
+
+font-weight:bold;
+
+margin-left:15px;
+
+}
+
+
+
+
+/* Mobile */
+
+
+@media(max-width:700px){
+
+
+.podium{
+
+gap:8px;
+
+}
+
+
+.block{
+
+width:100px;
+
+font-size:2rem;
+
+}
+
+
+.first .block{
+
+height:220px;
+
+}
+
+
+.second .block{
+
+height:170px;
+
+}
+
+
+.third .block{
+
+height:130px;
+
+}
+
+
+.avatar{
+
+width:80px;
+
+height:80px;
+
+}
+
+
+.first .avatar{
+
+width:110px;
+
+height:110px;
+
+}
+
+}
+
+</style>
+
+</head>
+
+
+<body>
+
+
+<div class="background">
+
+<div class="circle"></div>
+<div class="circle"></div>
+
+</div>
+
+
+<div class="container">
+
+
+<h1 class="title">
+    <div id="logo-container">
+
+        <div id="sonne">
+            <div class="strahl" style="--i:0"></div>
+            <div class="strahl" style="--i:1"></div>
+            <div class="strahl" style="--i:2"></div>
+            <div class="strahl" style="--i:3"></div>
+            <div class="strahl" style="--i:4"></div>
+            <div class="strahl" style="--i:5"></div>
+            <div class="strahl" style="--i:6"></div>
+            <div class="strahl" style="--i:7"></div>
+            <div class="strahl" style="--i:8"></div>
+            <div class="strahl" style="--i:9"></div>
+            <div class="strahl" style="--i:10"></div>
+            <div class="strahl" style="--i:11"></div>
+        </div>
+
+        <img id="logo" src="logo mit pokal.png" alt="Logo">
+
+        <span id="ball-wrapper">
+            <img id="ball" src="fussball_ohne_schatten.png" alt="Ball">
+        </span>
+
+  </div>
+</h1>
+
+
+<div id="podium" class="podium">
+
+<!-- wird per JavaScript gefüllt -->
+
+</div>
+
+
+<div class="ranking">
+
+<h2>Top 10</h2>
+
+<div id="top10">
+
+<!-- wird per JavaScript gefüllt -->
+
+</div>
+
+
+</div>
+
+
+</div>
+<script>
+
+
+// ===============================
+// SUPABASE KONFIGURATION
+// ===============================
+
+
+const supabaseUrl =
+"https://kmhwwdsuzphkpfupkynf.supabase.co";
+
+
+const supabaseKey =
+"sb_publishable_7ih4VSPUkXVfHkBa7lrDCA_mO_d0pW1";
+
+
+const supabaseClient =
+supabase.createClient(
+    supabaseUrl,
+    supabaseKey
+);
+
+
+
+// ===============================
+// BILDER
+// ===============================
+//
+// Die Datenbank liefert nur den Dateinamen.
+// Die Bilder liegen lokal im Ordner "bilder".
+//
+// Beispiel:
+// bild = "max.png"
+// Ergebnis:
+// bilder/max.png
+//
+
+
+function getImage(filename){
+
+    if(!filename || filename.trim()===""){
+        return "bilder/default.png";
+    }
+
+    return "bilder/" + filename;
+
+}
+
+
+
+// ===============================
+// DATEN LADEN
+// ===============================
+
+
+async function loadRanking(){
+
+
+    const {data,error} =
+    await supabaseClient
+    .from("rangliste")
+    .select("*")
+    .order("rang",{ascending:true});
+
+
+    if(error){
+
+        console.error(
+            "Fehler beim Laden:",
+            error
+        );
+
+        return;
+
+    }
+
+
+    createPodium(data.slice(0,3));
+
+    createTop10(data.slice(0,10));
+
+
+}
+
+
+
+// ===============================
+// SIEGERPODEST
+// ===============================
+
+
+function createPodium(players){
+
+
+    const podium =
+    document.getElementById("podium");
+
+
+    podium.innerHTML="";
+
+
+    /*
+       Reihenfolge:
+       Platz 2
+       Platz 1
+       Platz 3
+
+       damit Platz 1 in der Mitte steht
+    */
+
+
+    const order=[
+
+        players[1],
+        players[0],
+        players[2]
+
+    ];
+
+
+
+    order.forEach((player,index)=>{
+
+
+        if(!player)
+            return;
+
+
+
+        let place =
+        player.rang;
+
+
+
+        let cssClass="";
+
+
+        if(place===1)
+            cssClass="first";
+
+        if(place===2)
+            cssClass="second";
+
+        if(place===3)
+            cssClass="third";
+
+
+
+        const div =
+        document.createElement("div");
+
+
+        div.className =
+        "player "+cssClass;
+
+
+
+        div.innerHTML=`
+
+            <div class="avatar">
+
+                <img 
+                src="${getImage(player.bild)}"
+                onerror="
+                this.src='bilder/default.png'
+                "
+                >
+
+            </div>
+
+
+            <div class="username">
+                ${player.username}
+            </div>
+
+
+            <div class="block">
+
+                ${place}
+
+            </div>
+
+        `;
+
+
+
+        podium.appendChild(div);
+
+
+
+    });
+
+
+
+}
+
+
+
+// ===============================
+// TOP 10 LISTE
+// ===============================
+
+
+function createTop10(players){
+
+
+    const list =
+    document.getElementById("top10");
+
+
+    list.innerHTML="";
+
+
+
+    players.forEach(
+    (player,index)=>{
+
+
+        const row =
+        document.createElement("div");
+
+
+        row.className="row";
+
+
+        row.style.animationDelay =
+        (index*0.08)+"s";
+
+
+
+        row.innerHTML=`
+
+            <div class="rankNumber">
+                ${player.rang}
+            </div>
+
+
+            <img 
+            src="${getImage(player.bild)}"
+            onerror="
+            this.src='bilder/default.png'
+            "
+            >
+
+
+            <div class="nameBox">
+
+                ${player.username}
+
+            </div>
+
+
+        `;
+
+
+
+        list.appendChild(row);
+
+
+
+    });
+
+
+}
+
+
+
+// ===============================
+// START
+// ===============================
+
+
+loadRanking();
+
+
+
+</script>
+
+<style>
+
+
+/* ===============================
+   KONFETTI
+================================ */
+
+
+.confetti{
+
+position:fixed;
+
+top:-30px;
+
+width:10px;
+
+height:18px;
+
+z-index:10;
+
+opacity:.9;
+
+animation:
+confettiFall linear forwards;
+
+pointer-events:none;
+
+}
+
+
+
+@keyframes confettiFall{
+
+
+0%{
+
+transform:
+translateY(-50px)
+rotate(0deg);
+
+}
+
+
+100%{
+
+transform:
+translateY(110vh)
+rotate(720deg);
+
+}
+
+
+}
+
+
+
+
+
+/* ===============================
+   GOLD GLANZ AUF PLATZ 1
+================================ */
+
+
+.first .block{
+
+
+position:relative;
+
+overflow:hidden;
+
+
+}
+
+
+
+.first .block::before{
+
+
+content:"";
+
+position:absolute;
+
+top:0;
+
+left:-100%;
+
+width:60%;
+
+height:100%;
+
+
+background:
+
+linear-gradient(
+
+90deg,
+
+transparent,
+
+rgba(255,255,255,.8),
+
+transparent
+
+);
+
+
+
+animation:
+
+shine 3s infinite;
+
+
+}
+
+
+
+@keyframes shine{
+
+
+0%{
+
+left:-100%;
+
+}
+
+
+50%{
+
+left:150%;
+
+}
+
+
+100%{
+
+left:150%;
+
+}
+
+
+}
+
+
+
+
+
+/* ===============================
+   PODIUM SCHWEBT LEICHT
+================================ */
+
+
+.first{
+
+animation-name:
+winnerIn,
+floatWinner;
+
+animation-duration:
+1s,
+4s;
+
+animation-delay:
+.2s,
+1.2s;
+
+animation-fill-mode:
+forwards;
+
+animation-iteration-count:
+1,
+infinite;
+
+}
+
+
+@keyframes winnerIn{
+
+
+from{
+
+opacity:0;
+
+transform:
+translateY(200px)
+scale(.5);
+
+}
+
+
+to{
+
+opacity:1;
+
+transform:
+translateY(0)
+scale(1);
+
+}
+
+
+}
+
+
+
+@keyframes floatWinner{
+
+
+0%,100%{
+
+margin-top:0;
+
+}
+
+
+50%{
+
+margin-top:-12px;
+
+}
+
+
+}
+
+
+
+
+
+
+
+/* ===============================
+   TOP 10 HOVER
+================================ */
+
+
+.row{
+
+transition:
+transform .25s,
+background .25s;
+
+}
+
+
+
+.row:hover{
+
+transform:
+scale(1.03);
+
+background:
+rgba(255,255,255,.3);
+
+}
+
+
+
+
+</style>
+
+
+
+
+<script>
+
+
+// ===============================
+// KONFETTI GENERATOR
+// ===============================
+
+
+function createConfetti(){
+
+
+const colors=[
+
+"#ffd700",
+"#ffffff",
+"#00ff7f",
+"#ff5252",
+"#4dabff"
+
+];
+
+
+
+for(let i=0;i<120;i++){
+
+
+let piece =
+document.createElement("div");
+
+
+
+piece.className="confetti";
+
+
+
+piece.style.left =
+Math.random()*100+"vw";
+
+
+
+piece.style.background =
+colors[
+Math.floor(
+Math.random()*colors.length
+)
+];
+
+
+
+piece.style.animationDuration =
+(3+
+Math.random()*5)
++"s";
+
+
+
+piece.style.animationDelay =
+Math.random()*3+"s";
+
+
+
+piece.style.transform =
+"rotate("+
+Math.random()*360+
+"deg)";
+
+
+
+document.body.appendChild(piece);
+
+
+
+
+setTimeout(()=>{
+
+piece.remove();
+
+},9000);
+
+
+
+}
+
+
+
+}
+
+
+
+// Konfetti nach Laden starten
+
+setTimeout(
+createConfetti,
+1000
+);
+
+
+
+
+
+// ===============================
+// AUTOMATISCHES UPDATE
+// ===============================
+//
+// Alle 30 Sekunden neu laden
+//
+
+
+setInterval(
+
+loadRanking,
+
+30000
+
+);
+
+
+
+</script>
+
+<style>
+
+
+/* ===============================
+   MEDAILLEN AUF DEM PODEST
+================================ */
+
+
+.medal{
+
+font-size:55px;
+
+margin-bottom:5px;
+
+filter:
+drop-shadow(
+0 5px 8px rgba(0,0,0,.35)
+);
+
+animation:
+medalPop .8s ease forwards;
+
+opacity:0;
+
+}
+
+
+
+.first .medal{
+
+animation-delay:1s;
+
+}
+
+
+
+.second .medal{
+
+animation-delay:.7s;
+
+}
+
+
+
+.third .medal{
+
+animation-delay:1.3s;
+
+}
+
+
+
+@keyframes medalPop{
+
+
+0%{
+
+opacity:0;
+
+transform:
+scale(0)
+rotate(-180deg);
+
+}
+
+
+70%{
+
+transform:
+scale(1.3)
+rotate(20deg);
+
+}
+
+
+100%{
+
+opacity:1;
+
+transform:
+scale(1)
+rotate(0);
+
+}
+
+
+}
+
+
+
+
+
+/* ===============================
+   NAMENSANIMATION
+================================ */
+
+
+.username{
+
+animation:
+
+nameAppear .8s ease forwards;
+
+opacity:0;
+
+}
+
+
+
+@keyframes nameAppear{
+
+
+from{
+
+opacity:0;
+
+transform:
+translateY(20px);
+
+}
+
+
+to{
+
+opacity:1;
+
+transform:
+translateY(0);
+
+}
+
+
+}
+
+
+
+
+
+
+
+/* ===============================
+   TOP 10 PREMIUM LOOK
+================================ */
+
+
+.row:first-child{
+
+background:
+
+linear-gradient(
+
+90deg,
+
+rgba(255,215,0,.35),
+
+rgba(255,255,255,.15)
+
+);
+
+border:
+
+2px solid rgba(255,215,0,.6);
+
+}
+
+
+
+.row:nth-child(2){
+
+border:
+
+2px solid rgba(220,220,220,.5);
+
+}
+
+
+
+.row:nth-child(3){
+
+border:
+
+2px solid rgba(205,127,50,.5);
+
+}
+
+
+
+
+
+.row img{
+
+background:white;
+
+}
+
+
+
+
+/* ===============================
+   RANG ZAHLEN
+================================ */
+
+
+.rankNumber{
+
+display:flex;
+
+align-items:center;
+
+justify-content:center;
+
+}
+
+
+
+.rankNumber::before{
+
+content:"";
+
+width:35px;
+
+height:35px;
+
+border-radius:50%;
+
+position:absolute;
+
+z-index:-1;
+
+background:
+
+rgba(255,255,255,.15);
+
+}
+
+
+
+
+/* ===============================
+   LADEANIMATION
+================================ */
+
+
+.loading{
+
+
+position:fixed;
+
+inset:0;
+
+background:
+
+linear-gradient(
+135deg,
+#063d22,
+#12b85a
+);
+
+
+display:flex;
+
+align-items:center;
+
+justify-content:center;
+
+z-index:999;
+
+
+transition:
+
+opacity .6s;
+
+
+}
+
+
+
+.loading span{
+
+
+width:70px;
+
+height:70px;
+
+border-radius:50%;
+
+border:
+
+8px solid rgba(255,255,255,.3);
+
+
+border-top-color:white;
+
+
+animation:
+
+spin 1s linear infinite;
+
+
+}
+
+
+
+@keyframes spin{
+
+
+to{
+
+transform:
+rotate(360deg);
+
+}
+
+
+}
+
+
+
+
+</style>
+
+
+
+<div class="loading" id="loading">
+
+<span></span>
+
+</div>
+
+
+
+<script>
+
+
+// ===============================
+// LOADING SCREEN AUSBLENDEN
+// ===============================
+
+
+
+window.addEventListener(
+"load",
+()=>{
+
+
+setTimeout(()=>{
+
+
+const loader =
+document.getElementById(
+"loading"
+);
+
+
+
+if(loader){
+
+loader.style.opacity="0";
+
+
+setTimeout(()=>{
+
+loader.remove();
+
+},700);
+
+
+}
+
+
+
+},800);
+
+
+
+}
+
+);
+
+
+
+
+
+// ===============================
+// PLATZ-IKONEN IN TOP 10
+// ===============================
+
+
+function getRankIcon(rank){
+
+
+if(rank===1)
+return "🥇";
+
+
+if(rank===2)
+return "🥈";
+
+
+if(rank===3)
+return "🥉";
+
+
+return rank;
+
+
+
+}
+
+
+
+
+</script>
+
+<script>
+
+
+// ===============================
+// FEHLERANZEIGE
+// ===============================
+
+
+function showError(message){
+
+
+const box =
+document.createElement("div");
+
+
+box.style.position="fixed";
+
+box.style.top="20px";
+
+box.style.left="50%";
+
+box.style.transform=
+"translateX(-50%)";
+
+
+box.style.background=
+"rgba(255,0,0,.85)";
+
+
+box.style.padding=
+"15px 25px";
+
+
+box.style.borderRadius=
+"15px";
+
+
+box.style.fontWeight=
+"bold";
+
+
+box.style.zIndex="9999";
+
+
+box.innerHTML=
+"⚠️ "+message;
+
+
+document.body.appendChild(box);
+
+
+
+setTimeout(()=>{
+
+box.remove();
+
+},5000);
+
+
+
+}
+
+
+
+
+
+// ===============================
+// SUPABASE LIVE CHANNEL
+// ===============================
+//
+// Aktualisiert die Seite,
+// sobald sich die Rangliste ändert
+//
+
+
+const rankingChannel =
+supabaseClient
+.channel("rangliste-live")
+.on(
+
+"postgres_changes",
+
+{
+
+event:"*",
+
+schema:"public",
+
+table:"rangliste"
+
+},
+
+(payload)=>{
+
+
+console.log(
+"Rangliste geändert",
+payload
+);
+
+
+loadRanking();
+
+
+}
+
+)
+.subscribe();
+
+
+
+
+
+
+// ===============================
+// BESSERER BILDER-FALLBACK
+// ===============================
+
+
+function safeImage(element){
+
+
+element.onerror=function(){
+
+
+this.onerror=null;
+
+
+this.src=
+"bilder/default.png";
+
+
+};
+
+
+}
+
+
+
+
+
+
+// ===============================
+// START NACH DATENBANK CHECK
+// ===============================
+
+
+async function checkDatabase(){
+
+
+const {data,error}=
+
+await supabaseClient
+.from("rangliste")
+.select("username")
+.limit(1);
+
+
+
+if(error){
+
+showError(
+"Verbindung zur Rangliste fehlgeschlagen"
+);
+
+console.error(error);
+
+
+}
+
+
+}
+
+
+
+checkDatabase();
+
+
+
+
+
+// ===============================
+// EINFÜGE-EFFEKT FÜR NEUE SPIELER
+// ===============================
+
+
+let previousRanking=[];
+
+
+
+async function animatedRefresh(){
+
+
+const {data,error}=
+
+await supabaseClient
+.from("rangliste")
+.select("*")
+.order(
+"rang",
+{
+ascending:true
+}
+);
+
+
+
+if(error)
+return;
+
+
+
+let changed =
+JSON.stringify(data)
+!==
+JSON.stringify(previousRanking);
+
+
+
+if(changed){
+
+
+previousRanking=data;
+
+
+createPodium(
+data.slice(0,3)
+);
+
+
+createTop10(
+data.slice(0,10)
+);
+
+
+createConfetti();
+
+
+}
+
+
+
+}
+
+
+
+setInterval(
+
+animatedRefresh,
+
+10000
+
+);
+
+
+
+</script>
+
+<script>
+
+
+// ===============================
+// ERSTER DATENLADEN
+// ===============================
+
+
+document.addEventListener(
+"DOMContentLoaded",
+()=>{
+
+
+loadRanking();
+
+
+
+});
+
+
+
+
+// ===============================
+// ENTERTAINMENT EFFEKT
+// Pulsierender Sieger
+// ===============================
+
+
+setInterval(()=>{
+
+
+const winner =
+document.querySelector(
+".first .avatar"
+);
+
+
+
+if(winner){
+
+
+winner.animate(
+
+[
+
+{
+transform:
+"scale(1)"
+},
+
+{
+transform:
+"scale(1.08)"
+},
+
+{
+transform:
+"scale(1)"
+}
+
+],
+
+{
+
+duration:1200,
+
+iterations:1
+
+}
+
+);
+
+
+}
+
+
+},5000);
+
+
+
+
+
+</script>
+
+
+
+</body>
+</html>
