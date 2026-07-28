@@ -1113,7 +1113,7 @@
     <section class="ranking-card">
 
       <h2>
-        Top 10
+        Rangliste
       </h2>
 
       <div id="suche-wrapper">
@@ -3129,7 +3129,7 @@ function avatarBild(
 
         return rangliste.slice(
           0,
-          10
+          rangliste.length
         );
 
       }
